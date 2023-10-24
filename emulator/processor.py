@@ -1,5 +1,6 @@
 import array as ar
 from operator import inv, or_, xor, and_
+from typing import Any
 from emulator.opcodes import *
 from emulator.operators import (unsigned_byte_addition, signed_addition_overflow, unsigned_byte_subtraction, 
                                 signed_subtraction_overflow, unsigned_addition_carry, unsigned_subtraction_carry,
@@ -16,27 +17,123 @@ class Memory():
     def initialise(self) -> None:
         self.data = ar.array('B', [0] * self.size)
 
+
+class Register:
+    def __init__(self, init=0, bytes:int = 1) -> None:
+        self.bytes = bytes
+        self.value = init   
+
+    def get_value(self) -> int:
+        return self.value()
+
+    def set_value(self, value) -> None:
+        self.value = value
    
+def set_bit(v, index, x):
+    if x:
+        return v | (1<<index)
+    else:
+        return v & ~(1<<index)
+    
 class Processor:
     def __init__(self, memory_size=2**16) -> None:
         self.memory_size = memory_size
         self.memory = Memory(memory_size)
-        self.PC = START_ADDR    # Program counter
-        self.SP = 0xff          # Stack pointer; stack is top down, starts at 0x01ff
+        self.program_counter = Register(init=START_ADDR, bytes=2)        # Program counter
+        self.stack_pointer = Register(init=0xff)  # Stack pointer; stack is top down, starts at 0x01ff
         # Registers
-        self.A = 0              # Accumulator
-        self.X = 0              # Index register X
-        self.Y = 0              # Index register Y
-        # Processor Status
-        self.C = 0          # Carry flag
-        self.Z = 0          # Zero flag
-        self.I = 0          # Interrupt disable flag
-        self.D = 0          # Decimal mode flag
-        self.B = 0          # Break command flag
-        self.V = 0          # Overflow flag
-        self.N = 0          # Negative flag
+        self.accumulator = Register()          # Accumulator
+        self.index_x = Register()              # Index register X
+        self.index_y = Register()              # Index register Y
+        self.status = Register()               # Status register
         # Cycle counter
         self.cycles = 0
+
+    @property
+    def PC(self):
+        return self.program_counter.value
+    @ PC.setter
+    def PC(self, value):
+        self.program_counter.set_value(value)
+
+    @property
+    def SP(self):
+        return self.stack_pointer.value
+    @ SP.setter
+    def SP(self,value):
+        self.stack_pointer.set_value(value)
+
+    @property
+    def A(self):
+        return self.accumulator.value
+    @ A.setter
+    def A(self, value):
+        self.accumulator.set_value(value)
+
+    @property
+    def X(self):
+        return self.index_x.value    
+    @ X.setter
+    def X(self, value):
+        self.index_x.set_value(value)
+
+    @property
+    def Y(self):
+        return self.index_y.value
+    @ Y.setter
+    def Y(self, value):
+        self.index_y.set_value(value)
+
+    @property
+    def C(self):
+        return self.status.value & 1
+    @ C.setter
+    def C(self, value):
+        self.status.value = set_bit(self.status.value, 0, value)
+
+    @property
+    def Z(self):
+        return (self.status.value >> 1) & 1
+    @ Z.setter
+    def Z(self, value):
+        self.status.value = set_bit(self.status.value, 1, value)
+    
+    @property
+    def I(self):
+        return (self.status.value >> 2) & 1
+    @ I.setter
+    def I(self, value):
+        self.status.value = set_bit(self.status.value, 2, value)
+    
+    @property
+    def D(self):
+        return (self.status.value >> 3) & 1
+    @ D.setter
+    def D(self, value):
+        self.status.value = set_bit(self.status.value, 3, value)
+    
+    @property
+    def B(self):
+        return (self.status.value >> 4) & 1
+    @ B.setter
+    def B(self, value):
+        self.status.value = set_bit(self.status.value, 4, value)
+
+    @property
+    def V(self):
+        return (self.status.value >> 6) & 1
+    @ V.setter
+    def V(self, value):
+        self.status.value = set_bit(self.status.value, 6, value)
+
+    @property
+    def N(self):
+        return (self.status.value >> 7) & 1
+    @ N.setter
+    def N(self, value):
+        self.status.value = set_bit(self.status.value, 7, value)
+    
+    
 
     def reset(self) -> None:
         self.PC = START_ADDR
@@ -276,8 +373,7 @@ class Processor:
     ## Stack operations
     # Push processor flags to stack
     def push_processor_status(self) -> None:
-        byte = self.C + (self.Z << 1) + (self.I << 2) + (self.D << 3) + (self.B << 4) + (self.V << 6) + (self.N << 7)
-        self.push_to_stack(byte)
+        self.push_to_stack(self.status.value)
         self.add_to_stack_pointer(-1)
         self.cycle()
 
@@ -291,8 +387,7 @@ class Processor:
     def pull_processor_status(self) -> None:
         self.add_to_stack_pointer(1)
         self.cycle()
-        byte = self.pull_from_stack()
-        (self.C, self.Z, self.I, self.D, self.B, self.V, self.N) = (byte&0x1, (byte&0x2) >> 1, (byte&0x4) >> 2, (byte&0x8) >> 3, (byte&0x10) >> 4, (byte&0x40) >> 6, (byte&0x80) >> 7)
+        self.status.set_value(self.pull_from_stack())
         self.cycle()
 
     # Pull program counter from stack   
