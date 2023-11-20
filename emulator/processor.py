@@ -4,7 +4,7 @@ from typing import Any
 from emulator.opcodes import *
 from emulator.operators import (unsigned_byte_addition, signed_addition_overflow, unsigned_byte_subtraction, 
                                 signed_subtraction_overflow, unsigned_addition_carry, unsigned_subtraction_carry,
-                                shift_left, shift_right)
+                                shift_left, shift_right, set_bit)
 
 START_ADDR = 0xfffc
 
@@ -29,11 +29,6 @@ class Register:
     def set_value(self, value) -> None:
         self.value = value
    
-def set_bit(v, index, x):
-    if x:
-        return v | (1<<index)
-    else:
-        return v & ~(1<<index)
     
 class Processor:
     def __init__(self, memory_size=2**16) -> None:
@@ -48,7 +43,9 @@ class Processor:
         self.status = Register()               # Status register
         # Cycle counter
         self.cycles = 0
-
+        # Current instruction in disassembled form
+        self.current_instruction = ''
+        
     @property
     def PC(self):
         return self.program_counter.value
@@ -133,7 +130,13 @@ class Processor:
     def N(self, value):
         self.status.value = set_bit(self.status.value, 7, value)
     
-    
+    @property
+    def CI(self):
+        return self.current_instruction
+    @ CI.setter
+    def CI(self, value):
+        print(f'Disassembling instruction: {value}')
+        self.current_instruction = value
 
     def reset(self) -> None:
         self.PC = START_ADDR
@@ -227,26 +230,35 @@ class Processor:
     def immediate(self) -> int:
         address = self.PC
         self.PC += 1
+        value = self.memory.data[address]
+        self.CI += f' #{value:02X}'
         return address
        
     def zero_page(self) -> int:
-        return self.fetch_byte_at_pc()
+        address = self.fetch_byte_at_pc()
+        self.CI += f' ${address:02X}'
+        return address
     
-    def zero_page_offset(self, register, penalty_cycle=False) -> int:
+    def zero_page_indexed(self, register, penalty_cycle=False) -> int:
         self.cycle()
-        return unsigned_byte_addition(self.fetch_byte_at_pc(), self.__getattribute__(register))
+        address = unsigned_byte_addition(self.fetch_byte_at_pc(), self.__getattribute__(register))
+        self.CI += f' ${address:02X},{register}'        
+        return address
     
     def absolute(self) -> int:
         address = self.fetch_byte_at_pc()
         address += self.fetch_byte_at_pc() << 8
+        self.CI += f' ${address:04X}'
         return address
     
-    def absolute_offset(self, register, penalty_cycle=False) -> int:
+    def absolute_indexed(self, register, penalty_cycle=False) -> int:
         address = self.fetch_byte_at_pc()
         address += self.__getattribute__(register)
         if penalty_cycle or address > 0xff:
             self.cycle()
         address += self.fetch_byte_at_pc() << 8
+        self.CI += f' ${address:04X},{register}'
+        
         return address       
     
     def indexed_indirect_x(self) -> int:
@@ -254,6 +266,7 @@ class Processor:
         index = unsigned_byte_addition(index, self.X)
         self.cycle()
         address = self.fetch_byte(index) + (self.fetch_byte(index+1) << 8)
+        self.CI += f' (${address:02X},X)'
         return address
     
     def indirect_indexed_y(self) -> int:
@@ -263,6 +276,7 @@ class Processor:
         if address > 0xff:
             self.cycle()
         address += self.fetch_byte(index+1) << 8
+        self.CI += f' (${address:02X}),Y'
         return address
     
     def indirect(self) -> int:
@@ -271,55 +285,79 @@ class Processor:
         index = (index_high<<8) + index_low
         address_low = self.fetch_byte(index)
         address_high = self.fetch_byte(index+1)
-        return (address_high<<8) + address_low     
+        address = (address_high<<8) + address_low 
+        self.CI += f' (${address:04X})'    
+        return address
 
-    def get_address(self, mode:str, offset_register:str=None, penalty_cycle=False) -> int:
-        if offset_register is None:
+    def get_address(self, mode:str, index_register:str=None, penalty_cycle=False) -> int:
+        if index_register is None:
             return self.__getattribute__(mode)()
-        return self.__getattribute__(mode)(offset_register, penalty_cycle)   
+        return self.__getattribute__(mode)(index_register, penalty_cycle)   
     
     ## Processor instruction by type    
-    # Load value from memory to register, using mode with offset_register
-    def load_register(self, register: str, mode:str, offset_register=None) -> None:
-        address = self.get_address(mode, offset_register)
+    # Load value from memory to register, using mode with index_register
+    def load_register(self, register: str, mode:str, index_register=None) -> None:
+        self.CI = f'LD{register}'
+
+        address = self.get_address(mode, index_register)
         setattr(self, register, self.fetch_byte(address))
         self.set_zero_and_negative_status_flags(register)
 
-    # Store value from register to memory, using mode with offset_register
-    def store_register(self, register:str, mode:str, offset_register:str=None) -> None:
-        address = self.get_address(mode, offset_register, penalty_cycle=True) 
+    # Store value from register to memory, using mode with index_register
+    def store_register(self, register:str, mode:str, index_register:str=None) -> None:
+        self.CI = f'ST{register}'
+
+        address = self.get_address(mode, index_register, penalty_cycle=True) 
         self.put_byte(address, self.__getattribute__(register))
 
     # Transfer value from register source to register destination
     def transfer_register(self, source: str, destination: str) -> None:
+        self.CI = f'T{source}{destination}'
+
         setattr(self, destination, self.__getattribute__(source))
         self.cycle()
         self.set_zero_and_negative_status_flags(destination)
 
     # Add the content of a memory location to the accumulator together with the carry bit.
-    def add_with_carry(self, mode: str, offset_register:str=None) -> None:
-        address = self.get_address(mode, offset_register)
+    def add_with_carry(self, mode: str, index_register:str=None) -> None:
+        self.CI = 'ADC'
+
+        address = self.get_address(mode, index_register)
         value = self.fetch_byte(address) 
         self.add_to_accumulator_with_carry(value)
         self.set_zero_and_negative_status_flags('A')    
 
     # Subtract the content of a memory location from the accumulator together with the inverse of the carry bit.
-    def subtract_with_carry(self, mode: str, offset_register:str=None) -> None:
-        address = self.get_address(mode, offset_register)
+    def subtract_with_carry(self, mode: str, index_register:str=None) -> None:
+        self.CI = 'SBC'
+
+        address = self.get_address(mode, index_register)
         value = self.fetch_byte(address) 
         self.subtract_from_accumulator_with_carry(value)
         self.set_zero_and_negative_status_flags('A')    
 
     # Bitwise logical operation with accumulator and memory location.
-    def logical_operation(self, operator:str, mode: str, offset_register:str=None) -> None:
-        address = self.get_address(mode, offset_register)
+    def logical_operation(self, operator:str, mode: str, index_register:str=None) -> None:
+        if operator == 'and_':
+            self.CI = 'AND'
+        if operator == 'or_':
+            self.CI = 'ORA'
+        if operator == 'xor':
+            self.CI = 'EOR'
+
+        address = self.get_address(mode, index_register)
         value = self.fetch_byte(address)
         self.A = globals()[operator](self.A, value) 
         self.set_zero_and_negative_status_flags('A')
 
     # Compare register with memory location
-    def compare(self, register:str, mode: str, offset_register:str=None) -> None:
-        address = self.get_address(mode, offset_register)
+    def compare(self, register:str, mode: str, index_register:str=None) -> None:
+        if register == 'A':
+            self.CI = 'CMP'
+        else:
+            self.CI = f'CP{register}'
+
+        address = self.get_address(mode, index_register)
         value = self.fetch_byte(address)
         register_value = self.__getattribute__(register)
         if register_value > value:
@@ -337,6 +375,19 @@ class Processor:
 
     # Branch if flag has given state
     def branch(self, flag:str, state:bool) -> None:
+        if flag == 'V' and state is True:
+            self.CI = 'BVS'        
+        if flag == 'V' and state is False:
+            self.CI = 'BVC'        
+        if flag == 'Z' and state is True:
+            self.CI = 'BEQ'        
+        if flag == 'Z' and state is False:
+            self.CI = 'BNE'        
+        if flag == 'N' and state is True:
+            self.CI = 'BMI'        
+        if flag == 'V' and state is True:
+            self.CI = 'BPL'        
+
         # PC before start of operation
         pc = self.PC - 1
         relative_address = self.fetch_byte_at_pc()
@@ -351,19 +402,34 @@ class Processor:
     
     # Set or clear flag
     def set_flag(self, flag:str, state:bool) -> None:
+        if state is True:
+            self.CI = f'SE{flag}'
+        else:
+            self.CI = f'CL{flag}'
+
         setattr(self, flag, state)
         self.cycle()
 
     # Increment and decrement register
     def increment_register(self, step:int, register:str) -> None:
+        if step == 1:
+            self.CI = f'IN{register}'
+        else:
+            self.CI = f'DE{register}'
+
         value = (self.__getattribute__(register) + step) % 0x100
         self.__setattr__(register, value)
         self.cycle()
         self.set_zero_and_negative_status_flags(register)
 
     # Increment and decrement memory
-    def increment(self, step:int, mode:str, offset_register=None) -> None:
-        address = self.get_address(mode, offset_register, penalty_cycle=True)
+    def increment(self, step:int, mode:str, index_register=None) -> None:
+        if step == 1:
+            self.CI = 'INC'
+        if step == -1:
+            self.CI = 'DEC'
+
+        address = self.get_address(mode, index_register, penalty_cycle=True)
         value = (self.fetch_byte(address) + step) % 0x100
         self.cycle()
         self.put_byte(address, value)
@@ -373,18 +439,24 @@ class Processor:
     ## Stack operations
     # Push processor flags to stack
     def push_processor_status(self) -> None:
+        self.CI = 'PHP'
+
         self.push_to_stack(self.status.value)
         self.add_to_stack_pointer(-1)
         self.cycle()
 
     # Push register to stack
-    def push_register(self, register:str) -> None:
-        self.push_to_stack(self.__getattribute__(register))
+    def push_accumulator(self) -> None:
+        self.CI = 'PHA'
+
+        self.push_to_stack(self.A)
         self.add_to_stack_pointer(-1)
         self.cycle()
     
     # Pull processors from stack
     def pull_processor_status(self) -> None:
+        self.CI = 'PLP'
+
         self.add_to_stack_pointer(1)
         self.cycle()
         self.status.set_value(self.pull_from_stack())
@@ -398,25 +470,33 @@ class Processor:
         self.cycle()
 
     # Pull register from stack
-    def pull_register(self, register:str) -> None:
+    def pull_accumulator(self) -> None:
+        self.CI = 'PLP'
+
         self.add_to_stack_pointer(1)
         self.cycle()
-        self.__setattr__(register, self.pull_from_stack())
+        self.A = self.pull_from_stack()
         self.cycle()
     
     ## Jump operations
     # Jump instruction (absolute and relative)
     def jump(self, mode):
+        self.CI = 'JMP'
+
         address = self.get_address(mode)
         self.PC = address     
 
     def jump_to_subroutine(self):
+        self.CI = 'JSR'
+
         self.push_word_to_stack(self.PC + 1)
         self.add_to_stack_pointer(-2)
         self.cycle()
         self.jump('absolute')
 
     def return_from_subroutine(self):
+        self.CI = 'RTS'
+
         self.add_to_stack_pointer(2)
         self.cycle()
         self.PC = self.pull_word_from_stack() + 1
@@ -425,13 +505,19 @@ class Processor:
 
     # Break
     def brk(self):
+        self.CI = 'BRK'
+
         self.push_word_to_stack(self.PC + 1)
         self.add_to_stack_pointer(-2)
-        self.push_processor_status()
+        self.push_to_stack(self.status.value)
+        self.add_to_stack_pointer(-1)
+        self.cycle()       
         self.PC = self.fetch_byte(0xfffe) + (self.fetch_byte(0xffff) << 8)
         self.B = 1
 
     def return_from_interrupt(self):
+        self.CI = 'RTI'
+
         self.pull_processor_status()
         self.add_to_stack_pointer(2)           
         self.PC = self.pull_word_from_stack() 
@@ -439,18 +525,26 @@ class Processor:
     ## Shift and rotate
     def shift_accumulator(self, left:bool=True) -> None:
         if left:
+            self.CI = 'ASL'
+
             self.A, carry = shift_left(self.A)
         else:
+            self.CI = 'LSR'
+
             self.A, carry = shift_right(self.A)
         self.cycle()
         self.C = carry
         self.set_zero_and_negative_status_flags('A')
 
-    def shift_memory(self, mode:str, offset_register=None, left:bool=True) -> None:
-        address = self.get_address(mode, offset_register, penalty_cycle=True)
+    def shift_memory(self, mode:str, index_register=None, left:bool=True) -> None:
+        address = self.get_address(mode, index_register, penalty_cycle=True)
         if left:
+            self.CI = 'ASL'
+
             value, carry = shift_left(self.fetch_byte(address), self.C)
         else:
+            self.CI = 'LSR'
+
             value, carry = shift_right(self.fetch_byte(address), self.C)            
         self.cycle()
         self.C = carry
@@ -460,18 +554,26 @@ class Processor:
 
     def rotate_accumulator(self, left:bool=True) -> None:
         if left:
+            self.CI = 'ROL'
+
             self.A, carry = shift_left(self.A, self.C)
         else:
+            self.CI = 'ROR'
+
             self.A, carry = shift_right(self.A, self.C)
         self.cycle()
         self.C = carry
         self.set_zero_and_negative_status_flags('A')
 
-    def rotate_memory(self, mode:str, offset_register=None, left:bool=True) -> None:
-        address = self.get_address(mode, offset_register, penalty_cycle=True)
+    def rotate_memory(self, mode:str, index_register=None, left:bool=True) -> None:
+        address = self.get_address(mode, index_register, penalty_cycle=True)
         if left:
+            self.CI = 'ROL '
+
             value, carry = shift_left(self.fetch_byte(address), self.C)
         else:
+            self.CI = 'ROR '
+
             value, carry = shift_right(self.fetch_byte(address), self.C)            
         self.cycle()
         self.put_byte(address, value)
@@ -489,13 +591,13 @@ class Processor:
         elif op_code == ADC_ZERO_PAGE:
             self.add_with_carry('zero_page')            
         elif op_code == ADC_ZERO_PAGE_X:
-            self.add_with_carry('zero_page_offset', 'X')
+            self.add_with_carry('zero_page_indexed', 'X')
         elif op_code == ADC_ABSOLUTE:
             self.add_with_carry('absolute')            
         elif op_code == ADC_ABSOLUTE_X:
-            self.add_with_carry('absolute_offset', 'X')             
+            self.add_with_carry('absolute_indexed', 'X')             
         elif op_code == ADC_ABSOLUTE_Y:
-            self.add_with_carry('absolute_offset', 'Y')      
+            self.add_with_carry('absolute_indexed', 'Y')      
         elif op_code == ADC_INDIRECT_X:
             self.add_with_carry('indexed_indirect_x')                       
         elif op_code == ADC_INDIRECT_Y:
@@ -506,13 +608,13 @@ class Processor:
         elif op_code == AND_ZERO_PAGE:
             self.logical_operation('and_', 'zero_page')
         elif op_code == AND_ZERO_PAGE_X:
-            self.logical_operation('and_', 'zero_page_offset', 'X')
+            self.logical_operation('and_', 'zero_page_indexed', 'X')
         elif op_code == AND_ABSOLUTE:
             self.logical_operation('and_', 'absolute')
         elif op_code == AND_ABSOLUTE_X:
-            self.logical_operation('and_', 'absolute_offset', 'X')
+            self.logical_operation('and_', 'absolute_indexed', 'X')
         elif op_code == AND_ABSOLUTE_Y:
-            self.logical_operation('and_', 'absolute_offset', 'Y')
+            self.logical_operation('and_', 'absolute_indexed', 'Y')
         elif op_code == AND_INDIRECT_X:
             self.logical_operation('and_', 'indexed_indirect_x')
         elif op_code == AND_INDIRECT_Y:
@@ -523,11 +625,11 @@ class Processor:
         elif op_code == ASL_ZERO_PAGE:
             self.shift_memory(left=True, mode='zero_page')
         elif op_code == ASL_ZERO_PAGE_X:
-            self.shift_memory(left=True, mode='zero_page_offset', offset_register='X')
+            self.shift_memory(left=True, mode='zero_page_indexed', index_register='X')
         elif op_code == ASL_ABSOLUTE:
             self.shift_memory(left=True, mode='absolute')
         elif op_code == ASL_ABSOLUTE_X:
-            self.shift_memory(left=True, mode='absolute_offset', offset_register='X')       
+            self.shift_memory(left=True, mode='absolute_indexed', index_register='X')       
         # Branch instructions
         elif op_code == BCC_RELATIVE:
             self.branch('C', False)
@@ -563,13 +665,13 @@ class Processor:
         elif op_code == CMP_ZERO_PAGE:
             self.compare('A', 'zero_page')
         elif op_code == CMP_ZERO_PAGE_X:
-            self.compare('A', 'zero_page_offset', 'X')
+            self.compare('A', 'zero_page_indexed', 'X')
         elif op_code == CMP_ABSOLUTE:
             self.compare('A', 'absolute')
         elif op_code == CMP_ABSOLUTE_X:
-            self.compare('A', 'absolute_offset', 'X')
+            self.compare('A', 'absolute_indexed', 'X')
         elif op_code == CMP_ABSOLUTE_Y:
-            self.compare('A', 'absolute_offset', 'Y')
+            self.compare('A', 'absolute_indexed', 'Y')
         elif op_code == CMP_INDIRECT_X:
             self.compare('A', 'indexed_indirect_x')
         elif op_code == CMP_INDIRECT_Y:
@@ -590,11 +692,11 @@ class Processor:
         elif op_code == DEC_ZERO_PAGE:
             self.increment(-1, 'zero_page')
         elif op_code == DEC_ZERO_PAGE_X:
-            self.increment(-1, 'zero_page_offset', 'X')
+            self.increment(-1, 'zero_page_indexed', 'X')
         elif op_code == DEC_ABSOLUTE:
             self.increment(-1, 'absolute')
         elif op_code == DEC_ABSOLUTE_X:
-            self.increment(-1, 'absolute_offset', 'X')
+            self.increment(-1, 'absolute_indexed', 'X')
         # Decrement registers X and Y
         elif op_code == DEX:
             self.increment_register(-1, 'X')
@@ -606,13 +708,13 @@ class Processor:
         elif op_code == EOR_ZERO_PAGE:
             self.logical_operation('xor', 'zero_page')
         elif op_code == EOR_ZERO_PAGE_X:
-            self.logical_operation('xor', 'zero_page_offset', 'X')
+            self.logical_operation('xor', 'zero_page_indexed', 'X')
         elif op_code == EOR_ABSOLUTE:
             self.logical_operation('xor', 'absolute')
         elif op_code == EOR_ABSOLUTE_X:
-            self.logical_operation('xor', 'absolute_offset', 'X')
+            self.logical_operation('xor', 'absolute_indexed', 'X')
         elif op_code == EOR_ABSOLUTE_Y:
-            self.logical_operation('xor', 'absolute_offset', 'Y')
+            self.logical_operation('xor', 'absolute_indexed', 'Y')
         elif op_code == EOR_INDIRECT_X:
             self.logical_operation('xor', 'indexed_indirect_x')
         elif op_code == EOR_INDIRECT_Y:
@@ -621,11 +723,11 @@ class Processor:
         elif op_code == INC_ZERO_PAGE:
             self.increment(1, 'zero_page')
         elif op_code == INC_ZERO_PAGE_X:
-            self.increment(1, 'zero_page_offset', 'X')
+            self.increment(1, 'zero_page_indexed', 'X')
         elif op_code == INC_ABSOLUTE:
             self.increment(1, 'absolute')
         elif op_code == INC_ABSOLUTE_X:
-            self.increment(1, 'absolute_offset', 'X')
+            self.increment(1, 'absolute_indexed', 'X')
         # Decrement registers X and Y
         elif op_code == INX:
             self.increment_register(1, 'X')
@@ -645,13 +747,13 @@ class Processor:
         elif op_code == LDA_ZERO_PAGE:
             self.load_register('A', 'zero_page')
         elif op_code == LDA_ZERO_PAGE_X:
-            self.load_register('A', 'zero_page_offset', 'X')
+            self.load_register('A', 'zero_page_indexed', 'X')
         elif op_code == LDA_ABSOLUTE:
             self.load_register('A', 'absolute')
         elif op_code == LDA_ABSOLUTE_X:
-            self.load_register('A', 'absolute_offset', 'X')
+            self.load_register('A', 'absolute_indexed', 'X')
         elif op_code == LDA_ABSOLUTE_Y:
-            self.load_register('A', 'absolute_offset', 'Y')
+            self.load_register('A', 'absolute_indexed', 'Y')
         elif op_code == LDA_INDIRECT_X:
             self.load_register('A', 'indexed_indirect_x')        
         elif op_code == LDA_INDIRECT_Y:
@@ -662,33 +764,33 @@ class Processor:
         elif op_code == LDX_ZERO_PAGE:
             self.load_register('X', 'zero_page')
         elif op_code == LDX_ZERO_PAGE_Y:
-            self.load_register('X', 'zero_page_offset', 'Y')
+            self.load_register('X', 'zero_page_indexed', 'Y')
         elif op_code == LDX_ABSOLUTE:
             self.load_register('X', 'absolute')
         elif op_code == LDX_ABSOLUTE_Y:
-            self.load_register('X', 'absolute_offset', 'Y')
+            self.load_register('X', 'absolute_indexed', 'Y')
         # LDY instructions
         elif op_code == LDY_IMMEDIATE:
             self.load_register('Y', 'immediate')
         elif op_code == LDY_ZERO_PAGE:
             self.load_register('Y', 'zero_page')
         elif op_code == LDY_ZERO_PAGE_X:
-            self.load_register('Y', 'zero_page_offset', 'X')
+            self.load_register('Y', 'zero_page_indexed', 'X')
         elif op_code == LDY_ABSOLUTE:
             self.load_register('Y', 'absolute')
         elif op_code == LDX_ABSOLUTE_Y:
-            self.load_register('Y', 'absolute_offset', 'X')
+            self.load_register('Y', 'absolute_indexed', 'X')
         # Logical shift right
         elif op_code == LSR_ACCUMULATOR:
             self.shift_accumulator(left=False)
         elif op_code == LSR_ZERO_PAGE:
             self.shift_memory(left=False, mode='zero_page')
         elif op_code == LSR_ZERO_PAGE_X:
-            self.shift_memory(left=False, mode='zero_page_offset', offset_register='X')
+            self.shift_memory(left=False, mode='zero_page_indexed', index_register='X')
         elif op_code == LSR_ABSOLUTE:
             self.shift_memory(left=False, mode='absolute')
         elif op_code == LSR_ABSOLUTE_X:
-            self.shift_memory(left=False, mode='absolute_offset', offset_register='X')       
+            self.shift_memory(left=False, mode='absolute_indexed', index_register='X')       
         # NOP instruction
         elif op_code == NOP:
             self.no_operation()
@@ -698,25 +800,25 @@ class Processor:
         elif op_code == ORA_ZERO_PAGE:
             self.logical_operation('or_', 'zero_page')
         elif op_code == ORA_ZERO_PAGE_X:
-            self.logical_operation('or_', 'zero_page_offset', 'X')
+            self.logical_operation('or_', 'zero_page_indexed', 'X')
         elif op_code == ORA_ABSOLUTE:
             self.logical_operation('or_', 'absolute')
         elif op_code == ORA_ABSOLUTE_X:
-            self.logical_operation('or_', 'absolute_offset', 'X')
+            self.logical_operation('or_', 'absolute_indexed', 'X')
         elif op_code == ORA_ABSOLUTE_Y:
-            self.logical_operation('or_', 'absolute_offset', 'Y')
+            self.logical_operation('or_', 'absolute_indexed', 'Y')
         elif op_code == ORA_INDIRECT_X:
             self.logical_operation('or_', 'indexed_indirect_x')
         elif op_code == ORA_INDIRECT_Y:
             self.logical_operation('or_', 'indirect_indexed_y')
         # Push to stack instructions
         elif op_code == PHA:
-            self.push_register('A')
+            self.push_accumulator()
         elif op_code == PHP:
             self.push_processor_status()
         # Pull from stack instruction
         elif op_code == PLA:
-            self.pull_register('A')
+            self.pull_accumulator()
         elif op_code == PLP:
             self.pull_processor_status()
         # Rotate instructions
@@ -725,21 +827,21 @@ class Processor:
         elif op_code == ROL_ZERO_PAGE:
             self.rotate_memory(mode='zero_page', left=True)
         elif op_code == ROL_ZERO_PAGE_X:
-            self.rotate_memory(mode='zero_page_offset', offset_register='X', left=True)
+            self.rotate_memory(mode='zero_page_indexed', index_register='X', left=True)
         elif op_code == ROL_ABSOLUTE:
             self.rotate_memory(mode='absolute', left=True)
         elif op_code == ROL_ABSOLUTE_X:
-            self.rotate_memory(mode='absolute_offset', offset_register='X', left=True)
+            self.rotate_memory(mode='absolute_indexed', index_register='X', left=True)
         elif op_code == ROR_ACCUMULATOR:
             self.rotate_accumulator(left=False)
         elif op_code == ROR_ZERO_PAGE:
             self.rotate_memory(mode='zero_page', left=False)
         elif op_code == ROR_ZERO_PAGE_X:
-            self.rotate_memory(mode='zero_page_offset', offset_register='X', left=False)
+            self.rotate_memory(mode='zero_page_indexed', index_register='X', left=False)
         elif op_code == ROR_ABSOLUTE:
             self.rotate_memory(mode='absolute', left=False)
         elif op_code == ROR_ABSOLUTE_X:
-            self.rotate_memory(mode='absolute_offset', offset_register='X', left=False)
+            self.rotate_memory(mode='absolute_indexed', index_register='X', left=False)
         # RTI instruction
         elif op_code == RTI:
             self.return_from_interrupt()
@@ -752,13 +854,13 @@ class Processor:
         elif op_code == SBC_ZERO_PAGE:
             self.subtract_with_carry('zero_page')            
         elif op_code == SBC_ZERO_PAGE_X:
-            self.subtract_with_carry('zero_page_offset', 'X')
+            self.subtract_with_carry('zero_page_indexed', 'X')
         elif op_code == SBC_ABSOLUTE:
             self.subtract_with_carry('absolute')            
         elif op_code == SBC_ABSOLUTE_X:
-            self.subtract_with_carry('absolute_offset', 'X')             
+            self.subtract_with_carry('absolute_indexed', 'X')             
         elif op_code == SBC_ABSOLUTE_Y:
-            self.subtract_with_carry('absolute_offset', 'Y')      
+            self.subtract_with_carry('absolute_indexed', 'Y')      
         elif op_code == SBC_INDIRECT_X:
             self.subtract_with_carry('indexed_indirect_x')                       
         elif op_code == SBC_INDIRECT_Y:
@@ -774,13 +876,13 @@ class Processor:
         elif op_code == STA_ZERO_PAGE:
             self.store_register('A', 'zero_page')
         elif op_code == STA_ZERO_PAGE_X:
-            self.store_register('A', 'zero_page_offset', 'X')
+            self.store_register('A', 'zero_page_indexed', 'X')
         elif op_code == STA_ABSOLUTE:
             self.store_register('A', 'absolute')
         elif op_code == STA_ABSOLUTE_X:
-            self.store_register('A', 'absolute_offset', 'X')
+            self.store_register('A', 'absolute_indexed', 'X')
         elif op_code == STA_ABSOLUTE_Y:
-            self.store_register('A', 'absolute_offset', 'Y')
+            self.store_register('A', 'absolute_indexed', 'Y')
         elif op_code == STA_INDIRECT_X:
             self.store_register('A', 'indexed_indirect_x')
         elif op_code == STA_INDIRECT_Y:
@@ -789,14 +891,14 @@ class Processor:
         elif op_code == STX_ZERO_PAGE:
             self.store_register('X', 'zero_page')
         elif op_code == STX_ZERO_PAGE_Y:
-            self.store_register('X', 'zero_page_offset', 'Y')
+            self.store_register('X', 'zero_page_indexed', 'Y')
         elif op_code == STX_ABSOLUTE:
             self.store_register('X', 'absolute')
         # STY instructions
         elif op_code == STY_ZERO_PAGE:
             self.store_register('Y', 'zero_page')
         elif op_code == STY_ZERO_PAGE_X:
-            self.store_register('Y', 'zero_page_offset', 'X')
+            self.store_register('Y', 'zero_page_indexed', 'X')
         elif op_code == STY_ABSOLUTE:
             self.store_register('Y', 'absolute')
         # Transfer register to register instructions
@@ -832,8 +934,7 @@ def setup_processor(instruction:list[int]=[], data:dict={}, registers:dict={}, f
     for byte in instruction:
         processor.memory.data[address] = byte
         address += 1
-
-    
+   
     return processor
 
 

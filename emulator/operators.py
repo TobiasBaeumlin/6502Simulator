@@ -1,3 +1,9 @@
+def set_bit(v, index, x):
+    if x:
+        return v | (1<<index)
+    else:
+        return v & ~(1<<index)
+
 def signed_byte_addition(a: int, b:int) -> int:
     assert -128<=a<=127, -128<=b<=127
     sum = a + b
