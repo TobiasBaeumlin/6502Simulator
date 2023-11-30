@@ -62,16 +62,16 @@ class OperatorTest(unittest.TestCase):
         assert signed_subtraction_overflow(0xd0, 0x30) == False   
 
     def test_shift_left(self):
-        assert shift_left(0x5) == (0xa, 0)
-        assert shift_left(0x80) == (0, 1)
-        assert shift_left(0x10, 1) == (0x21, 0)
-        assert shift_left(0xf0, 1) == (0xe1, 1)
+        assert shl(0x5) == (0xa, 0)
+        assert shl(0x80) == (0, 1)
+        assert shl(0x10, 1) == (0x21, 0)
+        assert shl(0xf0, 1) == (0xe1, 1)
     
     def test_shift_right(self):
-        assert shift_right(0x5) == (0x2, 1)
-        assert shift_right(0x80) == (0x40, 0)
-        assert shift_right(0x10, 1) == (0x88, 0)
-        assert shift_right(0x81, 1) == (0xc0, 1)
+        assert shr(0x5) == (0x2, 1)
+        assert shr(0x80) == (0x40, 0)
+        assert shr(0x10, 1) == (0x88, 0)
+        assert shr(0x81, 1) == (0xc0, 1)
 
 if __name__ == '__main__':
     unittest.main()

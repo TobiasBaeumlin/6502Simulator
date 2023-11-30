@@ -147,14 +147,15 @@ INSTRUCTION_SET =\
 ## Address modes
 
 ADDRESS_MODES = {
-    0: 'x_indexed_indirect',
-    1: 'zero_page',
-    2: 'immediate',
-    3: 'absolute',
-    4: 'indirect_y_indexed',
-    5: 'zero_page_x_indexed',
-    6: 'absolute_x_indexed',
-    7: 'absolute_y_indexed'}
+    0: 'x_idx_ind',
+    1: 'zp',
+    2: 'imm',
+    3: 'abs',
+    4: 'ind_y_idx',
+    5: 'zp_x_idx',
+    6: 'abs_x_idx',
+    7: 'abs_y_idx'}
+
 
 def fetch_and_decode_instruction(op_code):
     a = (op_code & 0b11100000) >> 5

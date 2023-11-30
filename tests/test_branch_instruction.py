@@ -15,6 +15,7 @@ def test_branch_instruction(instruction:list[int], distance:int, flags:dict, bra
         assert processor.PC == pc + len(instruction)
     assert processor.cycles == num_cycles
 
+
 def test_set_flag_instruction(instruction:list[int], flag:str, state:bool, flags:dict, num_cycles:int) -> None:
     processor = setup_processor(instruction, data={}, flags=flags)
     

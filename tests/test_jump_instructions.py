@@ -90,7 +90,7 @@ class ProcessorTest(unittest.TestCase):
             0x8002: RTS
             }
         register_data = {'A': 0x10, 'SP': 0xa0, 'PC':0x0200}
-        processor = setup_processor(data=data, registers=register_data)
+        processor = setup_processor([], data=data, registers=register_data)
         for _ in range(4):
             processor.run_instruction()
         assert processor.A == 0x42

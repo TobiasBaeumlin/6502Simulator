@@ -6,7 +6,8 @@ class ProcessorTest(unittest.TestCase):
     def test_setter_getter(self):
         processor = Processor()
         processor.PC = 0x200
-        assert processor.program_counter.value == 0x200
+        assert processor.program_counter_low.value == 0x00
+        assert processor.program_counter_high.value == 0x02
         processor.A = 0xff
         assert processor.accumulator.value == 0xff
         processor.C = 1

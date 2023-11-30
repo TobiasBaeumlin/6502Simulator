@@ -38,6 +38,7 @@ def test_sbc_instruction(instruction:list[int], result:int, subtrahend:int, num_
     assert processor.V == signed_subtraction_overflow(a, b+c)
     assert processor.PC == START_ADDR + len(instruction)
 
+
 class ProcessorTest(unittest.TestCase):
     ## Addition
     def test_adc_immediate(self):
@@ -91,7 +92,7 @@ class ProcessorTest(unittest.TestCase):
         
     def test_sbc_zero_page_x(self):
         test_sbc_instruction(instruction=[SBC_ZERO_PAGE_X, 0x0a], register_data={'A': 0xf0, 'X': 0xf0}, data={0xfa: 0x20}, 
-                             result=0xcf, subtrahend=0x20, num_cycles=4)
+                             result=0xcf, subtrahend=0x20, num_cycles=4, carry=0)
         
     def test_sbc_absolute(self):
         test_sbc_instruction(instruction=[SBC_ABSOLUTE, 0x0a, 0x20], register_data={'A': 0xf0}, data={0x200a: 0xf0}, 
@@ -99,7 +100,7 @@ class ProcessorTest(unittest.TestCase):
          
     def test_sbc_absolute_x_same_page(self):
         test_sbc_instruction(instruction=[SBC_ABSOLUTE_X, 0x0a, 0x20], register_data={'A': 0xf0, 'X':0x01}, data={0x200b: 0xf0}, 
-                             result=0xff, subtrahend=0xf0, num_cycles=4) 
+                             result=0xff, subtrahend=0xf0, num_cycles=4, carry=0)
         
     def test_sbc_absolute_x_cross_page_boundary(self):
         test_sbc_instruction(instruction=[SBC_ABSOLUTE_X, 0x10, 0x20], register_data={'A': 0x01, 'X':0xf0}, data={0x2100: 0x01}, 
@@ -107,7 +108,7 @@ class ProcessorTest(unittest.TestCase):
         
     def test_sbc_absolute_y_same_page(self):
         test_sbc_instruction(instruction=[SBC_ABSOLUTE_Y, 0x0a, 0x20], register_data={'A': 0xf0, 'Y':0x01}, data={0x200b: 0x10}, 
-                             result=0xdf, subtrahend=0x10, num_cycles=4) 
+                             result=0xdf, subtrahend=0x10, num_cycles=4, carry=0)
         
     def test_sbc_absolute_y_cross_page_boundary(self):
         test_sbc_instruction(instruction=[SBC_ABSOLUTE_Y, 0x10, 0x20], register_data={'A': 0xa1, 'Y':0xf0}, data={0x2100: 0x01}, 
@@ -119,7 +120,7 @@ class ProcessorTest(unittest.TestCase):
         
     def test_sbc_indirect_y_same_page(self):
         test_sbc_instruction(instruction=[SBC_INDIRECT_Y, 0x30], register_data={'A': 0xff, 'Y':0xf0}, data={0x30:0x00, 0x31:0x21, 0x21f0: 0x01}, 
-                             result=0xfd, subtrahend=0x01, num_cycles=5) 
+                             result=0xfd, subtrahend=0x01, num_cycles=5, carry=0)
 
 if __name__ == '__main__':
     unittest.main()
