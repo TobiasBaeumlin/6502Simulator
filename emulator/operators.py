@@ -1,3 +1,8 @@
+def word(low_byte, high_byte):
+    assert 0 <= low_byte <= 0xff, 0 <= high_byte <= 0xff
+    return (low_byte + (high_byte << 8))
+
+
 def set_bit(v, index, x):
     if x:
         return v | (1 << index)

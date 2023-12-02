@@ -16,7 +16,7 @@ def test_load_instruction(instruction:list[int], register:str, value:int, num_cy
 
 class ProcessorTest(unittest.TestCase):
     def test_lda_immediate(self):
-        test_load_instruction(instruction=[LDA_IMMEDIATE, 0], register='A', value=0, num_cycles=2 )
+        test_load_instruction(instruction=[LDA_IMMEDIATE, 42], register='A', value=42, num_cycles=2 )
 
     def test_lda_zero_page(self):
         test_load_instruction(instruction=[LDA_ZERO_PAGE, 0x10], register='A', value=138, num_cycles=3, 

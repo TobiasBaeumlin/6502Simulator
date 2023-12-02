@@ -639,7 +639,13 @@
        <enum>QFrame::Sunken</enum>
       </property>
       <property name="text">
-       <string>0</string>
+       <string>FF</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="indent">
+       <number>0</number>
       </property>
      </widget>
      <widget class="QLabel" name="reg_1A">
@@ -7339,57 +7345,6 @@
      <property name="midLineWidth">
       <number>2</number>
      </property>
-     <widget class="QLabel" name="index_y">
-      <property name="geometry">
-       <rect>
-        <x>360</x>
-        <y>230</y>
-        <width>51</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="index_x">
-      <property name="geometry">
-       <rect>
-        <x>360</x>
-        <y>140</y>
-        <width>51</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
      <widget class="QFrame" name="accumulator_frame">
       <property name="geometry">
        <rect>
@@ -7463,9 +7418,9 @@
      <widget class="QFrame" name="program_counter_frame">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>60</x>
         <y>140</y>
-        <width>171</width>
+        <width>131</width>
         <height>51</height>
        </rect>
       </property>
@@ -7478,7 +7433,7 @@
       <widget class="QLabel" name="program_counter_high_byte">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>10</y>
          <width>51</width>
          <height>31</height>
@@ -7505,7 +7460,7 @@
       <widget class="QLabel" name="program_counter_low_byte">
        <property name="geometry">
         <rect>
-         <x>100</x>
+         <x>70</x>
          <y>10</y>
          <width>51</width>
          <height>31</height>
@@ -7885,7 +7840,7 @@
      <widget class="QLabel" name="status_register_label">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>50</x>
         <y>10</y>
         <width>141</width>
         <height>21</height>
@@ -7899,13 +7854,16 @@
       <property name="text">
        <string>Status Register</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="program_counter_label">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>40</x>
         <y>120</y>
-        <width>131</width>
+        <width>151</width>
         <height>20</height>
        </rect>
       </property>
@@ -7917,13 +7875,16 @@
       <property name="text">
        <string>Program Counter</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="accumulator_label">
       <property name="geometry">
        <rect>
         <x>270</x>
         <y>10</y>
-        <width>101</width>
+        <width>141</width>
         <height>20</height>
        </rect>
       </property>
@@ -7935,13 +7896,16 @@
       <property name="text">
        <string>Accumulator</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="index_x_label">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>270</x>
         <y>120</y>
-        <width>61</width>
+        <width>141</width>
         <height>20</height>
        </rect>
       </property>
@@ -7953,13 +7917,16 @@
       <property name="text">
        <string>Index X</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="index_y_label">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>270</x>
         <y>210</y>
-        <width>61</width>
+        <width>141</width>
         <height>20</height>
        </rect>
       </property>
@@ -7971,13 +7938,16 @@
       <property name="text">
        <string>Index Y</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="stack_pointer_label">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>20</x>
         <y>210</y>
-        <width>101</width>
+        <width>171</width>
         <height>20</height>
        </rect>
       </property>
@@ -7988,30 +7958,6 @@
       </property>
       <property name="text">
        <string>Stack Pointer</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="stack_pointer">
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>230</y>
-        <width>51</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="text">
-       <string>0</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -8045,6 +7991,9 @@
         <font>
          <pointsize>20</pointsize>
         </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="text">
         <string/>
@@ -8332,7 +8281,7 @@
         <x>220</x>
         <y>10</y>
         <width>20</width>
-        <height>301</height>
+        <height>331</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -8375,7 +8324,7 @@
        <rect>
         <x>190</x>
         <y>160</y>
-        <width>41</width>
+        <width>151</width>
         <height>20</height>
        </rect>
       </property>
@@ -8400,7 +8349,7 @@
        <rect>
         <x>190</x>
         <y>250</y>
-        <width>41</width>
+        <width>151</width>
         <height>20</height>
        </rect>
       </property>
@@ -8425,7 +8374,7 @@
        <rect>
         <x>190</x>
         <y>80</y>
-        <width>41</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -8448,9 +8397,9 @@
      <widget class="Line" name="line_12">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>450</x>
         <y>80</y>
-        <width>81</width>
+        <width>41</width>
         <height>20</height>
        </rect>
       </property>
@@ -8523,9 +8472,9 @@
      <widget class="Line" name="line_15">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>410</x>
         <y>40</y>
-        <width>41</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -8567,8 +8516,132 @@
        <enum>Qt::Vertical</enum>
       </property>
      </widget>
-     <zorder>index_y</zorder>
-     <zorder>index_x</zorder>
+     <widget class="QFrame" name="stack_pointer_frame">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>230</y>
+        <width>71</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="stack_pointer">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="index_y_frame">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>230</y>
+        <width>71</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="index_y">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="index_x_frame">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>140</y>
+        <width>71</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="index_x">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </widget>
      <zorder>accumulator_frame</zorder>
      <zorder>status_register_frame</zorder>
      <zorder>status_register_label</zorder>
@@ -8577,7 +8650,6 @@
      <zorder>index_x_label</zorder>
      <zorder>index_y_label</zorder>
      <zorder>stack_pointer_label</zorder>
-     <zorder>stack_pointer</zorder>
      <zorder>program_counter_frame</zorder>
      <zorder>current_instruction_frame</zorder>
      <zorder>current_instruction_label</zorder>
@@ -8594,13 +8666,16 @@
      <zorder>line_14</zorder>
      <zorder>line_15</zorder>
      <zorder>line_25</zorder>
+     <zorder>stack_pointer_frame</zorder>
+     <zorder>index_y_frame</zorder>
+     <zorder>index_x_frame</zorder>
     </widget>
     <widget class="QFrame" name="adress_register_frame">
      <property name="geometry">
       <rect>
        <x>760</x>
        <y>320</y>
-       <width>171</width>
+       <width>131</width>
        <height>51</height>
       </rect>
      </property>
@@ -8613,7 +8688,7 @@
      <widget class="QLabel" name="adress_register_high_byte">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>10</y>
         <width>51</width>
         <height>31</height>
@@ -8640,7 +8715,7 @@
      <widget class="QLabel" name="adress_register_low_byte">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>70</x>
         <y>10</y>
         <width>51</width>
         <height>31</height>
@@ -8669,7 +8744,7 @@
      <property name="geometry">
       <rect>
        <x>760</x>
-       <y>290</y>
+       <y>300</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -15647,7 +15722,7 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <widget class="QLabel" name="stack_0">
+     <widget class="QLabel" name="stack_F">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15671,7 +15746,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_1">
+     <widget class="QLabel" name="stack_E">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15695,7 +15770,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_2">
+     <widget class="QLabel" name="stack_D">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15719,7 +15794,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_3">
+     <widget class="QLabel" name="stack_C">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15743,7 +15818,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_4">
+     <widget class="QLabel" name="stack_B">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15767,7 +15842,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_5">
+     <widget class="QLabel" name="stack_A">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15791,7 +15866,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_6">
+     <widget class="QLabel" name="stack_9">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15815,7 +15890,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_7">
+     <widget class="QLabel" name="stack_8">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15839,7 +15914,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_8">
+     <widget class="QLabel" name="stack_7">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15863,7 +15938,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_9">
+     <widget class="QLabel" name="stack_6">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15887,7 +15962,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_A">
+     <widget class="QLabel" name="stack_5">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15911,7 +15986,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_B">
+     <widget class="QLabel" name="stack_4">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15935,7 +16010,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_C">
+     <widget class="QLabel" name="stack_3">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15959,7 +16034,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_D">
+     <widget class="QLabel" name="stack_2">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -15983,7 +16058,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_E">
+     <widget class="QLabel" name="stack_1">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -16007,7 +16082,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_F">
+     <widget class="QLabel" name="stack_0">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -16081,7 +16156,7 @@
        <number>5</number>
       </property>
      </widget>
-     <widget class="QLabel" name="stack_sp">
+     <widget class="QLabel" name="stack_sp_8">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16101,8 +16176,11 @@
       <property name="text">
        <string> SP</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m1">
+     <widget class="QLabel" name="stack_sp_7">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16119,8 +16197,11 @@
       <property name="text">
        <string> SP-1</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m2">
+     <widget class="QLabel" name="stack_sp_6">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16137,8 +16218,11 @@
       <property name="text">
        <string> SP-2</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m3">
+     <widget class="QLabel" name="stack_sp_5">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16155,8 +16239,11 @@
       <property name="text">
        <string> SP-3</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m4">
+     <widget class="QLabel" name="stack_sp_4">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16173,8 +16260,11 @@
       <property name="text">
        <string> SP-4</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m5">
+     <widget class="QLabel" name="stack_sp_3">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16191,8 +16281,11 @@
       <property name="text">
        <string> SP-5</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m6">
+     <widget class="QLabel" name="stack_sp_2">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16209,8 +16302,11 @@
       <property name="text">
        <string> SP-6</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p6">
+     <widget class="QLabel" name="stack_sp_E">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16227,8 +16323,11 @@
       <property name="text">
        <string> SP+6</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p4">
+     <widget class="QLabel" name="stack_sp_C">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16245,8 +16344,11 @@
       <property name="text">
        <string> SP+4</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p1">
+     <widget class="QLabel" name="stack_sp_9">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16263,8 +16365,11 @@
       <property name="text">
        <string> SP+1</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p2">
+     <widget class="QLabel" name="stack_sp_A">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16281,8 +16386,11 @@
       <property name="text">
        <string> SP+2</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p5">
+     <widget class="QLabel" name="stack_sp_D">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16299,8 +16407,11 @@
       <property name="text">
        <string> SP+5</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p3">
+     <widget class="QLabel" name="stack_sp_B">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16317,8 +16428,11 @@
       <property name="text">
        <string> SP+3</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_p7">
+     <widget class="QLabel" name="stack_sp_F">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16335,8 +16449,11 @@
       <property name="text">
        <string> SP+7</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m7">
+     <widget class="QLabel" name="stack_sp_1">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16353,8 +16470,11 @@
       <property name="text">
        <string> SP-7</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="stack_sp_m8">
+     <widget class="QLabel" name="stack_sp_0">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -16370,6 +16490,9 @@
       </property>
       <property name="text">
        <string> SP-8</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </widget>
@@ -16712,6 +16835,184 @@
       <enum>Qt::Vertical</enum>
      </property>
     </widget>
+    <widget class="Line" name="line_26">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>370</y>
+       <width>20</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="interrupt_vector_label">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>10</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Interrupt </string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="interrupt_vector_frame">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>30</y>
+       <width>131</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QLabel" name="interrupt_vector">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="reset_vector_label">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>90</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Reset </string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="reset_vector_frame">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>110</y>
+       <width>131</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QLabel" name="reset_vector">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="nminterrupt_vector_frame">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>200</y>
+       <width>131</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QLabel" name="nminterrupt_vector">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="nminterrupt_vector_label">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>180</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>NMInterrupt</string>
+     </property>
+    </widget>
     <zorder>memory_frame</zorder>
     <zorder>cycle_counter_frame</zorder>
     <zorder>cycle_counter_label</zorder>
@@ -16738,6 +17039,13 @@
     <zorder>line_4</zorder>
     <zorder>line_23</zorder>
     <zorder>line_24</zorder>
+    <zorder>line_26</zorder>
+    <zorder>interrupt_vector_label</zorder>
+    <zorder>interrupt_vector_frame</zorder>
+    <zorder>reset_vector_label</zorder>
+    <zorder>reset_vector_frame</zorder>
+    <zorder>nminterrupt_vector_frame</zorder>
+    <zorder>nminterrupt_vector_label</zorder>
    </widget>
    <widget class="QPushButton" name="run_button">
     <property name="geometry">
@@ -16874,6 +17182,72 @@
      <string/>
     </property>
    </widget>
+   <widget class="QDial" name="speed_dial">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>10</y>
+      <width>50</width>
+      <height>51</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="speed_dial_label">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>30</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Speed</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="speed_min_label">
+    <property name="geometry">
+     <rect>
+      <x>357</x>
+      <y>40</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>min</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="speed_max_label">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>40</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>min</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="indent">
+     <number>2</number>
+    </property>
+   </widget>
    <zorder>paint_label</zorder>
    <zorder>computer_frame</zorder>
    <zorder>run_button</zorder>
@@ -16885,6 +17259,10 @@
    <zorder>save_file_as_button</zorder>
    <zorder>assembler_file_name_label</zorder>
    <zorder>assembler_input</zorder>
+   <zorder>speed_dial</zorder>
+   <zorder>speed_dial_label</zorder>
+   <zorder>speed_min_label</zorder>
+   <zorder>speed_max_label</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

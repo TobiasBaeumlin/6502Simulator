@@ -6,7 +6,7 @@ from gui.bus_geometry import AnimationPaths
 
 
 class ProcessorVisualization(QObject, Processor):
-    animate_signal = Signal(list)
+    animate_signal = Signal(dict)
     update_label_signal = Signal(str, object)
     show_page_signal = Signal(int, object)
     show_address_signal = Signal(int, object)
@@ -38,16 +38,17 @@ class ProcessorVisualization(QObject, Processor):
         assert 0 <= value < 0x100
         self._current_page = value
         self.show_page_signal.emit(value, self.memory.data)
-        self.update_label_signal.emit('page', f'{value:02X}')
+        self.update_label_signal.emit('page', f'{value:{self.byte_format}}')
 
     def show_cycle_status(self, status: str):
         self.update_label_signal.emit('cycle_stage', status)
         if not self.window.animation_mode:
             time.sleep(self.window.cycle_delay)
 
-    def animate_data_transfer(self, data_transfers):
+    # Blocks while the animation in the gui is running
+    def animate_data_transfer(self, data_transfer):
         self.window.animation_running = True
-        self.animate_signal.emit(data_transfers)
+        self.animate_signal.emit(data_transfer)
         while self.window.animation_running:
             pass
 
@@ -64,10 +65,17 @@ class ProcessorVisualization(QObject, Processor):
         assert 0 <= value < 0x10000
         self.update_label_signal.emit('program_counter_high_byte', (value >> 8))
         self.update_label_signal.emit('program_counter_low_byte', (value & 0xff))
-        # self.update_label_signal.emit('current_address', f'{value:04X}')
         self.show_address_signal.emit(value, self.memory.data)
         self.program_counter_high.set_value(value >> 8)
         self.program_counter_low.set_value(value & 0xff)
+
+    @Processor.AR.setter
+    def AR(self, value):
+        assert 0 <= value < 0x10000
+        self.update_label_signal.emit('address_register_high_byte', (value >> 8))
+        self.update_label_signal.emit('address_register_low_byte', (value & 0xff))
+        self.address_register_high.set_value(value >> 8)
+        self.address_register_low.set_value(value & 0xff)
 
     @Processor.SP.setter
     def SP(self, value):
@@ -101,7 +109,7 @@ class ProcessorVisualization(QObject, Processor):
         self.status.value = set_bit(self.status.value, 1, value)
 
     @Processor.I.setter
-    def I(self, value):
+    def I(self, value):                   # noqa e743
         self.update_label_signal.emit('flag_i', value)
         self.status.value = set_bit(self.status.value, 2, value)
 
@@ -129,12 +137,11 @@ class ProcessorVisualization(QObject, Processor):
         super().reset()
         self.update_label_signal.emit('cycle_stage', '')
 
-
     def set_zero_and_negative_status_flags(self, register: str = 'RES') -> None:
         super().set_zero_and_negative_status_flags(register)
         data = f'N:{self.N} Z:{self.Z}'
         path = AnimationPaths[register]['SR']
-        self.animate_data_transfer([{'path': path, 'data': data}])
+        self.animate_data_transfer({'path': path, 'data': data})
 
     def alu_operation(self, operator):
         super().alu_operation(operator)
@@ -144,168 +151,149 @@ class ProcessorVisualization(QObject, Processor):
         super().cycle()
         self.update_label_signal.emit('cycle_counter', f'{self.cycles}')
 
-    def fetch_byte(self, address: int) -> int:
-        byte = super().fetch_byte(address)
-        self.show_address_signal.emit(address, self.memory.data)
-        if (address >> 8) == 1:
-            self.animate_data_transfer([{'path': AnimationPaths['AR']['MA'], 'data': f'{address:04X}'}])
-            self.update_label_signal.emit('data_zp', f'{byte:02X}')
+    def copy_byte(self, from_register: str, to_register: str) -> None:
+        super().copy_byte(from_register, to_register)
+        data = self.__getattribute__(from_register)
+        self.animate_data_transfer({'path': AnimationPaths[from_register][to_register],
+                                    'data': f'{data:{self.byte_format}}'})
+
+    def fetch_byte(self) -> int:
+        byte = super().fetch_byte()
+        self.show_address_signal.emit(self.AR, self.memory.data)
+        self.animate_data_transfer({'path': AnimationPaths['AR']['ZA'],
+                                    'data': f'{self.AR:{self.byte_format}}'})
+        if (self.AR >> 8) == 0:
+            self.update_label_signal.emit('data_mem',
+                                          f'{byte:{self.byte_format}}')
         else:
-            self.animate_data_transfer([{'path': AnimationPaths['AR']['ZA'], 'data': f'{address:02X}'}])
-            self.update_label_signal.emit('data_mem', f'{byte:02X}')
+            self.update_label_signal.emit('data_zp',
+                                          f'{byte:{self.byte_format}}')
         return byte
 
-    def fetch_byte_to_register(self, address: int, register: str) -> None:
-        super().fetch_byte_to_register(address, register)
-        page = address >> 0
-        if page == 1:
+    def fetch_byte_to_register(self, register: str) -> None:
+        super().fetch_byte_to_register(register)
+        if (self.AR >> 8) == 0:
             path = AnimationPaths['ZD'][register]
         else:
             path = AnimationPaths['MD'][register]
-        self.animate_data_transfer([{'path': path, 'data': self.__getattribute__(register)}])
+        self.animate_data_transfer({'path': path,
+                                    'data': f'{getattr(self, register):{self.byte_format}}'})
 
-    def put_byte(self, address: int, byte: int) -> None:
-        super().put_byte(address, byte)
-        self.show_address_signal.emit(address, self.memory.data)
-        self.update_label_signal.emit('data', f'{byte:02x}')
+    def put_byte(self, byte: int) -> None:
+        super().put_byte(byte)
+        if (self.AR >> 8) == 0:
+            self.update_label_signal.emit('data_zp', f'{byte:{self.byte_format}}')
+        else:
+            self.update_label_signal.emit('data_mem', f'{byte:{self.byte_format}}')
+
+    def put_byte_from_register(self, register: str) -> None:
+        super().put_byte_from_register(register)
+        if (self.AR >> 8) == 0:
+            self.animate_data_transfer({'path': AnimationPaths[register]['ZD'],
+                                        'data': f'{getattr(self, register):{self.byte_format}}'})
+        else:
+            self.animate_data_transfer({'path': AnimationPaths[register]['ZD'],
+                                        'data': f'{getattr(self, register)}:{self.byte_format}'})
 
     def push_pc_to_stack(self, word: int) -> None:
         super().push_pc_to_stack(word)
-        self.animate_data_transfer([{'path': AnimationPaths['PC']['MD'], 'data': f'{(word & 0xff):02x}'}])
-        self.animate_data_transfer([{'path': AnimationPaths['PC']['MD'], 'data': f'{(word >> 0xff):02x}'}])
+        self.animate_data_transfer({'path': AnimationPaths['PC']['MD'],
+                                    'data': f'{(word & 0xff):{self.byte_format}}'})
+        self.animate_data_transfer({'path': AnimationPaths['PC']['MD'],
+                                    'data': f'{(word >> 0xff):{self.byte_format}}'})
 
     def pull_pc_from_stack(self) -> None:
         super().pull_pc_from_stack()
-        self.animate_data_transfer([{'path': AnimationPaths['MD']['PC'], 'data': f'{(self.PC & 0xff):02x}'}])
-        self.animate_data_transfer([{'path': AnimationPaths['PC']['MD'], 'data': f'{(self.PC >> 0xff):02x}'}])
+        self.animate_data_transfer({'path': AnimationPaths['MD']['PC'],
+                                    'data': f'{(self.PC & 0xff):{self.byte_format}}'})
+        self.animate_data_transfer({'path': AnimationPaths['PC']['MD'],
+                                    'data': f'{(self.PC >> 0xff):{self.byte_format}}'})
 
-    def fetch_instruction(self) -> int:
+    def fetch_instruction(self) -> None:
         self.show_cycle_status('fetch')
-        data = f'{self.PC:04X}'
-        self.animate_data_transfer([{'path': AnimationPaths['PC']['AR'], 'data': data}])
-        op_code = super().fetch_instruction()
-        data = f'{op_code:02X}'
-        self.animate_data_transfer([{'path': AnimationPaths['MD']['IR'], 'data': data}])
-        return op_code
-
-    def run_instruction(self):
-        super().run_instruction()
-
-    def decode(self, op_code: int) -> None:
-        self.show_cycle_status('decode')
-        super().decode(op_code)
+        address = f'{self.PC:{self.word_format}}'
+        self.animate_data_transfer({'path': AnimationPaths['PC']['AR'], 'data': address})
+        super().fetch_instruction()
+        if (self.PC >> 8) == 0:
+            self.animate_data_transfer({'path': AnimationPaths['ZD']['IR'],
+                                        'data': f'{self.IR:{self.byte_format}}'})
+        else:
+            self.animate_data_transfer({'path': AnimationPaths['MD']['IR'],
+                                        'data': f'{self.IR:{self.byte_format}}'})
 
     def load_register(self, register: str, mode: str, index_register=None) -> None:
         self.show_cycle_status('run')
-        # path = AnimationPaths['MD'][register]
-        # self.animate_data_transfer([{'path': path, 'data': str(self.__getattribute__(register))}])
         super().load_register(register, mode, index_register)
 
     def store_register(self, register: str, mode: str, index_register: str = None) -> None:
         self.show_cycle_status('run')
-        # path = AnimationPaths[register]['MD']
-        # self.animate_data_transfer([{'path': path, 'data': str(self.__getattribute__(register))}])
         super().store_register(register, mode, index_register)
 
     def transfer_register(self, source: str, destination: str) -> None:
         self.show_cycle_status('run')
         path = AnimationPaths[source][destination]
-        self.animate_data_transfer([{'path': path, 'data': str(self.__getattribute__(source))}])
+        self.animate_data_transfer({'path': path,
+                                    'data': str(self.__getattribute__(source))})
+
         super().transfer_register(source, destination)
 
-    def add_with_carry(self, mode: str, index_register: str = None) -> None:
+    def arithmetic_operation(self, operator: str, mode: str, index_register: str = None) -> None:
         self.show_cycle_status('run')
-        super().add_with_carry(mode, index_register)
-        # self.animate_data_transfer([{'path': self.window.paths.dat_al_i2, 'data': '-1'},
-        #                            {'path': self.window.paths.ac_al_i1, 'data': '-1'}])
-        # self.animate_data_transfer([{'path': self.window.paths.al_o_ac, 'data': '-1'}])
-
-    def subtract_with_carry(self, mode: str, index_register: str = None) -> None:
-        self.show_cycle_status('run')
-        super().subtract_with_carry(mode, index_register)
-        # self.animate_data_transfer([{'path': self.window.paths.dat_al_i2, 'data': '-1'},
-        #                            {'path': self.window.paths.ac_al_i1, 'data': '-1'}])
-        # self.animate_data_transfer([{'path': self.window.paths.al_o_ac, 'data': '-1'}])
-
-    def logical_operation(self, operator: str, mode: str, index_register: str = None) -> None:
-        self.show_cycle_status('run')
-        super().logical_operation(operator, mode, index_register)
-        # self.animate_data_transfer([{'path': self.window.paths.dat_al_i2, 'data': '-1'},
-        #                             {'path': self.window.paths.ac_al_i1, 'data': '-1'}])
-        # self.animate_data_transfer([{'path': self.window.paths.al_o_ac, 'data': '-1'}])
+        super().arithmetic_operation(operator, mode, index_register)
 
     def compare(self, register: str, mode: str, index_register: str = None) -> None:
         self.show_cycle_status('run')
         super().compare(register, mode, index_register)
-        # self.animate_data_transfer([{'path': self.window.paths.dat_al_i2, 'data': '-1'},
-        #                             {'path': self.window.paths.ac_al_i1, 'data': '-1'}])
-        # self.animate_data_transfer([{'path': self.window.paths.al_o_sr, 'data': '-1'}])
 
     def branch(self, flag: str, state: bool) -> None:
         self.show_cycle_status('run')
         super().branch(flag, state)
-        data = '1' if state else '0'
-        # self.animate_data_transfer([{'path': self.window.paths.dat_pc, 'data': '-1'},
-        #                             {'path': self.window.paths.sr_pc, 'data': data}])
 
     def set_flag(self, flag: str, state: bool) -> None:
         self.show_cycle_status('run')
         super().set_flag(flag, state)
-        data = '1' if state else '0'
-        # self.animate_data_transfer([{'path': self.window.paths.ir_sr, 'data': data}])
 
-    def increment(self, increment:int, mode: str, index_register: str=None) -> None:
+    def increment(self, increment: int, mode: str, index_register: str=None) -> None:  # noqa 252
         self.show_cycle_status('run')
         super().increment(increment, mode, index_register)
-        self.animate_data_transfer([{'path': self.window.paths.dat_al_i2, 'data': '-1'},
-                                    {'path': self.window.paths.ir_al_i1, 'data': str(increment)}])
-        # Todo: Set ALU
-        # self.animate_data_transfer([{'path': self.window.paths.al_0_dat, 'data': '-1'}])
+        # self.animate_data_transfer({'path': self.window.paths.dat_al_i2, 'data': '-1'},
+        #                             {'path': self.window.paths.ir_al_i1, 'data': str(increment)})
 
     def increment_register(self, step: int, register: str) -> None:
         self.show_cycle_status('run')
         super().increment_register(step, register)
-        # if register == 'X':
-        #     path = [{'path': self.window.paths.ir_ix, 'data': f'{self.X:02X}'}]
-        # else:
-        #     path = [{'path': self.window.paths.ir_iy, 'data': f'{self.Y:02X}'}]
-        # self.animate_data_transfer(path)
 
     def push_processor_status(self) -> None:
         self.show_cycle_status('run')
         super().push_processor_status()
-        # self.animate_data_transfer([{'path': self.window.paths.sr_mem, 'data': f'{self.status.value:02X}'}])
 
     def push_accumulator(self) -> None:
         self.show_cycle_status('run')
         super().push_accumulator()
-        # self.animate_data_transfer([{'path': self.window.paths.ac_dat, 'data': f'{self.A:02X}'}])
 
     def pull_processor_status(self) -> None:
         self.show_cycle_status('run')
         super().pull_processor_status()
-        # self.animate_data_transfer([{'path': self.window.paths.dat_sr, 'data': f'{self.status.value:02X}'}])
 
     def pull_accumulator(self) -> None:
         self.show_cycle_status('run')
         super().pull_accumulator()
-        # self.animate_data_transfer([{'path': self.window.paths.dat_ac, 'data': f'{self.A:02X}'}])
 
     def jump(self, mode) -> None:
         self.show_cycle_status('run')
         super().jump(mode)
-        # self.animate_data_transfer([{'path': self.window.paths.dat_pc, 'data': f'{self.PC:02X}'}])
 
     def jump_to_subroutine(self):
         self.show_cycle_status('run')
-        # super().jump_to_subroutine()
+        super().jump_to_subroutine()
 
     def return_from_subroutine(self):
         self.show_cycle_status('run')
         super().return_from_subroutine()
-        # self.animate_data_transfer([{'path': self.window.paths.sr_dat, 'data': f'{self.status.value:02x}'}])
-        # self.animate_data_transfer([{'path': self.window.paths.dat_pc, 'data': f'{self.PC & 0xff}'}])
-        # self.animate_data_transfer([{'path': self.window.paths.dat_pc, 'data': f'{self.PC >> 8}'}])
 
+    def run_instruction(self):
+        super().run_instruction()
 
-
+    def decode_instruction(self) -> None:
+        self.show_cycle_status('decode')
+        super().decode_instruction()

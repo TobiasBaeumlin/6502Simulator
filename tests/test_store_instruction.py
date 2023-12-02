@@ -29,11 +29,11 @@ class ProcessorTest(unittest.TestCase):
         test_store_instruction(instruction=[STA_ABSOLUTE_Y, 0xf0, 0x10], destination=0x10fa, value=0x42, num_cycles=5, 
                                register_data={'A': 0x42, 'Y': 0x0a})
     def test_sta_indirect_x(self):
-        test_store_instruction(instruction=[STA_INDIRECT_X, 0x10], destination=0x10fa, value=0x42, num_cycles=6, 
-                               data={0x1a:0xfa, 0x1b:0x10}, register_data={'A': 0x42, 'X': 0x0a})
+        test_store_instruction(instruction=[STA_INDIRECT_X, 0x70], destination=0x3032, value=0x42, num_cycles=6,
+                               data={0x75: 0x32, 0x76: 0x30}, register_data={'A': 0x42, 'X': 0x05})
     def test_sta_indirect_y(self):
         test_store_instruction(instruction=[STA_INDIRECT_Y, 0xf0], destination=0x110a, value=0x42, num_cycles=6, 
-                               data={0xf0:0xfa, 0xf1:0x10}, register_data={'A': 0x42, 'Y': 0x10})
+                               data={0xf0: 0xfa, 0xf1: 0x10}, register_data={'A': 0x42, 'Y': 0x10})
     def test_stx_zero_page(self):
         test_store_instruction(instruction=[STX_ZERO_PAGE, 0xf0], destination=0xf0, value=0x42, num_cycles=3, 
                                register_data={'X': 0x42})        

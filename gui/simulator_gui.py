@@ -1,14 +1,13 @@
 from pathlib import Path
 from functools import partial
 from PySide6.QtCore import QObject, QThread, Signal, Slot, QPoint, QMutex, QWaitCondition
-from PySide6 import QtWidgets
 from PySide6.QtWidgets import QLCDNumber, QInputDialog, QFileDialog, QMessageBox
 
 from asm.assembler_helpers import parse_num
 from gui.bus_geometry import AnimationPaths
 from gui.animations import build_animation
 from gui.processor_visualization import ProcessorVisualization
-from gui.mainwindow import Ui_MainWindow
+from gui.emulator_window import EmulatorWindow
 from asm.assembler import AssemblerError, assemble_file
 
 
@@ -48,16 +47,27 @@ class RunWorker(QObject):
         self.finished.emit()
 
 
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class Simulator(EmulatorWindow):
     def __init__(self):
-        super(MainWindow, self).__init__()
-        self.setupUi(self)
+        # super(QtWidgets.QMainWindow, self).__init__()
+        super().__init__()
+
+        self.setup()
+        self.retranslate()
+
+        self.mutex = QMutex()
+        self.can_continue = QWaitCondition()
+        self.processor = ProcessorVisualization(self, self.mutex, self.can_continue)
 
         self.set_base_mode(QLCDNumber.Mode.Hex)
         self.accumulator_binary.setMode(QLCDNumber.Mode.Bin)
-        self.shown_page = 0xff
+        self.shown_page = 2
         self.shown_page_col = 0
         self.shown_page_row = 0
+
+        self.show_page(2, force_update=True)
+        self.shown_stack_pointer = self.processor.SP
+        self.show_stack(force_update=True)
 
         self.assembler_file_name = ''
         self.assembler_file_unsaved_changes = False
@@ -87,20 +97,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cycle_delay = 2.5
 
         self.animation_mode = True
-        self.mutex = QMutex()
-        self.can_continue = QWaitCondition()
         self.paths = AnimationPaths
         self.animators = []
         self.animation_duration = 2000    # in ms
-        self.animation_speed = 0.2        # pixel/ms
+        self.animation_speed = 0.1        # pixel/ms
         self.animation_running = False
-        self.processor = ProcessorVisualization(self, self.mutex, self.can_continue)
 
     @Slot(int, object)
-    def show_page(self, page, data, force=False):
-        # if page == 1:
-        #     self.show_stack_page(data)
-        #     return
+    def show_page(self, page, force_update=True):
+        if not force_update and self.shown_page == page:
+            return
+
         if page == 0:
             # Zero page has separate Widgets
             prefix = 'zp'
@@ -111,7 +118,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.set_page_col_color(c, 'black')
 
         for r in range(0x100):
-            byte = data[(page << 8) + r]
+            byte = self.processor.memory.data[(page << 8) + r]
             self.__getattribute__(f'{prefix}_{r:02X}').setText(f'{byte:02X}')
 
         if page > 2:
@@ -119,10 +126,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.shown_page = page
 
     def set_page_row_color(self, row, color):
-        self.__getattribute__(f'page_row_{row:1X}').setStyleSheet(f'color: {color}')
+        self.__getattribute__(f'reg_row_{row:1X}').setStyleSheet(f'color: {color}')
 
     def set_page_col_color(self, col, color):
-        self.__getattribute__(f'page_col_{col:1X}').setStyleSheet(f'color: {color}')
+        self.__getattribute__(f'reg_col_{col:1X}').setStyleSheet(f'color: {color}')
 
     @Slot(int, object)
     def show_memory_address(self, address: int, data):
@@ -141,8 +148,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.shown_page_col = col
         self.shown_page_row = row
         byte = data[(page << 8) + reg]
-        self.__getattribute__(f'reg_{reg:02X}').setProperty('intValue', byte)
+        self.__getattribute__(f'reg_{reg:02X}').setText(byte)
         # self.page.setText(f'{(address >> 8):02X}')
+
+    def show_stack(self, force_update=True) -> None:
+        stack_pointer = self.processor.SP
+        if not force_update and stack_pointer == self.shown_stack_pointer:
+            return
+
+        if force_update or stack_pointer != self.shown_stack_pointer:
+            self.show_stack_labels(stack_pointer)
+            self.shown_stack_pointer = stack_pointer
+
+        for i in range(0x10):
+            address = 0x100 + (self.processor.SP + i - 8) % 0x100
+            self.__getattribute__(f'stack_{(i%0x10):01X}').setText(f'{self.processor.memory.data[address]:02X}')
+
+    def show_stack_labels(self, stack_pointer):
+        for i in range(0x10):
+            address = (stack_pointer + i - 8) % 0x100
+            self.__getattribute__(f'stack_sp_{(i%0x10):01X}').setText(f'{address:02X}')
 
     @Slot(str, str)
     def update_label(self, name: str, value):
@@ -218,7 +243,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 )
             )
 
-    def count_steps(int):
+    def count_steps(self):
         pass
 
     @Slot()
@@ -306,11 +331,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             file_name += ' *'
         self.assembler_file_name_label.setText(file_name)
 
-    def animate(self, paths):
-        """Animates data transfer along the given paths
-        paths: A list of lists. Each element is a list of paths that are animated in parallel.
-               Then the parallel animations are executed sequentially."""
-        self.animation = build_animation(paths, self)
+    def animate(self, path):
+        """Animates data transfer along the given path (a list of coordinates)"""
+        self.animation = build_animation(path, self)
 
         self.animation.finished.connect(self.stop_animation)
 
