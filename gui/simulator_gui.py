@@ -10,6 +10,29 @@ from gui.processor_visualization import ProcessorVisualization
 from gui.emulator_window import EmulatorWindow
 from asm.assembler import AssemblerError, assemble_file
 
+REGISTER_NAMES = {
+    'A': 'accumulator',
+    'AB': 'accumulator_binary',
+    'ARH': 'address_register_high_byte',
+    'ARL': 'address_register_low_byte',
+    'OP1': 'alu_op1',
+    'OP2': 'alu_op2',
+    'RES': 'alu_res',
+    'B': 'flag_b',
+    'C': 'flag_c',
+    'D': 'flag_d',
+    'I': 'flag_i',
+    'N': 'flag_n',
+    'V': 'flag_v',
+    'Z': 'flag_z',
+    'X': 'index_x',
+    'Y': 'index_x',
+
+    'IR': 'instruction_register',
+    'ZD': 'zero_page_data',
+    'MD': 'memory_data',
+    'SD': 'stack_data'
+}
 
 def split_to_bytes(value):
     return [int(value[i:i + 2], 16) for i in range(0, len(value), 2)]
@@ -95,13 +118,25 @@ class Simulator(EmulatorWindow):
         self.save_file_as_button.clicked.connect(self.save_assembler_file_as_clicked)
 
         self.cycle_delay = 2.5
-
+        self.speed_dial.setMinimum(0)
+        self.speed_dial.setMaximum(100)
+        self.speed_dial.valueChanged.connect(self.set_speed)
         self.animation_mode = True
         self.paths = AnimationPaths
         self.animators = []
-        self.animation_duration = 2000    # in ms
-        self.animation_speed = 0.1        # pixel/ms
+        self.animation_max_speed = 1
+        self.animation_min_speed = 0.02
         self.animation_running = False
+        self.speed_dial.setValue(30)
+
+        self.processor.reset()
+
+    def set_speed(self):
+        value = self.speed_dial.value()
+        # For animation mode
+        self.animation_speed = self.animation_min_speed + (self.animation_max_speed-self.animation_min_speed)*value/100
+        # Cycle delay is used without animations
+        self.cycle_delay = 5 - 5*value/100
 
     @Slot(int, object)
     def show_page(self, page, force_update=True):
@@ -119,7 +154,7 @@ class Simulator(EmulatorWindow):
 
         for r in range(0x100):
             byte = self.processor.memory.data[(page << 8) + r]
-            self.__getattribute__(f'{prefix}_{r:02X}').setText(f'{byte:02X}')
+            self.__getattribute__(f'{prefix}_{r:02X}').setText(byte)
 
         if page > 2:
             self.page.setText(f'{page:2X}')
@@ -148,8 +183,8 @@ class Simulator(EmulatorWindow):
         self.shown_page_col = col
         self.shown_page_row = row
         byte = data[(page << 8) + reg]
-        self.__getattribute__(f'reg_{reg:02X}').setText(byte)
-        # self.page.setText(f'{(address >> 8):02X}')
+        # self.__getattribute__(f'reg_{reg:02X}').setText(byte)
+        self.page.setText(f'{(address >> 8):02X}')
 
     def show_stack(self, force_update=True) -> None:
         stack_pointer = self.processor.SP
@@ -209,7 +244,7 @@ class Simulator(EmulatorWindow):
             value = parse_num(text)
             if 0 <= value <= 0xff:
                 self.processor.memory.data[address] = value
-                self.__getattribute__(f'{prefix}_{offset:02x}').setText(value)
+                getattr(self, f'{prefix}_{offset:02x}').setText(value)
             else:
                 pass
 
@@ -274,6 +309,13 @@ class Simulator(EmulatorWindow):
     def reset_button_clicked(self):
         self.processor.reset()
 
+    def format_assembler_errors(self, errors):
+        message = 'Assembler error:\n'
+        for line, error in errors.errors.items():
+            message += f'Line {line}: {error}\n'
+            self.assembler_input.mark_line(line)
+        return message
+
     def assemble_button_clicked(self):
         if not self.assembler_file_name:
             self.save_assembler_file_as_clicked()
@@ -281,13 +323,19 @@ class Simulator(EmulatorWindow):
             data = assemble_file(self.assembler_file_name)
         except AssemblerError as e:
             # todo: Mark lines with errors
+            QMessageBox.critical(self, 'Assembler error', self.format_assembler_errors(e))
             print(e)
+        except Exception as error:
+            print('General assembler error.\n Cannot proceed')
+            QMessageBox.critical(self, 'Assembler error',
+                                       f'Something went wrong with your assembler code: {error}')
         else:
             for key, value in data.items():
                 bytes = split_to_bytes(value)
                 for byte in bytes:
                     self.processor.memory.data[key] = byte
                     key += 1
+            self.processor.reset()
 
     def open_assembler_file_clicked(self):
         if self.assembler_file_unsaved_changes:
@@ -331,9 +379,11 @@ class Simulator(EmulatorWindow):
             file_name += ' *'
         self.assembler_file_name_label.setText(file_name)
 
-    def animate(self, path):
+    def animate(self, transfer, destinations):
         """Animates data transfer along the given path (a list of coordinates)"""
-        self.animation = build_animation(path, self)
+        self.animation = build_animation(transfer, self)
+        self.transfer_destinations = destinations
+        self.transfer_data = transfer['data']
 
         self.animation.finished.connect(self.stop_animation)
 
@@ -345,7 +395,10 @@ class Simulator(EmulatorWindow):
         for animator in self.animators:
             animator.hide()
             animator.deleteLater()
-            
+
+        for destination in self.transfer_destinations:
+            self.update_label(REGISTER_NAMES[destination], getattr(self.processor, destination))
+        #     print('updating', destination, REGISTER_NAMES[destination], self.transfer_data)
         self.animators = []
 
         self.animation_running = False

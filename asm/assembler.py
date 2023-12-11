@@ -185,6 +185,9 @@ def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None)
         if (token_line[0] not in ah.VALID_MNEMONICS) and (token_line[0] not in ah.VALID_DIRECTIVES):
             # not in the valid mnemonic and directive tables, then it must be a LABEL
             label = token_line.pop(0)
+            if len(token_line) == 0:
+                pass2_errors[line_number] = 'No instruction after label'
+                continue
 
         if len(token_line) == 2 and token_line[1].startswith('#'):
            token_line[1] = handle_immediate_operands(token_line[1])
@@ -297,7 +300,10 @@ def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None)
                 address_mode, num_bytes, op_code = ah.determine_mode(token_line[0], operand)
             elif len(token_line) == 1:
                 address_mode, num_bytes, op_code = ah.determine_mode(token_line[0], '')
-                    
+
+            if address_mode == 'Invalid':
+                pass2_errors[line_number] = f'Undefined label {label}'
+                break
             if address_mode == 'Implied' or address_mode == 'Accumulator':
                 if list_file:
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code)

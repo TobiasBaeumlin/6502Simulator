@@ -20,7 +20,7 @@
       <x>20</x>
       <y>70</y>
       <width>1281</width>
-      <height>851</height>
+      <height>881</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -36,7 +36,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>460</y>
+       <y>490</y>
        <width>601</width>
        <height>361</height>
       </rect>
@@ -47,53 +47,10 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <widget class="QLabel" name="label_9">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>300</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(100, 0, 210);</string>
-      </property>
-      <property name="text">
-       <string>Page</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="data_mem_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 0, 0);
-</string>
-      </property>
-      <property name="text">
-       <string>Data</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="page_col_0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -114,7 +71,7 @@
      <widget class="QLabel" name="page_col_1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>100</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -135,7 +92,7 @@
      <widget class="QLabel" name="page_col_2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>130</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -156,7 +113,7 @@
      <widget class="QLabel" name="page_col_3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -177,7 +134,7 @@
      <widget class="QLabel" name="page_col_4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -198,7 +155,7 @@
      <widget class="QLabel" name="page_col_5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>220</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -219,7 +176,7 @@
      <widget class="QLabel" name="page_col_6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>250</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -240,7 +197,7 @@
      <widget class="QLabel" name="page_col_7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>280</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -261,7 +218,7 @@
      <widget class="QLabel" name="page_col_8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>310</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -282,7 +239,7 @@
      <widget class="QLabel" name="page_col_9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>340</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -303,7 +260,7 @@
      <widget class="QLabel" name="page_col_A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>370</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -324,7 +281,7 @@
      <widget class="QLabel" name="page_col_B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>400</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -345,7 +302,7 @@
      <widget class="QLabel" name="page_col_C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>430</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -366,7 +323,7 @@
      <widget class="QLabel" name="page_col_D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>460</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -387,7 +344,7 @@
      <widget class="QLabel" name="page_col_E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>490</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -408,7 +365,7 @@
      <widget class="QLabel" name="page_col_F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>520</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -429,7 +386,7 @@
      <widget class="QLabel" name="reg_12">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>130</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -453,7 +410,7 @@
      <widget class="QLabel" name="reg_0E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>490</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -477,7 +434,7 @@
      <widget class="QLabel" name="reg_01">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>100</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -501,7 +458,7 @@
      <widget class="QLabel" name="reg_11">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>100</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -525,7 +482,7 @@
      <widget class="QLabel" name="reg_07">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>280</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -549,7 +506,7 @@
      <widget class="QLabel" name="reg_18">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>310</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -573,7 +530,7 @@
      <widget class="QLabel" name="reg_05">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>220</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -597,7 +554,7 @@
      <widget class="QLabel" name="reg_19">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>340</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -621,7 +578,7 @@
      <widget class="QLabel" name="reg_00">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -651,7 +608,7 @@
      <widget class="QLabel" name="reg_1A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>370</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -675,7 +632,7 @@
      <widget class="QLabel" name="reg_02">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>130</x>
         <y>30</y>
         <width>31</width>
         <height>20</height>
@@ -699,7 +656,7 @@
      <widget class="QLabel" name="reg_1B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>400</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -723,7 +680,7 @@
      <widget class="QLabel" name="reg_08">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>310</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -747,7 +704,7 @@
      <widget class="QLabel" name="reg_14">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -771,7 +728,7 @@
      <widget class="QLabel" name="reg_1C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>430</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -795,7 +752,7 @@
      <widget class="QLabel" name="reg_10">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>50</y>
         <width>31</width>
         <height>20</height>
@@ -819,7 +776,7 @@
      <widget class="QLabel" name="reg_04">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -843,7 +800,7 @@
      <widget class="QLabel" name="reg_1E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>490</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -867,7 +824,7 @@
      <widget class="QLabel" name="reg_0A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>370</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -891,7 +848,7 @@
      <widget class="QLabel" name="reg_13">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -915,7 +872,7 @@
      <widget class="QLabel" name="reg_0B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>400</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -939,7 +896,7 @@
      <widget class="QLabel" name="reg_15">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>220</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -963,7 +920,7 @@
      <widget class="QLabel" name="reg_09">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>340</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -987,7 +944,7 @@
      <widget class="QLabel" name="reg_06">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>250</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -1011,7 +968,7 @@
      <widget class="QLabel" name="reg_16">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>250</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -1035,7 +992,7 @@
      <widget class="QLabel" name="reg_0C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>430</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -1059,7 +1016,7 @@
      <widget class="QLabel" name="reg_0F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>520</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -1083,7 +1040,7 @@
      <widget class="QLabel" name="reg_17">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>280</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -1107,7 +1064,7 @@
      <widget class="QLabel" name="reg_0D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>460</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -1131,7 +1088,7 @@
      <widget class="QLabel" name="reg_03">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>160</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -1155,7 +1112,7 @@
      <widget class="QLabel" name="reg_1F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>520</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -1179,7 +1136,7 @@
      <widget class="QLabel" name="reg_1D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>460</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -6579,9 +6536,9 @@
      <widget class="QLabel" name="page_row_0">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>30</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6606,9 +6563,9 @@
      <widget class="QLabel" name="page_row_1">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>50</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6627,9 +6584,9 @@
      <widget class="QLabel" name="page_row_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>70</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6648,9 +6605,9 @@
      <widget class="QLabel" name="page_row_3">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>90</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6669,9 +6626,9 @@
      <widget class="QLabel" name="page_row_4">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>110</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6690,9 +6647,9 @@
      <widget class="QLabel" name="page_row_5">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>130</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6711,9 +6668,9 @@
      <widget class="QLabel" name="page_row_6">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>150</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6732,9 +6689,9 @@
      <widget class="QLabel" name="page_row_7">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>170</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6753,9 +6710,9 @@
      <widget class="QLabel" name="page_row_8">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>190</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6774,9 +6731,9 @@
      <widget class="QLabel" name="page_row_9">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>210</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6795,9 +6752,9 @@
      <widget class="QLabel" name="page_row_A">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>230</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6816,9 +6773,9 @@
      <widget class="QLabel" name="page_row_B">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>250</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6837,9 +6794,9 @@
      <widget class="QLabel" name="page_row_C">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>270</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6858,9 +6815,9 @@
      <widget class="QLabel" name="page_row_D">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>290</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6879,9 +6836,9 @@
      <widget class="QLabel" name="page_row_E">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>310</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6900,9 +6857,9 @@
      <widget class="QLabel" name="page_row_F">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>49</x>
         <y>330</y>
-        <width>30</width>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -6918,59 +6875,26 @@
        <number>8</number>
       </property>
      </widget>
-     <widget class="QLabel" name="page">
+     <widget class="Line" name="line_22">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>320</y>
-        <width>40</width>
-        <height>30</height>
+        <x>10</x>
+        <y>-10</y>
+        <width>531</width>
+        <height>41</height>
        </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>22</pointsize>
-       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(100, 0, 210);</string>
       </property>
-      <property name="text">
-       <string>FF</string>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
       </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <property name="indent">
+      <property name="lineWidth">
        <number>5</number>
       </property>
-     </widget>
-     <widget class="QLabel" name="data_mem">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>70</y>
-        <width>61</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>22</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 0, 0);
-</string>
-      </property>
-      <property name="text">
-       <string>255</string>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <property name="indent">
-       <number>5</number>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
      <zorder>reg_12</zorder>
@@ -7229,8 +7153,6 @@
      <zorder>reg_EB</zorder>
      <zorder>reg_D1</zorder>
      <zorder>reg_FE</zorder>
-     <zorder>label_9</zorder>
-     <zorder>data_mem_label</zorder>
      <zorder>page_col_0</zorder>
      <zorder>page_col_1</zorder>
      <zorder>page_col_2</zorder>
@@ -7263,8 +7185,7 @@
      <zorder>page_row_D</zorder>
      <zorder>page_row_E</zorder>
      <zorder>page_row_F</zorder>
-     <zorder>page</zorder>
-     <zorder>data_mem</zorder>
+     <zorder>line_22</zorder>
     </widget>
     <widget class="QFrame" name="cycle_counter_frame">
      <property name="geometry">
@@ -7327,7 +7248,7 @@
        <x>30</x>
        <y>30</y>
        <width>701</width>
-       <height>341</height>
+       <height>371</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -7602,7 +7523,7 @@
         <enum>QFrame::Sunken</enum>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
        <property name="indent">
         <number>0</number>
@@ -7683,7 +7604,7 @@
         <enum>QFrame::Sunken</enum>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
        <property name="indent">
         <number>0</number>
@@ -7945,9 +7866,9 @@
      <widget class="QLabel" name="stack_pointer_label">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>490</x>
         <y>210</y>
-        <width>171</width>
+        <width>101</width>
         <height>20</height>
        </rect>
       </property>
@@ -7967,7 +7888,7 @@
       <property name="geometry">
        <rect>
         <x>490</x>
-        <y>230</y>
+        <y>310</y>
         <width>191</width>
         <height>51</height>
        </rect>
@@ -8004,7 +7925,7 @@
       <property name="geometry">
        <rect>
         <x>490</x>
-        <y>210</y>
+        <y>290</y>
         <width>91</width>
         <height>18</height>
        </rect>
@@ -8253,9 +8174,9 @@
      <widget class="Line" name="line_5">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>300</y>
-        <width>691</width>
+        <x>190</x>
+        <y>330</y>
+        <width>301</width>
         <height>20</height>
        </rect>
       </property>
@@ -8281,7 +8202,7 @@
         <x>220</x>
         <y>10</y>
         <width>20</width>
-        <height>331</height>
+        <height>361</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -8500,7 +8421,7 @@
         <x>440</x>
         <y>310</y>
         <width>20</width>
-        <height>31</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -8519,7 +8440,7 @@
      <widget class="QFrame" name="stack_pointer_frame">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>490</x>
         <y>230</y>
         <width>71</width>
         <height>51</height>
@@ -8642,6 +8563,138 @@
        </property>
       </widget>
      </widget>
+     <widget class="QFrame" name="adress_register_frame">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>230</y>
+        <width>131</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <widget class="QLabel" name="adress_register_high_byte">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="adress_register_low_byte">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>10</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="Line" name="line_27">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>150</y>
+        <width>31</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(100, 0, 210);</string>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>5</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="Line" name="line_29">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>240</y>
+        <width>31</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(100, 0, 210);</string>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>5</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="address_register">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>210</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Adress Register</string>
+      </property>
+     </widget>
      <zorder>accumulator_frame</zorder>
      <zorder>status_register_frame</zorder>
      <zorder>status_register_label</zorder>
@@ -8669,94 +8722,10 @@
      <zorder>stack_pointer_frame</zorder>
      <zorder>index_y_frame</zorder>
      <zorder>index_x_frame</zorder>
-    </widget>
-    <widget class="QFrame" name="adress_register_frame">
-     <property name="geometry">
-      <rect>
-       <x>760</x>
-       <y>320</y>
-       <width>131</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QLabel" name="adress_register_high_byte">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>51</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="adress_register_low_byte">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>10</y>
-        <width>51</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QLabel" name="address_register">
-     <property name="geometry">
-      <rect>
-       <x>760</x>
-       <y>300</y>
-       <width>131</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Adress Register</string>
-     </property>
+     <zorder>adress_register_frame</zorder>
+     <zorder>line_27</zorder>
+     <zorder>line_29</zorder>
+     <zorder>address_register</zorder>
     </widget>
     <widget class="QLabel" name="cycle_stage">
      <property name="geometry">
@@ -8789,7 +8758,7 @@
      <property name="geometry">
       <rect>
        <x>660</x>
-       <y>460</y>
+       <y>490</y>
        <width>601</width>
        <height>361</height>
       </rect>
@@ -8803,7 +8772,7 @@
      <widget class="QLabel" name="page_col_10">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8824,7 +8793,7 @@
      <widget class="QLabel" name="page_col_11">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8845,7 +8814,7 @@
      <widget class="QLabel" name="page_col_12">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8866,7 +8835,7 @@
      <widget class="QLabel" name="page_col_13">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8887,7 +8856,7 @@
      <widget class="QLabel" name="page_col_14">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8908,7 +8877,7 @@
      <widget class="QLabel" name="page_col_15">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8929,7 +8898,7 @@
      <widget class="QLabel" name="page_col_16">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8950,7 +8919,7 @@
      <widget class="QLabel" name="page_col_17">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8971,7 +8940,7 @@
      <widget class="QLabel" name="page_col_18">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -8992,7 +8961,7 @@
      <widget class="QLabel" name="page_col_19">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9013,7 +8982,7 @@
      <widget class="QLabel" name="page_col_A_2">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9034,7 +9003,7 @@
      <widget class="QLabel" name="page_col_B_2">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9055,7 +9024,7 @@
      <widget class="QLabel" name="page_col_C_2">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9076,7 +9045,7 @@
      <widget class="QLabel" name="page_col_D_2">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9097,7 +9066,7 @@
      <widget class="QLabel" name="page_col_E_2">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9118,7 +9087,7 @@
      <widget class="QLabel" name="page_col_F_2">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>10</y>
         <width>30</width>
         <height>20</height>
@@ -9139,7 +9108,7 @@
      <widget class="QLabel" name="zp_12">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9163,7 +9132,7 @@
      <widget class="QLabel" name="zp_0E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9187,7 +9156,7 @@
      <widget class="QLabel" name="zp_01">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9211,7 +9180,7 @@
      <widget class="QLabel" name="zp_11">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9235,7 +9204,7 @@
      <widget class="QLabel" name="zp_07">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9259,7 +9228,7 @@
      <widget class="QLabel" name="zp_18">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9283,7 +9252,7 @@
      <widget class="QLabel" name="zp_05">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9307,7 +9276,7 @@
      <widget class="QLabel" name="zp_19">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9331,7 +9300,7 @@
      <widget class="QLabel" name="zp_00">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9355,7 +9324,7 @@
      <widget class="QLabel" name="zp_1A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9379,7 +9348,7 @@
      <widget class="QLabel" name="zp_02">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>30</y>
         <width>31</width>
         <height>20</height>
@@ -9403,7 +9372,7 @@
      <widget class="QLabel" name="zp_1B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9427,7 +9396,7 @@
      <widget class="QLabel" name="zp_08">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9451,7 +9420,7 @@
      <widget class="QLabel" name="zp_14">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9475,7 +9444,7 @@
      <widget class="QLabel" name="zp_1C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9499,7 +9468,7 @@
      <widget class="QLabel" name="zp_10">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>50</y>
         <width>31</width>
         <height>20</height>
@@ -9523,7 +9492,7 @@
      <widget class="QLabel" name="zp_04">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9547,7 +9516,7 @@
      <widget class="QLabel" name="zp_1E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9571,7 +9540,7 @@
      <widget class="QLabel" name="zp_0A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9595,7 +9564,7 @@
      <widget class="QLabel" name="zp_13">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9619,7 +9588,7 @@
      <widget class="QLabel" name="zp_0B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9643,7 +9612,7 @@
      <widget class="QLabel" name="zp_15">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9667,7 +9636,7 @@
      <widget class="QLabel" name="zp_09">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9691,7 +9660,7 @@
      <widget class="QLabel" name="zp_06">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9715,7 +9684,7 @@
      <widget class="QLabel" name="zp_16">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9739,7 +9708,7 @@
      <widget class="QLabel" name="zp_0C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9763,7 +9732,7 @@
      <widget class="QLabel" name="zp_0F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9787,7 +9756,7 @@
      <widget class="QLabel" name="zp_17">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9811,7 +9780,7 @@
      <widget class="QLabel" name="zp_0D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9835,7 +9804,7 @@
      <widget class="QLabel" name="zp_03">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -9859,7 +9828,7 @@
      <widget class="QLabel" name="zp_1F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9883,7 +9852,7 @@
      <widget class="QLabel" name="zp_1D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -9907,7 +9876,7 @@
      <widget class="QLabel" name="zp_56">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -9931,7 +9900,7 @@
      <widget class="QLabel" name="zp_45">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -9955,7 +9924,7 @@
      <widget class="QLabel" name="zp_4C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -9979,7 +9948,7 @@
      <widget class="QLabel" name="zp_34">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10003,7 +9972,7 @@
      <widget class="QLabel" name="zp_4F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10027,7 +9996,7 @@
      <widget class="QLabel" name="zp_35">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10051,7 +10020,7 @@
      <widget class="QLabel" name="zp_2E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10075,7 +10044,7 @@
      <widget class="QLabel" name="zp_43">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10099,7 +10068,7 @@
      <widget class="QLabel" name="zp_3C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10123,7 +10092,7 @@
      <widget class="QLabel" name="zp_27">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10147,7 +10116,7 @@
      <widget class="QLabel" name="zp_48">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10171,7 +10140,7 @@
      <widget class="QLabel" name="zp_33">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10195,7 +10164,7 @@
      <widget class="QLabel" name="zp_44">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10219,7 +10188,7 @@
      <widget class="QLabel" name="zp_5F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10243,7 +10212,7 @@
      <widget class="QLabel" name="zp_42">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10267,7 +10236,7 @@
      <widget class="QLabel" name="zp_4A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10291,7 +10260,7 @@
      <widget class="QLabel" name="zp_53">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10315,7 +10284,7 @@
      <widget class="QLabel" name="zp_40">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10339,7 +10308,7 @@
      <widget class="QLabel" name="zp_38">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10363,7 +10332,7 @@
      <widget class="QLabel" name="zp_26">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10387,7 +10356,7 @@
      <widget class="QLabel" name="zp_29">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10411,7 +10380,7 @@
      <widget class="QLabel" name="zp_20">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10435,7 +10404,7 @@
      <widget class="QLabel" name="zp_2A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10459,7 +10428,7 @@
      <widget class="QLabel" name="zp_5D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10483,7 +10452,7 @@
      <widget class="QLabel" name="zp_5C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10507,7 +10476,7 @@
      <widget class="QLabel" name="zp_39">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10531,7 +10500,7 @@
      <widget class="QLabel" name="zp_37">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10555,7 +10524,7 @@
      <widget class="QLabel" name="zp_49">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10579,7 +10548,7 @@
      <widget class="QLabel" name="zp_58">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10603,7 +10572,7 @@
      <widget class="QLabel" name="zp_28">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10627,7 +10596,7 @@
      <widget class="QLabel" name="zp_50">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10651,7 +10620,7 @@
      <widget class="QLabel" name="zp_51">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10675,7 +10644,7 @@
      <widget class="QLabel" name="zp_59">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10699,7 +10668,7 @@
      <widget class="QLabel" name="zp_24">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10723,7 +10692,7 @@
      <widget class="QLabel" name="zp_54">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10747,7 +10716,7 @@
      <widget class="QLabel" name="zp_23">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10771,7 +10740,7 @@
      <widget class="QLabel" name="zp_4E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10795,7 +10764,7 @@
      <widget class="QLabel" name="zp_30">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10819,7 +10788,7 @@
      <widget class="QLabel" name="zp_3B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10843,7 +10812,7 @@
      <widget class="QLabel" name="zp_31">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -10867,7 +10836,7 @@
      <widget class="QLabel" name="zp_2B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10891,7 +10860,7 @@
      <widget class="QLabel" name="zp_4D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10915,7 +10884,7 @@
      <widget class="QLabel" name="zp_21">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -10939,7 +10908,7 @@
      <widget class="QLabel" name="zp_5A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -10963,7 +10932,7 @@
      <widget class="QLabel" name="zp_46">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -10987,7 +10956,7 @@
      <widget class="QLabel" name="zp_57">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -11011,7 +10980,7 @@
      <widget class="QLabel" name="zp_4B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -11035,7 +11004,7 @@
      <widget class="QLabel" name="zp_32">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -11059,7 +11028,7 @@
      <widget class="QLabel" name="zp_36">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -11083,7 +11052,7 @@
      <widget class="QLabel" name="zp_3A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -11107,7 +11076,7 @@
      <widget class="QLabel" name="zp_2F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -11131,7 +11100,7 @@
      <widget class="QLabel" name="zp_3E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -11155,7 +11124,7 @@
      <widget class="QLabel" name="zp_41">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -11179,7 +11148,7 @@
      <widget class="QLabel" name="zp_3D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -11203,7 +11172,7 @@
      <widget class="QLabel" name="zp_47">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -11227,7 +11196,7 @@
      <widget class="QLabel" name="zp_25">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -11251,7 +11220,7 @@
      <widget class="QLabel" name="zp_2C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -11275,7 +11244,7 @@
      <widget class="QLabel" name="zp_3F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -11299,7 +11268,7 @@
      <widget class="QLabel" name="zp_5B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -11323,7 +11292,7 @@
      <widget class="QLabel" name="zp_5E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -11347,7 +11316,7 @@
      <widget class="QLabel" name="zp_2D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -11371,7 +11340,7 @@
      <widget class="QLabel" name="zp_22">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -11395,7 +11364,7 @@
      <widget class="QLabel" name="zp_55">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -11419,7 +11388,7 @@
      <widget class="QLabel" name="zp_52">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -11443,7 +11412,7 @@
      <widget class="QLabel" name="zp_72">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11467,7 +11436,7 @@
      <widget class="QLabel" name="zp_88">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -11491,7 +11460,7 @@
      <widget class="QLabel" name="zp_87">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -11515,7 +11484,7 @@
      <widget class="QLabel" name="zp_8C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -11539,7 +11508,7 @@
      <widget class="QLabel" name="zp_6D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -11563,7 +11532,7 @@
      <widget class="QLabel" name="zp_71">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11587,7 +11556,7 @@
      <widget class="QLabel" name="zp_7D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11611,7 +11580,7 @@
      <widget class="QLabel" name="zp_78">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11635,7 +11604,7 @@
      <widget class="QLabel" name="zp_96">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -11659,7 +11628,7 @@
      <widget class="QLabel" name="zp_99">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -11683,7 +11652,7 @@
      <widget class="QLabel" name="zp_60">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -11707,7 +11676,7 @@
      <widget class="QLabel" name="zp_9E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -11731,7 +11700,7 @@
      <widget class="QLabel" name="zp_79">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11755,7 +11724,7 @@
      <widget class="QLabel" name="zp_93">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -11779,7 +11748,7 @@
      <widget class="QLabel" name="zp_7B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11803,7 +11772,7 @@
      <widget class="QLabel" name="zp_65">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -11827,7 +11796,7 @@
      <widget class="QLabel" name="zp_74">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11851,7 +11820,7 @@
      <widget class="QLabel" name="zp_9B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -11875,7 +11844,7 @@
      <widget class="QLabel" name="zp_84">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -11899,7 +11868,7 @@
      <widget class="QLabel" name="zp_76">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -11923,7 +11892,7 @@
      <widget class="QLabel" name="zp_90">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -11947,7 +11916,7 @@
      <widget class="QLabel" name="zp_8E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -11971,7 +11940,7 @@
      <widget class="QLabel" name="zp_8B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -11995,7 +11964,7 @@
      <widget class="QLabel" name="zp_70">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12019,7 +11988,7 @@
      <widget class="QLabel" name="zp_66">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12043,7 +12012,7 @@
      <widget class="QLabel" name="zp_7C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12067,7 +12036,7 @@
      <widget class="QLabel" name="zp_98">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12091,7 +12060,7 @@
      <widget class="QLabel" name="zp_9C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12115,7 +12084,7 @@
      <widget class="QLabel" name="zp_62">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12139,7 +12108,7 @@
      <widget class="QLabel" name="zp_94">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12163,7 +12132,7 @@
      <widget class="QLabel" name="zp_97">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12187,7 +12156,7 @@
      <widget class="QLabel" name="zp_63">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12211,7 +12180,7 @@
      <widget class="QLabel" name="zp_69">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12235,7 +12204,7 @@
      <widget class="QLabel" name="zp_6B">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12259,7 +12228,7 @@
      <widget class="QLabel" name="zp_89">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12283,7 +12252,7 @@
      <widget class="QLabel" name="zp_9F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12307,7 +12276,7 @@
      <widget class="QLabel" name="zp_73">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12331,7 +12300,7 @@
      <widget class="QLabel" name="zp_92">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12355,7 +12324,7 @@
      <widget class="QLabel" name="zp_86">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12379,7 +12348,7 @@
      <widget class="QLabel" name="zp_6C">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12427,7 +12396,7 @@
      <widget class="QLabel" name="zp_64">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12451,7 +12420,7 @@
      <widget class="QLabel" name="zp_6F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12475,7 +12444,7 @@
      <widget class="QLabel" name="zp_68">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12499,7 +12468,7 @@
      <widget class="QLabel" name="zp_67">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12523,7 +12492,7 @@
      <widget class="QLabel" name="zp_7A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12547,7 +12516,7 @@
      <widget class="QLabel" name="zp_77">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12571,7 +12540,7 @@
      <widget class="QLabel" name="zp_82">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12595,7 +12564,7 @@
      <widget class="QLabel" name="zp_8A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12619,7 +12588,7 @@
      <widget class="QLabel" name="zp_6E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12643,7 +12612,7 @@
      <widget class="QLabel" name="zp_8D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12667,7 +12636,7 @@
      <widget class="QLabel" name="zp_75">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12691,7 +12660,7 @@
      <widget class="QLabel" name="zp_8F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12715,7 +12684,7 @@
      <widget class="QLabel" name="zp_81">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12739,7 +12708,7 @@
      <widget class="QLabel" name="zp_61">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12763,7 +12732,7 @@
      <widget class="QLabel" name="zp_6A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -12787,7 +12756,7 @@
      <widget class="QLabel" name="zp_80">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12811,7 +12780,7 @@
      <widget class="QLabel" name="zp_91">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12835,7 +12804,7 @@
      <widget class="QLabel" name="zp_7F">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12859,7 +12828,7 @@
      <widget class="QLabel" name="zp_83">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -12883,7 +12852,7 @@
      <widget class="QLabel" name="zp_95">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12907,7 +12876,7 @@
      <widget class="QLabel" name="zp_9A">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12931,7 +12900,7 @@
      <widget class="QLabel" name="zp_7E">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -12955,7 +12924,7 @@
      <widget class="QLabel" name="zp_9D">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -12979,7 +12948,7 @@
      <widget class="QLabel" name="zp_F0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -13003,7 +12972,7 @@
      <widget class="QLabel" name="zp_CF">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13027,7 +12996,7 @@
      <widget class="QLabel" name="zp_BD">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -13051,7 +13020,7 @@
      <widget class="QLabel" name="zp_E0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13075,7 +13044,7 @@
      <widget class="QLabel" name="zp_DD">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -13099,7 +13068,7 @@
      <widget class="QLabel" name="zp_D2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -13123,7 +13092,7 @@
      <widget class="QLabel" name="zp_F2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -13147,7 +13116,7 @@
      <widget class="QLabel" name="zp_D8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -13171,7 +13140,7 @@
      <widget class="QLabel" name="zp_A3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13195,7 +13164,7 @@
      <widget class="QLabel" name="zp_A4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13219,7 +13188,7 @@
      <widget class="QLabel" name="zp_A0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13243,7 +13212,7 @@
      <widget class="QLabel" name="zp_DB">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -13267,7 +13236,7 @@
      <widget class="QLabel" name="zp_A1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13291,7 +13260,7 @@
      <widget class="QLabel" name="zp_B5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -13315,7 +13284,7 @@
      <widget class="QLabel" name="zp_A2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13339,7 +13308,7 @@
      <widget class="QLabel" name="zp_CE">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13363,7 +13332,7 @@
      <widget class="QLabel" name="zp_D0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -13387,7 +13356,7 @@
      <widget class="QLabel" name="zp_C1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13411,7 +13380,7 @@
      <widget class="QLabel" name="zp_CA">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13435,7 +13404,7 @@
      <widget class="QLabel" name="zp_C8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13459,7 +13428,7 @@
      <widget class="QLabel" name="zp_B3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -13483,7 +13452,7 @@
      <widget class="QLabel" name="zp_B0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -13507,7 +13476,7 @@
      <widget class="QLabel" name="zp_BF">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -13531,7 +13500,7 @@
      <widget class="QLabel" name="zp_EC">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13555,7 +13524,7 @@
      <widget class="QLabel" name="zp_CC">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13579,7 +13548,7 @@
      <widget class="QLabel" name="zp_D6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -13603,7 +13572,7 @@
      <widget class="QLabel" name="zp_F7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -13627,7 +13596,7 @@
      <widget class="QLabel" name="zp_BA">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -13651,7 +13620,7 @@
      <widget class="QLabel" name="zp_E3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13675,7 +13644,7 @@
      <widget class="QLabel" name="zp_A7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13699,7 +13668,7 @@
      <widget class="QLabel" name="zp_ED">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13723,7 +13692,7 @@
      <widget class="QLabel" name="zp_EA">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13747,7 +13716,7 @@
      <widget class="QLabel" name="zp_E9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13771,7 +13740,7 @@
      <widget class="QLabel" name="zp_A9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13795,7 +13764,7 @@
      <widget class="QLabel" name="zp_C4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13819,7 +13788,7 @@
      <widget class="QLabel" name="zp_C6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13843,7 +13812,7 @@
      <widget class="QLabel" name="zp_E1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13867,7 +13836,7 @@
      <widget class="QLabel" name="zp_C5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -13891,7 +13860,7 @@
      <widget class="QLabel" name="zp_E6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13915,7 +13884,7 @@
      <widget class="QLabel" name="zp_EE">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -13939,7 +13908,7 @@
      <widget class="QLabel" name="zp_A8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -13963,7 +13932,7 @@
      <widget class="QLabel" name="zp_FB">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -13987,7 +13956,7 @@
      <widget class="QLabel" name="zp_B6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14011,7 +13980,7 @@
      <widget class="QLabel" name="zp_B8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14035,7 +14004,7 @@
      <widget class="QLabel" name="zp_C3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -14059,7 +14028,7 @@
      <widget class="QLabel" name="zp_EF">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -14083,7 +14052,7 @@
      <widget class="QLabel" name="zp_B7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14107,7 +14076,7 @@
      <widget class="QLabel" name="zp_B4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14131,7 +14100,7 @@
      <widget class="QLabel" name="zp_C2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -14155,7 +14124,7 @@
      <widget class="QLabel" name="zp_F8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14179,7 +14148,7 @@
      <widget class="QLabel" name="zp_E2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -14203,7 +14172,7 @@
      <widget class="QLabel" name="zp_F3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14227,7 +14196,7 @@
      <widget class="QLabel" name="zp_AE">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14251,7 +14220,7 @@
      <widget class="QLabel" name="zp_AC">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14275,7 +14244,7 @@
      <widget class="QLabel" name="zp_FF">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14299,7 +14268,7 @@
      <widget class="QLabel" name="zp_C0">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>80</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -14323,7 +14292,7 @@
      <widget class="QLabel" name="zp_DA">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14347,7 +14316,7 @@
      <widget class="QLabel" name="zp_F9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14371,7 +14340,7 @@
      <widget class="QLabel" name="zp_AB">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14395,7 +14364,7 @@
      <widget class="QLabel" name="zp_CD">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -14419,7 +14388,7 @@
      <widget class="QLabel" name="zp_D9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14443,7 +14412,7 @@
      <widget class="QLabel" name="zp_FD">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14467,7 +14436,7 @@
      <widget class="QLabel" name="zp_DF">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14491,7 +14460,7 @@
      <widget class="QLabel" name="zp_F4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14515,7 +14484,7 @@
      <widget class="QLabel" name="zp_E7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -14539,7 +14508,7 @@
      <widget class="QLabel" name="zp_A5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14563,7 +14532,7 @@
      <widget class="QLabel" name="zp_CB">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -14587,7 +14556,7 @@
      <widget class="QLabel" name="zp_F1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14611,7 +14580,7 @@
      <widget class="QLabel" name="zp_B2">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>140</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14635,7 +14604,7 @@
      <widget class="QLabel" name="zp_D7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14659,7 +14628,7 @@
      <widget class="QLabel" name="zp_B1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14683,7 +14652,7 @@
      <widget class="QLabel" name="zp_BB">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14707,7 +14676,7 @@
      <widget class="QLabel" name="zp_F5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14731,7 +14700,7 @@
      <widget class="QLabel" name="zp_F6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14755,7 +14724,7 @@
      <widget class="QLabel" name="zp_FA">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14779,7 +14748,7 @@
      <widget class="QLabel" name="zp_D5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14803,7 +14772,7 @@
      <widget class="QLabel" name="zp_AD">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14827,7 +14796,7 @@
      <widget class="QLabel" name="zp_AF">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>530</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14851,7 +14820,7 @@
      <widget class="QLabel" name="zp_D3">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>170</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14875,7 +14844,7 @@
      <widget class="QLabel" name="zp_BE">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -14899,7 +14868,7 @@
      <widget class="QLabel" name="zp_A6">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>260</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -14923,7 +14892,7 @@
      <widget class="QLabel" name="zp_C9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -14947,7 +14916,7 @@
      <widget class="QLabel" name="zp_FC">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -14971,7 +14940,7 @@
      <widget class="QLabel" name="zp_DE">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -14995,7 +14964,7 @@
      <widget class="QLabel" name="zp_B9">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>350</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -15019,7 +14988,7 @@
      <widget class="QLabel" name="zp_AA">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>380</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -15043,7 +15012,7 @@
      <widget class="QLabel" name="zp_C7">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>290</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -15067,7 +15036,7 @@
      <widget class="QLabel" name="zp_D4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -15091,7 +15060,7 @@
      <widget class="QLabel" name="zp_DC">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -15115,7 +15084,7 @@
      <widget class="QLabel" name="zp_E4">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>200</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -15139,7 +15108,7 @@
      <widget class="QLabel" name="zp_BC">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>440</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -15163,7 +15132,7 @@
      <widget class="QLabel" name="zp_E5">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -15187,7 +15156,7 @@
      <widget class="QLabel" name="zp_E8">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>320</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -15211,7 +15180,7 @@
      <widget class="QLabel" name="zp_EB">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>410</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -15235,7 +15204,7 @@
      <widget class="QLabel" name="zp_D1">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>110</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -15259,7 +15228,7 @@
      <widget class="QLabel" name="zp_FE">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>500</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -15283,7 +15252,7 @@
      <widget class="QLabel" name="page_row_10">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>30</y>
         <width>30</width>
         <height>20</height>
@@ -15304,7 +15273,7 @@
      <widget class="QLabel" name="page_row_11">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>50</y>
         <width>30</width>
         <height>20</height>
@@ -15325,7 +15294,7 @@
      <widget class="QLabel" name="page_row_12">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>70</y>
         <width>30</width>
         <height>20</height>
@@ -15346,7 +15315,7 @@
      <widget class="QLabel" name="page_row_13">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>90</y>
         <width>30</width>
         <height>20</height>
@@ -15367,7 +15336,7 @@
      <widget class="QLabel" name="page_row_14">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>110</y>
         <width>30</width>
         <height>20</height>
@@ -15388,7 +15357,7 @@
      <widget class="QLabel" name="page_row_15">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>130</y>
         <width>30</width>
         <height>20</height>
@@ -15409,7 +15378,7 @@
      <widget class="QLabel" name="page_row_16">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>150</y>
         <width>30</width>
         <height>20</height>
@@ -15430,7 +15399,7 @@
      <widget class="QLabel" name="page_row_17">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>170</y>
         <width>30</width>
         <height>20</height>
@@ -15451,7 +15420,7 @@
      <widget class="QLabel" name="page_row_18">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>190</y>
         <width>30</width>
         <height>20</height>
@@ -15472,7 +15441,7 @@
      <widget class="QLabel" name="page_row_19">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>210</y>
         <width>30</width>
         <height>20</height>
@@ -15493,7 +15462,7 @@
      <widget class="QLabel" name="page_row_A_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>230</y>
         <width>30</width>
         <height>20</height>
@@ -15514,7 +15483,7 @@
      <widget class="QLabel" name="page_row_B_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>250</y>
         <width>30</width>
         <height>20</height>
@@ -15535,7 +15504,7 @@
      <widget class="QLabel" name="page_row_C_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>270</y>
         <width>30</width>
         <height>20</height>
@@ -15556,7 +15525,7 @@
      <widget class="QLabel" name="page_row_D_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>290</y>
         <width>30</width>
         <height>20</height>
@@ -15577,7 +15546,7 @@
      <widget class="QLabel" name="page_row_E_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>310</y>
         <width>30</width>
         <height>20</height>
@@ -15598,7 +15567,7 @@
      <widget class="QLabel" name="page_row_F_2">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>50</x>
         <y>330</y>
         <width>30</width>
         <height>20</height>
@@ -15619,9 +15588,9 @@
      <widget class="Line" name="line_16">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>10</x>
         <y>-10</y>
-        <width>511</width>
+        <width>531</width>
         <height>41</height>
        </rect>
       </property>
@@ -15638,62 +15607,12 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="data_zp_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>110</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 0, 0);
-</string>
-      </property>
-      <property name="text">
-       <string>Data</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="data_zp">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>80</y>
-        <width>61</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>22</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 0, 0);
-</string>
-      </property>
-      <property name="text">
-       <string>255</string>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <property name="indent">
-       <number>5</number>
-      </property>
-     </widget>
     </widget>
     <widget class="QLabel" name="zero_page_label">
      <property name="geometry">
       <rect>
        <x>660</x>
-       <y>820</y>
+       <y>850</y>
        <width>81</width>
        <height>21</height>
       </rect>
@@ -16106,56 +16025,6 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="data_stack_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>240</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 0, 0);
-</string>
-      </property>
-      <property name="text">
-       <string>Data</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="data_stack">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>260</y>
-        <width>61</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>22</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 0, 0);
-</string>
-      </property>
-      <property name="text">
-       <string>255</string>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <property name="indent">
-       <number>5</number>
-      </property>
-     </widget>
      <widget class="QLabel" name="stack_sp_8">
       <property name="geometry">
        <rect>
@@ -16500,8 +16369,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>820</y>
-       <width>81</width>
+       <y>850</y>
+       <width>111</width>
        <height>21</height>
       </rect>
      </property>
@@ -16511,7 +16380,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Memory</string>
+      <string>Memory page</string>
      </property>
     </widget>
     <widget class="QLabel" name="stack_label">
@@ -16554,7 +16423,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>420</y>
+       <y>460</y>
        <width>1241</width>
        <height>20</height>
       </rect>
@@ -16578,10 +16447,10 @@
     <widget class="Line" name="line_2">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>430</y>
+       <x>600</x>
+       <y>470</y>
        <width>20</width>
-       <height>101</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -16603,77 +16472,11 @@
        <x>990</x>
        <y>320</y>
        <width>20</width>
-       <height>111</height>
+       <height>151</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 0, 0);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_17">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>380</y>
-       <width>1241</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(100, 0, 210);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_18">
-     <property name="geometry">
-      <rect>
-       <x>790</x>
-       <y>370</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(100, 0, 210);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_19">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>400</y>
-       <width>31</width>
-       <height>401</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(100, 0, 210);</string>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
@@ -16703,83 +16506,17 @@
       <string>CPU</string>
      </property>
     </widget>
-    <widget class="Line" name="line_20">
-     <property name="geometry">
-      <rect>
-       <x>730</x>
-       <y>320</y>
-       <width>31</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(0, 85, 255);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
     <widget class="Line" name="line_21">
      <property name="geometry">
       <rect>
        <x>1030</x>
        <y>370</y>
        <width>31</width>
-       <height>31</height>
+       <height>51</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(100, 0, 210);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_22">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>450</y>
-       <width>511</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(100, 0, 210);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_4">
-     <property name="geometry">
-      <rect>
-       <x>670</x>
-       <y>430</y>
-       <width>20</width>
-       <height>111</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
@@ -16794,10 +16531,10 @@
     <widget class="Line" name="line_23">
      <property name="geometry">
       <rect>
-       <x>710</x>
-       <y>400</y>
+       <x>670</x>
+       <y>420</y>
        <width>31</width>
-       <height>401</height>
+       <height>411</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -16817,31 +16554,9 @@
      <property name="geometry">
       <rect>
        <x>470</x>
-       <y>370</y>
+       <y>400</y>
        <width>20</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_26">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>370</y>
-       <width>20</width>
-       <height>61</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -17013,11 +16728,167 @@
       <string>NMInterrupt</string>
      </property>
     </widget>
+    <widget class="Line" name="line_26">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>400</y>
+       <width>1241</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(100, 0, 210);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="data_mem_label">
+     <property name="geometry">
+      <rect>
+       <x>1160</x>
+       <y>440</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);
+</string>
+     </property>
+     <property name="text">
+      <string>Databus</string>
+     </property>
+    </widget>
+    <widget class="Line" name="line_19">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>200</y>
+       <width>31</width>
+       <height>631</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(100, 0, 210);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_4">
+     <property name="geometry">
+      <rect>
+       <x>1230</x>
+       <y>470</y>
+       <width>20</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="data_mem_label_2">
+     <property name="geometry">
+      <rect>
+       <x>1160</x>
+       <y>390</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(100, 0, 210);</string>
+     </property>
+     <property name="text">
+      <string>Address bus</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="page">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>850</y>
+       <width>51</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>255</string>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <property name="indent">
+      <number>5</number>
+     </property>
+    </widget>
+    <widget class="Line" name="line_28">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>400</y>
+       <width>20</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
     <zorder>memory_frame</zorder>
     <zorder>cycle_counter_frame</zorder>
     <zorder>cycle_counter_label</zorder>
-    <zorder>adress_register_frame</zorder>
-    <zorder>address_register</zorder>
     <zorder>cycle_stage</zorder>
     <zorder>processor_frame</zorder>
     <zorder>zero_page_label</zorder>
@@ -17028,24 +16899,24 @@
     <zorder>line</zorder>
     <zorder>line_2</zorder>
     <zorder>line_7</zorder>
-    <zorder>line_17</zorder>
-    <zorder>line_18</zorder>
-    <zorder>line_19</zorder>
     <zorder>processor_label</zorder>
-    <zorder>line_20</zorder>
     <zorder>line_21</zorder>
-    <zorder>line_22</zorder>
     <zorder>zero_page_frame</zorder>
-    <zorder>line_4</zorder>
     <zorder>line_23</zorder>
     <zorder>line_24</zorder>
-    <zorder>line_26</zorder>
     <zorder>interrupt_vector_label</zorder>
     <zorder>interrupt_vector_frame</zorder>
     <zorder>reset_vector_label</zorder>
     <zorder>reset_vector_frame</zorder>
     <zorder>nminterrupt_vector_frame</zorder>
     <zorder>nminterrupt_vector_label</zorder>
+    <zorder>line_26</zorder>
+    <zorder>data_mem_label</zorder>
+    <zorder>line_19</zorder>
+    <zorder>line_4</zorder>
+    <zorder>data_mem_label_2</zorder>
+    <zorder>page</zorder>
+    <zorder>line_28</zorder>
    </widget>
    <widget class="QPushButton" name="run_button">
     <property name="geometry">
@@ -17248,6 +17119,48 @@
      <number>2</number>
     </property>
    </widget>
+   <widget class="QPushButton" name="reset_button_2">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>20</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Decimal</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>20</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>85</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Animations</string>
+     </property>
+    </widget>
+   </widget>
    <zorder>paint_label</zorder>
    <zorder>computer_frame</zorder>
    <zorder>run_button</zorder>
@@ -17263,6 +17176,8 @@
    <zorder>speed_dial_label</zorder>
    <zorder>speed_min_label</zorder>
    <zorder>speed_max_label</zorder>
+   <zorder>reset_button_2</zorder>
+   <zorder>frame</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

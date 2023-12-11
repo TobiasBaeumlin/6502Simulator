@@ -194,7 +194,7 @@ def determine_mode(mnemonic, operand):
                 break
 
     if mode == 'Invalid':
-        return (mode, 9, 'XX')
+        return mode, 0, 'XX'
 
     numbytes = ADDRESS_MODES[mode][0]
     good_mnemonic = False
@@ -203,9 +203,9 @@ def determine_mode(mnemonic, operand):
             good_mnemonic = True
             break
     if good_mnemonic:
-        return (mode, numbytes, opc)
+        return mode, numbytes, opc
     else:
-        return (mode, numbytes, 'XX')
+        return mode, numbytes, 'XX'
 
 
 # Construct data bytes field from a .db directive

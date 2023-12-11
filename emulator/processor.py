@@ -5,24 +5,6 @@ from emulator.operators import unsigned_byte_addition, shl, shr, set_bit, cmp, s
 
 START_ADDR = 0x0000
 
-ADDRESS_MODES_SHORT = {
-    'immediate': 'imm',
-    'zero_page': 'zp',
-    'zero_page_indexed': 'zp_idx',
-    'absolute': 'abs',
-    'absolute_indexed': 'abs_idx',
-    'indexed_indirect_x': 'idx_x_ind',
-    'indirect_indexed_y': 'ind_idx_y',
-}
-
-
-def build_address_mode_string(mode: str, index_register: str) -> str:
-    result = ADDRESS_MODES_SHORT[mode]
-    if index_register:
-        result += ',' + index_register
-    return result
-
-
 class Memory:
     def __init__(self, size: int) -> None:
         assert size > 2 ** 12, size <= 2 ** 16
@@ -66,7 +48,6 @@ class Processor:
         # Cycle counter
         self.cycles = 0
         # Current instruction in disassembled form
-        self.current_instruction = ''
         self.byte_format = '02X'
         self.word_format = '04X'
         self.format_prefix = '$'
@@ -104,8 +85,24 @@ class Processor:
     @AR.setter
     def AR(self, value):
         assert 0 <= value < 0x10000
-        self.address_register_high.set_value(value >> 8)
-        self.address_register_low.set_value(value & 0xff)
+        self.ARH = (value >> 8)
+        self.ARL = (value & 0xff)
+
+    @property
+    def ARH(self):
+        return self.address_register_high.value
+
+    @ARH.setter
+    def ARH(self, value):
+        self.address_register_high.set_value(value)
+
+    @property
+    def ARL(self):
+        return self.address_register_low.value
+
+    @ARL.setter
+    def ARL(self, value):
+        self.address_register_low.set_value(value)
 
     @property
     def IR(self):
@@ -204,14 +201,6 @@ class Processor:
         self.status.value = set_bit(self.status.value, 7, value)
 
     @property
-    def CI(self):
-        return self.current_instruction
-
-    @CI.setter
-    def CI(self, value):
-        self.current_instruction = value
-
-    @property
     def OP1(self):
         return self.alu_op_1.value
 
@@ -237,19 +226,20 @@ class Processor:
 
     def reset(self) -> None:
         # Reset vector is at $fffc, $fffd
-        self.PC = (self.memory.data[0xfffc] << 8) + self.memory.data[0xfffd]
+        self.PC = (self.memory.data[0xfffd] << 8) + self.memory.data[0xfffc]
         self.SP = 0xff
         self.A = self.X = self.Y = 0
         self.C = self.Z = self.I = self.D = self.B = self.V = self.N = 0
+        self.OP1 = self.OP2 = self.RES = 0
+        self.AR = 0
         self.cycles = 0
-        self.CI = ''
 
     def cycle(self) -> None:
         self.cycles += 1
 
     # Atomic operations
     def copy_byte(self, from_register: str, to_register: str) -> None:
-        setattr(self, to_register, self.__getattribute__(from_register))
+        setattr(self, to_register, getattr(self, from_register))
 
     def copy_constant(self, value: int, register: str):
         setattr(self, register, value)
@@ -259,15 +249,16 @@ class Processor:
         self.cycle()
         return self.memory.data[self.AR]
 
-    # Fetches byte in memory location PC, consumes one cycle, increments PC
-    def fetch_byte_at_pc(self) -> int:
-        self.AR = self.PC
-        self.PC += 1
-        return self.fetch_byte()
-
     def fetch_byte_to_register(self, register: str) -> None:
         byte = self.fetch_byte()
         setattr(self, register, byte)
+
+    # Fetches byte in memory location PC, consumes one cycle, increments PC
+    def fetch_byte_at_pc(self) -> int:
+        self.cycle()
+        byte = self.memory.data[self.PC]
+        self.PC += 1
+        return byte
 
     def fetch_byte_at_pc_to_register(self, register: str) -> None:
         byte = self.fetch_byte_at_pc()
@@ -346,34 +337,28 @@ class Processor:
     def immediate(self):
         self.copy_byte('PC', 'AR')
         self.PC += 1
-        self.CI = self.CI[:3] + f' ${self.memory.data[self.AR]:02X}'
 
     def zero_page(self):
         self.fetch_byte_at_pc_to_register('AR')
-        self.CI = self.CI[:3] + f' ${self.AR:02X}'
 
     def zero_page_indexed(self, register, penalty_cycle=False):  # noqa
         self.cycle()
         self.fetch_byte_at_pc_to_register('AR')
         self.AR = unsigned_byte_addition(self.AR, self.__getattribute__(register))
-        self.CI = self.CI[:3] + f' ${self.AR:02X},{register}'
 
     def absolute(self):
-        self.fetch_byte_at_pc_to_register('AR')
-        low_byte = self.AR
-        self.fetch_byte_at_pc_to_register('AR')
-        self.AR = (self.AR << 8) + low_byte
-        self.CI = self.CI[:3] + f' ${self.AR:04X}'
+        self.fetch_byte_at_pc_to_register('ARL')
+        self.fetch_byte_at_pc_to_register('ARH')
 
     def absolute_indexed(self, register, penalty_cycle=False) -> None:
-        self.fetch_byte_at_pc_to_register('AR')
-        address = self.AR + self.__getattribute__(register)
+        self.fetch_byte_at_pc_to_register('ARL')
+        address = self.ARL + self.__getattribute__(register)
+        self.ARL = address % 0x100
         if penalty_cycle or address > 0xff:
             self.cycle()
-        self.fetch_byte_at_pc_to_register('AR')
-        self.AR = ((self.AR << 8) + address) % 0x10000
-        self.CI = self.CI[:3] + f' ${self.AR:04X},{register}'
-    
+        self.fetch_byte_at_pc_to_register('ARH')
+        self.ARH = (self.ARH + address // 0x100) % 0x10000
+
     def indexed_indirect_x(self) -> None:
         self.fetch_byte_at_pc_to_register('AR')
         index = (self.AR + self.X) % 0x100
@@ -384,7 +369,6 @@ class Processor:
         self.AR = index+1
         self.fetch_byte_to_register('AR')
         self.AR = (self.AR << 8) + low_byte
-        self.CI = self.CI[:3] + f' (${self.AR:02X},X)'
 
     def indirect_indexed_y(self) -> None:
         self.fetch_byte_at_pc_to_register('AR')
@@ -396,44 +380,36 @@ class Processor:
         self.AR = ((self.AR << 8) + low_byte + self.Y) % 0x10000
         if (low_byte+self.Y) > 0xff:
             self.cycle()
-        self.CI = self.CI[:3] + f' (${self.AR:02X}),Y'
 
-    def indirect(self) -> int:
+    def indirect(self) -> None:
         index_low = self.fetch_byte_at_pc()
         index_high = self.fetch_byte_at_pc()
         self.AR = (index_high << 8) + index_low
         address_low = self.fetch_byte()
         self.AR += 1
         address_high = self.fetch_byte()
-        address = (address_high << 8) + address_low
-        self.CI = self.CI[:3] + f' (${address:04X})'
-        return address
+        self.AR = (address_high << 8) + address_low
 
-    def get_address(self, mode: str, index_register: str = None, penalty_cycle=False) -> int:
+    def get_address(self, mode: str, index_register: str = None, penalty_cycle=False) -> None:
         if index_register is None:
-            return self.__getattribute__(mode)()
-        return self.__getattribute__(mode)(index_register, penalty_cycle)
+            self.__getattribute__(mode)()
+        else:
+            self.__getattribute__(mode)(index_register, penalty_cycle)
 
-        # Processor instruction by type
-
+    # Processor instruction by type
     # Load value from memory to register, using mode with index_register
     def load_register(self, register: str, mode: str, index_register: str = None) -> None:
-        self.CI = f'LD{register} {build_address_mode_string(mode, index_register)}'
         self.get_address(mode, index_register)
         self.fetch_byte_to_register(register)
         self.set_zero_and_negative_status_flags(register)
 
     # Store value from register to memory, using mode with index_register
     def store_register(self, register: str, mode: str, index_register: str = None) -> None:
-        self.CI = f'ST{register} {build_address_mode_string(mode, index_register)}'
-
         self.get_address(mode, index_register, penalty_cycle=True)
-        self.put_byte(self.__getattribute__(register))
+        self.put_byte_from_register(register)
 
     # Transfer value from register source to register destination
     def transfer_register(self, source: str, destination: str) -> None:
-        self.CI = f'T{source}{destination}'
-
         setattr(self, destination, self.__getattribute__(source))
         self.cycle()
         self.set_zero_and_negative_status_flags(destination)
@@ -441,8 +417,6 @@ class Processor:
     # Bitwise arithmetic or logical operation with accumulator and memory location:
     # ADC, SBC, AND, EOR, XOR
     def arithmetic_operation(self, operator: str, mode: str, index_register: str = None) -> None:
-        self.CI = f'{operator[0:3].upper()} {build_address_mode_string(mode, index_register)}'
-
         self.copy_byte('A', 'OP1')
         self.get_address(mode, index_register)
         self.fetch_byte_to_register('OP2')
@@ -452,19 +426,12 @@ class Processor:
 
     # Compare register with memory location
     def compare(self, register: str, mode: str, index_register: str = None) -> None:
-        if register == 'A':
-            self.CI = f'CMP {build_address_mode_string(mode, index_register)}'
-        else:
-            self.CI = f'CP{register} {build_address_mode_string(mode, index_register)}'
-
         self.copy_byte(register, 'OP1')
         self.get_address(mode, index_register)
         self.fetch_byte_to_register('OP2')
         self.alu_operation('cmp')
 
     def bit_test(self, mode: str, index_register: str=None) -> None:  # noqa
-        self.CI = f'BIT {build_address_mode_string(mode, index_register)}'
-
         self.copy_byte('A', 'OP1')
         self.get_address(mode, index_register)
         self.fetch_byte_to_register('OP2')
@@ -475,72 +442,40 @@ class Processor:
 
     # Shift and rotate
     def shift_accumulator(self, left: bool = True) -> None:
-        if left:
-            self.CI = 'ASL'
-            operator = 'shl'
-        else:
-            self.CI = 'LSR'
-            operator = 'shr'
-
         self.copy_byte('A', 'OP1')
         self.copy_constant(0, 'OP2')
-        self.alu_operation(operator)
+        self.alu_operation('shl' if left else 'shr')
         self.copy_byte('RES', 'A')
         self.cycle()
         self.set_zero_and_negative_status_flags()
 
     def shift_memory(self, mode: str, index_register=None, left: bool = True) -> None:
-        if left:
-            self.CI = f'ASL {build_address_mode_string(mode, index_register)}'
-            operator = 'shl'
-        else:
-            self.CI = f'LSR {build_address_mode_string(mode, index_register)}'
-            operator = 'shr'
-
         self.get_address(mode, index_register, penalty_cycle=True)
         self.fetch_byte_to_register('OP1')
         self.copy_constant(0, 'OP2')
-        self.alu_operation(operator)
+        self.alu_operation('shl' if left else 'shr')
         self.put_byte_from_register('RES')
         self.cycle()
         self.set_zero_and_negative_status_flags()
 
     def rotate_accumulator(self, left: bool = True) -> None:
-        if left:
-            operator = 'rol'
-        else:
-            operator = 'ror'
-
-        self.CI = operator.upper()
         self.copy_byte('A', 'OP1')
         self.copy_constant(self.C, 'OP2')
-        self.alu_operation(operator)
+        self.alu_operation('rol' if left else 'ror')
         self.copy_byte('RES', 'A')
         self.cycle()
         self.set_zero_and_negative_status_flags()
 
     def rotate_memory(self, mode: str, index_register=None, left: bool = True) -> None:
-        if left:
-            self.CI = f'ROL {build_address_mode_string(mode, index_register)}'
-            operator = 'rol'
-        else:
-            self.CI = f'ROR {build_address_mode_string(mode, index_register)}'
-            operator = 'ror'
-
         self.get_address(mode, index_register, penalty_cycle=True)
         self.fetch_byte_to_register('OP1')
         self.copy_constant(self.C, 'OP2')
-        self.alu_operation(operator)
+        self.alu_operation('rol' if left else 'ror')
         self.put_byte_from_register('RES')
         self.cycle()
         self.set_zero_and_negative_status_flags()
 
     def increment_register(self, increment: int, register: str) -> None:
-        if increment == 1:
-            self.CI = f'IN{register}'
-        else:
-            self.CI = f'DE{register}'
-
         self.copy_byte(register, 'OP1')
         self.copy_constant(increment, 'OP2')
         self.alu_operation('inc')
@@ -550,11 +485,6 @@ class Processor:
 
     # Increment and decrement memory
     def increment(self, increment: int, mode: str, index_register: str = None) -> None:
-        if increment == 1:
-            self.CI = f'INC {build_address_mode_string(mode, index_register)}'
-        else:
-            self.CI = f'DEC {build_address_mode_string(mode, index_register)}'
-
         self.get_address(mode, index_register, penalty_cycle=True)
         self.fetch_byte_to_register('OP1')
         self.copy_constant(increment, 'OP2')
@@ -565,19 +495,6 @@ class Processor:
 
     # Branch if flag has given state
     def branch(self, flag: str, state: bool) -> None:
-        if flag == 'V' and state is True:
-            self.CI = 'BVS'
-        if flag == 'V' and state is False:
-            self.CI = 'BVC'
-        if flag == 'Z' and state is True:
-            self.CI = 'BEQ'
-        if flag == 'Z' and state is False:
-            self.CI = 'BNE'
-        if flag == 'N' and state is True:
-            self.CI = 'BMI'
-        if flag == 'V' and state is True:
-            self.CI = 'BPL'
-
         # PC before start of operation
         pc = self.PC - 1
         relative_address = self.fetch_byte_at_pc()
@@ -590,14 +507,8 @@ class Processor:
                 self.cycle()
                 self.cycle()
 
-                # Set or clear flag
-
+    # Set or clear flag
     def set_flag(self, flag: str, state: bool) -> None:
-        if state is True:
-            self.CI = f'SE{flag}'
-        else:
-            self.CI = f'CL{flag}'
-
         setattr(self, flag, state)
         self.cycle()
 
@@ -605,24 +516,18 @@ class Processor:
     # Stack operations
     # Push processor flags to stack
     def push_processor_status(self) -> None:
-        self.CI = 'PHP'
-
         self.push_to_stack(self.status.value)
         self.add_to_stack_pointer(-1)
         self.cycle()
 
     # Push register to stack
     def push_accumulator(self) -> None:
-        self.CI = 'PHA'
-
         self.push_to_stack(self.A)
         self.add_to_stack_pointer(-1)
         self.cycle()
 
     # Pull processors from stack
     def pull_processor_status(self) -> None:
-        self.CI = 'PLP'
-
         self.add_to_stack_pointer(1)
         self.cycle()
         self.status.set_value(self.pull_from_stack())
@@ -637,8 +542,6 @@ class Processor:
 
     # Pull register from stack
     def pull_accumulator(self) -> None:
-        self.CI = 'PLP'
-
         self.add_to_stack_pointer(1)
         self.cycle()
         self.A = self.pull_from_stack()
@@ -647,22 +550,16 @@ class Processor:
     # Jump operations
     # Jump instruction (absolute and relative)
     def jump(self, mode) -> None:
-        self.CI = f'JMP {mode}'
-
-        address = self.get_address(mode)
-        self.PC = address
+        self.get_address(mode)
+        self.PC = self.AR
 
     def jump_to_subroutine(self):
-        self.CI = 'JSR'
-
         self.push_pc_to_stack(self.PC + 1)
         self.add_to_stack_pointer(-2)
         self.cycle()
         self.jump('absolute')
 
     def return_from_subroutine(self):
-        self.CI = 'RTS'
-
         self.add_to_stack_pointer(2)
         self.cycle()
         self.pull_pc_from_stack()
@@ -672,8 +569,6 @@ class Processor:
 
     # Break
     def brk(self):
-        self.CI = 'BRK'
-
         self.push_pc_to_stack(self.PC + 1)
         self.add_to_stack_pointer(-2)
         self.push_to_stack(self.status.value)
@@ -687,8 +582,6 @@ class Processor:
         self.B = 1
 
     def return_from_interrupt(self):
-        self.CI = 'RTI'
-
         self.pull_processor_status()
         self.add_to_stack_pointer(2)
         self.PC = self.pull_pc_from_stack()
