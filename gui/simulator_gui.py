@@ -88,7 +88,11 @@ class Simulator(EmulatorWindow):
         self.shown_page_col = 0
         self.shown_page_row = 0
 
+        self.shown_zero_page_col = 0
+        self.shown_zero_page_row = 0
+
         self.show_page(2, force_update=True)
+        self.show_page(0, force_update=True)
         self.shown_stack_pointer = self.processor.SP
         self.show_stack(force_update=True)
 
@@ -166,12 +170,29 @@ class Simulator(EmulatorWindow):
     def set_page_col_color(self, col, color):
         self.__getattribute__(f'reg_col_{col:1X}').setStyleSheet(f'color: {color}')
 
+    def set_zero_page_row_color(self, row, color):
+        self.__getattribute__(f'zp_row_{row:1X}').setStyleSheet(f'color: {color}')
+
+    def set_zero_page_col_color(self, col, color):
+        self.__getattribute__(f'zp_col_{col:1X}').setStyleSheet(f'color: {color}')
+
     @Slot(int, object)
-    def show_memory_address(self, address: int, data):
+    def show_memory_address(self, address: int):
+        print('Show memory address', address)
+        print('Currently shown page', self.shown_page)
+        print('Currently shown address', self.shown_page_col, self.shown_page_row)
         page = address >> 8
         reg = address & 0xff
         if page != self.shown_page:
-            self.show_page(page, data)
+            self.show_page(page)
+        row = (address & 0xf0) >> 4
+        col = address & 0x0f
+        if page == 0:
+            self.show_zero_page_address(address)
+        else:
+            self.show_memory_page_address(page, address)
+
+    def show_memory_page_address(self, page, address):
         row = (address & 0xf0) >> 4
         col = address & 0x0f
         if self.shown_page == page and self.shown_page_row == row and self.shown_page_col == col:
@@ -182,9 +203,30 @@ class Simulator(EmulatorWindow):
         self.set_page_col_color(col, 'red')
         self.shown_page_col = col
         self.shown_page_row = row
-        byte = data[(page << 8) + reg]
-        # self.__getattribute__(f'reg_{reg:02X}').setText(byte)
-        self.page.setText(f'{(address >> 8):02X}')
+        reg = address & 0xff
+        byte = self.processor.memory.data[(page << 8) + reg]
+        print('Updating memory register', reg, 'to', byte)
+        self.__getattribute__(f'reg_{reg:02X}').setText(byte)
+
+    def show_zero_page_address(self, address):
+        row = (address & 0xf0) >> 4
+        col = address & 0x0f
+        if self.shown_zero_page_row == row and self.shown_zero_page_col == col:
+            return
+        self.set_zero_page_row_color(self.shown_zero_page_row, 'black')
+        self.set_zero_page_col_color(self.shown_zero_page_col, 'black')
+        self.set_zero_page_row_color(row, 'red')
+        self.set_zero_page_col_color(col, 'red')
+        self.shown_zero_page_col = col
+        self.shown_zero_page_row = row
+        reg = address & 0xff
+        byte = self.processor.memory.data[reg]
+        print('Updating zero page register', reg, 'to', byte)
+        self.__getattribute__(f'zp_{reg:02X}').setText(byte)
+
+
+
+
 
     def show_stack(self, force_update=True) -> None:
         stack_pointer = self.processor.SP

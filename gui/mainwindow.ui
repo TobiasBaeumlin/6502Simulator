@@ -7884,43 +7884,6 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QFrame" name="current_instruction_frame">
-      <property name="geometry">
-       <rect>
-        <x>490</x>
-        <y>310</y>
-        <width>191</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <widget class="QLabel" name="current_instruction">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>171</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </widget>
      <widget class="QLabel" name="current_instruction_label">
       <property name="geometry">
        <rect>
@@ -8633,50 +8596,6 @@
        </property>
       </widget>
      </widget>
-     <widget class="Line" name="line_27">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>150</y>
-        <width>31</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(100, 0, 210);</string>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
-       <number>5</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="Line" name="line_29">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>240</y>
-        <width>31</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(100, 0, 210);</string>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
-       <number>5</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
      <widget class="QLabel" name="address_register">
       <property name="geometry">
        <rect>
@@ -8695,6 +8614,49 @@
        <string>Adress Register</string>
       </property>
      </widget>
+     <widget class="QFrame" name="instruction_register_frame">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>310</y>
+        <width>71</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="instruction_register">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>51</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </widget>
      <zorder>accumulator_frame</zorder>
      <zorder>status_register_frame</zorder>
      <zorder>status_register_label</zorder>
@@ -8704,7 +8666,6 @@
      <zorder>index_y_label</zorder>
      <zorder>stack_pointer_label</zorder>
      <zorder>program_counter_frame</zorder>
-     <zorder>current_instruction_frame</zorder>
      <zorder>current_instruction_label</zorder>
      <zorder>alu_frame</zorder>
      <zorder>alu_label</zorder>
@@ -8723,9 +8684,8 @@
      <zorder>index_y_frame</zorder>
      <zorder>index_x_frame</zorder>
      <zorder>adress_register_frame</zorder>
-     <zorder>line_27</zorder>
-     <zorder>line_29</zorder>
      <zorder>address_register</zorder>
+     <zorder>instruction_register_frame</zorder>
     </widget>
     <widget class="QLabel" name="cycle_stage">
      <property name="geometry">
@@ -16886,6 +16846,87 @@
       <enum>Qt::Vertical</enum>
      </property>
     </widget>
+    <widget class="QFrame" name="current_instruction_frame">
+     <property name="geometry">
+      <rect>
+       <x>750</x>
+       <y>190</y>
+       <width>191</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QLabel" name="current_instruction">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="Line" name="line_29">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>270</y>
+       <width>31</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(100, 0, 210);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_27">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>180</y>
+       <width>31</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(100, 0, 210);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
     <zorder>memory_frame</zorder>
     <zorder>cycle_counter_frame</zorder>
     <zorder>cycle_counter_label</zorder>
@@ -16917,6 +16958,9 @@
     <zorder>data_mem_label_2</zorder>
     <zorder>page</zorder>
     <zorder>line_28</zorder>
+    <zorder>current_instruction_frame</zorder>
+    <zorder>line_29</zorder>
+    <zorder>line_27</zorder>
    </widget>
    <widget class="QPushButton" name="run_button">
     <property name="geometry">
