@@ -1,3 +1,4 @@
+import setuptools
 from PySide6.QtWidgets import QFrame, QLabel, QLCDNumber
 from PySide6.QtGui import QPainter, QPaintEvent, QPen, QColor, QFont
 from PySide6.QtCore import  Qt
@@ -53,6 +54,7 @@ class RegisterWidget(QLabel):
 
     def setMode(self, mode):
         self.mode = mode
+        self.setText(self.value)
 
     def setGeometry(self, qrect):
         super().setGeometry(qrect)
@@ -60,15 +62,12 @@ class RegisterWidget(QLabel):
         font.setPointSize(3 * qrect.height() // 5)
         self.setFont(font)
 
-    # def setProperty(self, prop, value):
-    #     self.value = value
-    #     self.display()
-
     def setText(self, arg):
         if type(arg) == int:
-            if self.mode == QLCDNumber.Hex:
+            self.value = arg
+            if self.mode == QLCDNumber.Mode.Hex:
                 arg = f'${arg:02X}'
-            elif self.mode == QLCDNumber.Bin:
+            elif self.mode == QLCDNumber.Mode.Bin:
                 arg = f'^{arg:08b}'
             else:
                 arg = str(arg)

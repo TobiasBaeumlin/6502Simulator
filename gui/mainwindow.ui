@@ -7415,11 +7415,20 @@
         <height>81</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(0, 85, 255)</string>
+      </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::Box</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+      <property name="midLineWidth">
+       <number>0</number>
       </property>
       <widget class="QLabel" name="flag_c">
        <property name="geometry">
@@ -17101,7 +17110,7 @@
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>10</y>
+      <y>20</y>
       <width>50</width>
       <height>51</height>
      </rect>
@@ -17110,8 +17119,8 @@
    <widget class="QLabel" name="speed_dial_label">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>30</y>
+      <x>380</x>
+      <y>0</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -17128,8 +17137,8 @@
    <widget class="QLabel" name="speed_min_label">
     <property name="geometry">
      <rect>
-      <x>357</x>
-      <y>40</y>
+      <x>350</x>
+      <y>50</y>
       <width>31</width>
       <height>20</height>
      </rect>
@@ -17147,8 +17156,8 @@
    <widget class="QLabel" name="speed_max_label">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>40</y>
+      <x>430</x>
+      <y>50</y>
       <width>31</width>
       <height>20</height>
      </rect>
@@ -17163,47 +17172,31 @@
      <number>2</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="reset_button_2">
+   <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>20</y>
-      <width>71</width>
-      <height>41</height>
+      <x>490</x>
+      <y>30</y>
+      <width>101</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="text">
      <string>Decimal</string>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QCheckBox" name="checkBox_2">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>20</y>
+      <x>590</x>
+      <y>30</y>
       <width>101</width>
-      <height>41</height>
+      <height>24</height>
      </rect>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+    <property name="text">
+     <string>Animations</string>
     </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QCheckBox" name="checkBox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>85</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Animations</string>
-     </property>
-    </widget>
    </widget>
    <zorder>paint_label</zorder>
    <zorder>computer_frame</zorder>
@@ -17220,8 +17213,8 @@
    <zorder>speed_dial_label</zorder>
    <zorder>speed_min_label</zorder>
    <zorder>speed_max_label</zorder>
-   <zorder>reset_button_2</zorder>
-   <zorder>frame</zorder>
+   <zorder>checkBox</zorder>
+   <zorder>checkBox_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

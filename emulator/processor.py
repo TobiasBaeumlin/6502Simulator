@@ -5,6 +5,12 @@ from emulator.operators import unsigned_byte_addition, shl, shr, set_bit, cmp, s
 
 START_ADDR = 0x0000
 
+
+class UndefinedInstructionError(Exception):
+    def __init__(self, instruction):
+        super().__init__(f'UNDEF ${instruction:02x}')
+
+
 class Memory:
     def __init__(self, size: int) -> None:
         assert size > 2 ** 12, size <= 2 ** 16
@@ -113,11 +119,11 @@ class Processor:
         self.instruction_register.set_value(value)
 
     @property
-    def SP(self):
+    def S(self):
         return self.stack_pointer.value
 
-    @SP.setter
-    def SP(self, value):
+    @S.setter
+    def S(self, value):
         self.stack_pointer.set_value(value)
 
     @property
@@ -143,6 +149,20 @@ class Processor:
     @Y.setter
     def Y(self, value):
         self.index_y.set_value(value)
+
+    @property
+    def SR(self):
+        return self.status.value
+
+    @SR.setter
+    def SR(self, value):
+        self.C = value & 1
+        self.Z = (value >> 1) & 1
+        self.I = (value >> 2) & 1
+        self.D = (value >> 3) & 1
+        self.B = (value >> 4) & 1
+        self.V = (value >> 6) & 1
+        self.N = (value >> 7) & 1
 
     @property
     def C(self):
@@ -227,7 +247,7 @@ class Processor:
     def reset(self) -> None:
         # Reset vector is at $fffc, $fffd
         self.PC = (self.memory.data[0xfffd] << 8) + self.memory.data[0xfffc]
-        self.SP = 0xff
+        self.S = 0xff
         self.A = self.X = self.Y = 0
         self.C = self.Z = self.I = self.D = self.B = self.V = self.N = 0
         self.OP1 = self.OP2 = self.RES = 0
@@ -305,29 +325,29 @@ class Processor:
 
     # Stack operations
     def add_to_stack_pointer(self, increment: int) -> None:
-        self.SP = (self.SP + increment) % 0x100
+        self.S = (self.S + increment) % 0x100
 
     # Push byte to stack
     def push_to_stack(self, byte: int) -> None:
         assert 0 <= byte <= 0xff
-        self.AR = 0x100 + self.SP
+        self.AR = 0x100 + self.S
         self.put_byte(byte)
 
     def push_pc_to_stack(self, word: int) -> None:
         assert 0 <= word <= 0xffff
-        self.AR = 0x100 + self.SP
+        self.AR = 0x100 + self.S
         self.put_byte(self.PCL)
-        self.AR = 0x100 + self.SP - 1
+        self.AR = 0x100 + self.S - 1
         self.put_byte(self.PCH)
 
     # Pull byte from stack
     def pull_from_stack(self) -> int:
-        self.AR = 0x100 + self.SP
+        self.AR = 0x100 + self.S
         byte = self.fetch_byte()
         return byte
 
     def pull_pc_from_stack(self) -> None:
-        self.AR = 0x100 + self.SP
+        self.AR = 0x100 + self.S
         low_byte = self.fetch_byte()
         self.AR -= 1
         high_byte = self.fetch_byte()
@@ -460,7 +480,7 @@ class Processor:
 
     def rotate_accumulator(self, left: bool = True) -> None:
         self.copy_byte('A', 'OP1')
-        self.copy_constant(self.C, 'OP2')
+        self.copy_byte('C', 'OP2')
         self.alu_operation('rol' if left else 'ror')
         self.copy_byte('RES', 'A')
         self.cycle()
@@ -469,7 +489,7 @@ class Processor:
     def rotate_memory(self, mode: str, index_register=None, left: bool = True) -> None:
         self.get_address(mode, index_register, penalty_cycle=True)
         self.fetch_byte_to_register('OP1')
-        self.copy_constant(self.C, 'OP2')
+        self.copy_byte('C', 'OP2')
         self.alu_operation('rol' if left else 'ror')
         self.put_byte_from_register('RES')
         self.cycle()
@@ -496,15 +516,16 @@ class Processor:
     # Branch if flag has given state
     def branch(self, flag: str, state: bool) -> None:
         # PC before start of operation
-        pc = self.PC - 1
         relative_address = self.fetch_byte_at_pc()
-        flag_state = self.__getattribute__(flag)
+        if relative_address >= 0x80:
+            relative_address -= 0x100
+        flag_state = getattr(self, flag)
         if flag_state == state:
-            self.PC = (self.PC + relative_address - 128) % 0x10000
+            pc = self.PC
+            self.PC = (self.PC + relative_address) % 0x10000
             self.cycle()
             # See if page boundary crossed after branch
-            if pc // 0xff != self.PC // 0xff:
-                self.cycle()
+            if pc // 0x100 != self.PC // 0x100:
                 self.cycle()
 
     # Set or clear flag
@@ -644,17 +665,17 @@ class Processor:
         elif self.IR == ASL_ABSOLUTE_X:
             self.shift_memory(left=True, mode='absolute_indexed', index_register='X')
         # Branch instructions
-        elif self.IR == BCC_RELATIVE:
+        elif self.IR == BCC:
             self.branch('C', False)
-        elif self.IR == BCS_RELATIVE:
+        elif self.IR == BCS:
             self.branch('C', True)
-        elif self.IR == BEQ_RELATIVE:
+        elif self.IR == BEQ:
             self.branch('Z', True)
-        elif self.IR == BMI_RELATIVE:
+        elif self.IR == BMI:
             self.branch('N', True)
-        elif self.IR == BNE_RELATIVE:
+        elif self.IR == BNE:
             self.branch('Z', False)
-        elif self.IR == BPL_RELATIVE:
+        elif self.IR == BPL:
             self.branch('N', False)
         elif self.IR == BVC:
             self.branch('V', False)
@@ -932,7 +953,7 @@ class Processor:
         elif self.IR == TYA:
             self.transfer_register('Y', 'A')
         else:
-            raise Exception()
+            raise UndefinedInstructionError(self.IR)
 
 
 def setup_processor(instruction: list[int], data: dict = None, registers: dict = None, flags: dict = None) -> Processor:

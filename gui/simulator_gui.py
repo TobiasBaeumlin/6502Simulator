@@ -1,9 +1,11 @@
+from collections import OrderedDict
 from pathlib import Path
 from functools import partial
-from PySide6.QtCore import QObject, QThread, Signal, Slot, QPoint, QMutex, QWaitCondition
+from PySide6.QtCore import Qt, QObject, QThread, Signal, Slot, QPoint, QMutex, QWaitCondition
 from PySide6.QtWidgets import QLCDNumber, QInputDialog, QFileDialog, QMessageBox
 
 from asm.assembler_helpers import parse_num
+from emulator.processor import UndefinedInstructionError
 from gui.bus_geometry import AnimationPaths
 from gui.animations import build_animation
 from gui.processor_visualization import ProcessorVisualization
@@ -27,12 +29,14 @@ REGISTER_NAMES = {
     'Z': 'flag_z',
     'X': 'index_x',
     'Y': 'index_x',
+    'S': 'stack_pointer',
 
     'IR': 'instruction_register',
     'ZD': 'zero_page_data',
     'MD': 'memory_data',
     'SD': 'stack_data'
 }
+
 
 def split_to_bytes(value):
     return [int(value[i:i + 2], 16) for i in range(0, len(value), 2)]
@@ -45,28 +49,30 @@ def segment_length(point_a: QPoint, point_b: QPoint) -> int:
 class RunWorker(QObject):
     finished = Signal()
     steps = Signal(int)
+    update_label_signal = Signal(str, object)
 
     def __init__(self, processor) -> None:
         super().__init__()
         self.processor = processor
         self.processor_ready = True
 
-    @Slot()
-    def set_processor_ready(self):
-        self.processor_ready = True
-
     def run_processor(self):
         i = 0
         while not self.processor.interrupt_requested:
             if self.processor_ready:
-                self.set_processor_ready = False
-                self.processor.run_instruction()
+                try:
+                    self.processor.run_instruction()
+                except UndefinedInstructionError as exception:
+                    self.update_label_signal.emit('current_instruction', str(exception))
                 i += 1
                 self.steps.emit(i)
         self.finished.emit()
 
     def run_instruction(self):
-        self.processor.run_instruction()
+        try:
+            self.processor.run_instruction()
+        except UndefinedInstructionError as exception:
+            self.update_label_signal.emit('current_instruction', str(exception))
         self.finished.emit()
 
 
@@ -78,12 +84,8 @@ class Simulator(EmulatorWindow):
         self.setup()
         self.retranslate()
 
-        self.mutex = QMutex()
-        self.can_continue = QWaitCondition()
-        self.processor = ProcessorVisualization(self, self.mutex, self.can_continue)
+        self.processor = ProcessorVisualization(self )
 
-        self.set_base_mode(QLCDNumber.Mode.Hex)
-        self.accumulator_binary.setMode(QLCDNumber.Mode.Bin)
         self.shown_page = 2
         self.shown_page_col = 0
         self.shown_page_row = 0
@@ -93,17 +95,19 @@ class Simulator(EmulatorWindow):
 
         self.show_page(2, force_update=True)
         self.show_page(0, force_update=True)
-        self.shown_stack_pointer = self.processor.SP
+        self.shown_stack_pointer = self.processor.S
         self.show_stack(force_update=True)
 
         self.assembler_file_name = ''
         self.assembler_file_unsaved_changes = False
         self.assembler_input.textChanged.connect(self.assembler_file_changed)
+        self.debug_info = {}
+
         self.program_counter_frame.mousePressEvent = partial(self.set_register, 'PC')
         self.accumulator_frame.mousePressEvent = partial(self.set_register, 'A')
         self.index_x.mousePressEvent = partial(self.set_register, 'X')
         self.index_y.mousePressEvent = partial(self.set_register, 'Y')
-        self.stack_pointer.mousePressEvent = partial(self.set_register, 'SP')
+        self.stack_pointer.mousePressEvent = partial(self.set_register, 'S')
         self.status_register_frame.mousePressEvent = partial(self.set_register, 'SR')
 
         for offset in range(0x100):
@@ -125,14 +129,20 @@ class Simulator(EmulatorWindow):
         self.speed_dial.setMinimum(0)
         self.speed_dial.setMaximum(100)
         self.speed_dial.valueChanged.connect(self.set_speed)
-        self.animation_mode = True
-        self.paths = AnimationPaths
-        self.animators = []
-        self.animation_max_speed = 1
-        self.animation_min_speed = 0.02
+        self.animation_max_speed = 0.9
+        self.animation_min_speed = 0.01
+        self.animation_speed = 0.2
         self.animation_running = False
         self.speed_dial.setValue(30)
 
+        self.animation_mode_checkbox.stateChanged.connect(self.animations_checkbox_clicked)
+        self.animation_mode = False
+        self.paths = AnimationPaths
+        self.animators = []
+
+        self.decimal_mode_checkbox.stateChanged.connect(self.decimal_display_checkbox_clicked)
+        self.set_base_mode(QLCDNumber.Mode.Hex)
+        self.accumulator_binary.setMode(QLCDNumber.Mode.Bin)
         self.processor.reset()
 
     def set_speed(self):
@@ -160,9 +170,9 @@ class Simulator(EmulatorWindow):
             byte = self.processor.memory.data[(page << 8) + r]
             self.__getattribute__(f'{prefix}_{r:02X}').setText(byte)
 
-        if page > 2:
-            self.page.setText(f'{page:2X}')
-        self.shown_page = page
+        if page > 0:
+            self.shown_page_label.setText(f'${page:02X}')
+            self.shown_page = page
 
     def set_page_row_color(self, row, color):
         self.__getattribute__(f'reg_row_{row:1X}').setStyleSheet(f'color: {color}')
@@ -178,58 +188,46 @@ class Simulator(EmulatorWindow):
 
     @Slot(int, object)
     def show_memory_address(self, address: int):
-        print('Show memory address', address)
-        print('Currently shown page', self.shown_page)
-        print('Currently shown address', self.shown_page_col, self.shown_page_row)
         page = address >> 8
-        reg = address & 0xff
         if page != self.shown_page:
             self.show_page(page)
-        row = (address & 0xf0) >> 4
-        col = address & 0x0f
         if page == 0:
             self.show_zero_page_address(address)
+        elif page == 1:
+            self.show_stack()
         else:
             self.show_memory_page_address(page, address)
 
     def show_memory_page_address(self, page, address):
         row = (address & 0xf0) >> 4
         col = address & 0x0f
-        if self.shown_page == page and self.shown_page_row == row and self.shown_page_col == col:
-            return
-        self.set_page_row_color(self.shown_page_row, 'black')
-        self.set_page_col_color(self.shown_page_col, 'black')
-        self.set_page_row_color(row, 'red')
-        self.set_page_col_color(col, 'red')
-        self.shown_page_col = col
-        self.shown_page_row = row
+        if self.shown_page != page or self.shown_page_row != row or self.shown_page_col != col:
+            self.set_page_row_color(self.shown_page_row, 'black')
+            self.set_page_col_color(self.shown_page_col, 'black')
+            self.set_page_row_color(row, 'red')
+            self.set_page_col_color(col, 'red')
+            self.shown_page_col = col
+            self.shown_page_row = row
         reg = address & 0xff
         byte = self.processor.memory.data[(page << 8) + reg]
-        print('Updating memory register', reg, 'to', byte)
         self.__getattribute__(f'reg_{reg:02X}').setText(byte)
 
     def show_zero_page_address(self, address):
         row = (address & 0xf0) >> 4
         col = address & 0x0f
-        if self.shown_zero_page_row == row and self.shown_zero_page_col == col:
-            return
-        self.set_zero_page_row_color(self.shown_zero_page_row, 'black')
-        self.set_zero_page_col_color(self.shown_zero_page_col, 'black')
-        self.set_zero_page_row_color(row, 'red')
-        self.set_zero_page_col_color(col, 'red')
-        self.shown_zero_page_col = col
-        self.shown_zero_page_row = row
+        if self.shown_zero_page_row != row or self.shown_zero_page_col != col:
+            self.set_zero_page_row_color(self.shown_zero_page_row, 'black')
+            self.set_zero_page_col_color(self.shown_zero_page_col, 'black')
+            self.set_zero_page_row_color(row, 'red')
+            self.set_zero_page_col_color(col, 'red')
+            self.shown_zero_page_col = col
+            self.shown_zero_page_row = row
         reg = address & 0xff
         byte = self.processor.memory.data[reg]
-        print('Updating zero page register', reg, 'to', byte)
         self.__getattribute__(f'zp_{reg:02X}').setText(byte)
 
-
-
-
-
     def show_stack(self, force_update=True) -> None:
-        stack_pointer = self.processor.SP
+        stack_pointer = self.processor.S
         if not force_update and stack_pointer == self.shown_stack_pointer:
             return
 
@@ -238,29 +236,43 @@ class Simulator(EmulatorWindow):
             self.shown_stack_pointer = stack_pointer
 
         for i in range(0x10):
-            address = 0x100 + (self.processor.SP + i - 8) % 0x100
-            self.__getattribute__(f'stack_{(i%0x10):01X}').setText(f'{self.processor.memory.data[address]:02X}')
+            address = 0x100 + (self.processor.S + i - 8) % 0x100
+            getattr(self, f'stack_{(i%0x10):01X}').setText(f'{self.processor.memory.data[address]:02X}')
 
     def show_stack_labels(self, stack_pointer):
         for i in range(0x10):
             address = (stack_pointer + i - 8) % 0x100
-            self.__getattribute__(f'stack_sp_{(i%0x10):01X}').setText(f'{address:02X}')
+            getattr(self, f'stack_sp_{(i%0x10):01X}').setText(f'{address:02X}')
 
     @Slot(str, str)
     def update_label(self, name: str, value):
-        self.__getattribute__(name).setText(value)
+        getattr(self, name).setText(value)
 
     def set_base_mode(self, mode: QLCDNumber.Mode):
         for r in range(0x100):
-            self.__getattribute__(f'reg_{r:02X}').setMode(mode)
-        self.program_counter_high_byte.setMode(mode)
-        self.program_counter_low_byte.setMode(mode)
+            getattr(self, f'zp_{r:02X}').setMode(mode)
+            getattr(self, f'reg_{r:02X}').setMode(mode)
         self.accumulator.setMode(mode)
         self.index_x.setMode(mode)
         self.index_y.setMode(mode)
         self.stack_pointer.setMode(mode)
+        self.instruction_register.setMode(mode)
 
-    def set_register(self, register, event):
+    def decimal_display_checkbox_clicked(self, value):
+        state = Qt.CheckState(value)
+        if state == Qt.CheckState.Checked:
+            self.set_base_mode(QLCDNumber.Mode.Dec)
+        elif state == Qt.CheckState.Unchecked:
+            self.set_base_mode(QLCDNumber.Mode.Hex)
+
+    def animations_checkbox_clicked(self, value):
+        state = Qt.CheckState(value)
+        if state == Qt.CheckState.Checked:
+            self.animation_mode = True
+        elif state == Qt.CheckState.Unchecked:
+            self.animation_mode = False
+
+    def set_register(self, register, _):
         text, ok = QInputDialog.getText(
             self, "Set Register", f"Set register {register} to:")
         if ok and text:
@@ -274,19 +286,19 @@ class Simulator(EmulatorWindow):
                 else:
                     pass
 
-    def set_memory_address(self, offset, prefix, event):
+    def set_memory_address(self, offset, prefix, _):
         if prefix == 'zp':
             address = offset
         else:
-            page = self.processor.current_page
+            page = self.shown_page
             address = (page << 8) + offset
 
-        text, ok = QInputDialog.getText(self, f'Set Memory Address', f'Set address {address} to:')
+        text, ok = QInputDialog.getText(self, f'Set Memory Address', f'Set address {address:04X} to:')
         if ok and text:
             value = parse_num(text)
             if 0 <= value <= 0xff:
                 self.processor.memory.data[address] = value
-                getattr(self, f'{prefix}_{offset:02x}').setText(value)
+                getattr(self, f'{prefix}_{offset:02X}').setText(value)
             else:
                 pass
 
@@ -296,27 +308,27 @@ class Simulator(EmulatorWindow):
             self.worker.finished.emit()
             self.program_running = False
         else:
+            self.enable_buttons(False)
+
+            self.run_button.setEnabled(True)
             self.run_button.setText('Stop')
-            self.step_button.setEnabled(False)
             self.program_running = True
             self.processor.interrupt_requested = False
-
             self.thread = QThread()
             self.worker = RunWorker(self.processor)
             self.worker.moveToThread(self.thread)
             self.thread.started.connect(self.worker.run_processor)
             self.worker.finished.connect(self.thread.quit)
             self.worker.finished.connect(self.interrupt)
+            self.worker.update_label_signal.connect(self.update_label)
             self.worker.finished.connect(self.worker.deleteLater)
             self.thread.finished.connect(self.thread.deleteLater)
             self.worker.steps.connect(self.count_steps)
             self.thread.start()
-            self.can_continue.wakeAll()
             self.thread.finished.connect(
                 lambda: (
                     self.run_button.setText('Run'),
-                    self.run_button.setEnabled(True),
-                    self.step_button.setEnabled(True)
+                    self.enable_buttons(True),
                 )
             )
 
@@ -327,9 +339,17 @@ class Simulator(EmulatorWindow):
     def interrupt(self):
         self.processor.interrupt_requested = True
 
+    def enable_buttons(self, state: bool) -> None:
+        self.run_button.setEnabled(state)
+        self.step_button.setEnabled(state)
+        self.reset_button.setEnabled(state)
+        self.assemble_button.setEnabled(state)
+        self.open_file_button.setEnabled(state)
+        self.save_file_button.setEnabled(state)
+        self.save_file_as_button.setEnabled(state)
+
     def step_button_clicked(self):
-        self.run_button.setEnabled(False)
-        self.step_button.setEnabled(False)
+        self.enable_buttons(False)
 
         self.thread = QThread()
         self.worker = RunWorker(self.processor)
@@ -337,16 +357,15 @@ class Simulator(EmulatorWindow):
         self.thread.started.connect(self.worker.run_instruction)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.interrupt)
+        self.worker.update_label_signal.connect(self.update_label)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.thread.start()
-        self.can_continue.wakeAll()
         self.thread.finished.connect(
             lambda: (
-                self.run_button.setEnabled(True),
-                self.step_button.setEnabled(True)
+                self.enable_buttons(True)
             )
         )
+        self.thread.start()
 
     def reset_button_clicked(self):
         self.processor.reset()
@@ -361,14 +380,18 @@ class Simulator(EmulatorWindow):
     def assemble_button_clicked(self):
         if not self.assembler_file_name:
             self.save_assembler_file_as_clicked()
+
+        if self.assembler_file_unsaved_changes:
+            answer = QMessageBox.question(self, 'Unsaved changes', 'Save changes before assembling?')
+            if answer == QMessageBox.Yes:
+                self.save_assembler_file()
+
         try:
-            data = assemble_file(self.assembler_file_name)
+            data, self.debug_info = assemble_file(self.assembler_file_name)
         except AssemblerError as e:
             # todo: Mark lines with errors
             QMessageBox.critical(self, 'Assembler error', self.format_assembler_errors(e))
-            print(e)
         except Exception as error:
-            print('General assembler error.\n Cannot proceed')
             QMessageBox.critical(self, 'Assembler error',
                                        f'Something went wrong with your assembler code: {error}')
         else:
@@ -397,9 +420,9 @@ class Simulator(EmulatorWindow):
     def save_assembler_file_clicked(self):
         if not self.assembler_file_name:
             self.save_assembler_file_as_clicked()
-        with open(self.assembler_file_name, 'w') as file:
-            file.write(self.assembler_input.toPlainText())
+        self.save_assembler_file()
         self.assembler_file_unsaved_changes = False
+        self.show_assembler_file_name()
 
     def save_assembler_file_as_clicked(self):
         file_name = QFileDialog.getSaveFileName(
@@ -421,6 +444,11 @@ class Simulator(EmulatorWindow):
             file_name += ' *'
         self.assembler_file_name_label.setText(file_name)
 
+    def save_assembler_file(self):
+        with open(self.assembler_file_name, 'w') as file:
+            file.write(self.assembler_input.toPlainText())
+
+
     def animate(self, transfer, destinations):
         """Animates data transfer along the given path (a list of coordinates)"""
         self.animation = build_animation(transfer, self)
@@ -438,10 +466,7 @@ class Simulator(EmulatorWindow):
             animator.hide()
             animator.deleteLater()
 
-        for destination in self.transfer_destinations:
-            self.update_label(REGISTER_NAMES[destination], getattr(self.processor, destination))
-        #     print('updating', destination, REGISTER_NAMES[destination], self.transfer_data)
+        # for destination in self.transfer_destinations:
+        #     self.update_label(REGISTER_NAMES[destination], getattr(self.processor, destination))
         self.animators = []
-
         self.animation_running = False
-        self.can_continue.wakeAll()

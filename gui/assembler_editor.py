@@ -1,6 +1,6 @@
 import math
 
-from PySide6.QtCore import QSize, QRect, Qt, Slot
+from PySide6.QtCore import QSize, QRect, Qt, Slot, Signal
 from PySide6.QtGui import QPainter, QColor, QTextFormat, QTextCursor, QSyntaxHighlighter, QTextCharFormat
 from PySide6.QtWidgets import QWidget, QPlainTextEdit, QTextEdit
 
@@ -18,6 +18,8 @@ class LineNumberArea(QWidget):
 
 
 class AssemblerEdit(QPlainTextEdit):
+    programCounterChanged = Signal(int)
+
     def __init__(self, parent=None):
         super(AssemblerEdit, self).__init__(parent)
         # self.highlight = syntax.PythonHighlighter(self.document())
@@ -26,6 +28,7 @@ class AssemblerEdit(QPlainTextEdit):
         self.blockCountChanged.connect(self.update_line_number_area_width)
         self.updateRequest.connect(self.update_line_number_area)
         self.cursorPositionChanged.connect(self.highlight_current_line)
+        self.programCounterChanged.connect(self.highlight_pc_line)
         self.update_line_number_area_width(0)
 
     def line_number_area_width(self):
@@ -80,6 +83,17 @@ class AssemblerEdit(QPlainTextEdit):
             selection.format.setBackground(line_color)
             selection.format.setProperty(QTextFormat.FullWidthSelection, True)
             selection.cursor = self.textCursor()
+            selection.cursor.clearSelection()
+            self.setExtraSelections([selection])
+
+    def highlight_pc_line(self, line_number):
+        if not self.isReadOnly():
+            selection = QTextEdit.ExtraSelection()
+            line_color = QColor(Qt.red).lighter(150)
+            selection.format.setBackground(line_color)
+            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
+            document = self.document()
+            selection.cursor = QTextCursor(document.findBlockByLineNumber(line_number))
             selection.cursor.clearSelection()
             self.setExtraSelections([selection])
 

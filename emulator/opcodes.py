@@ -23,20 +23,20 @@ ASL_ZERO_PAGE_X = 0x16
 ASL_ABSOLUTE = 0x0E
 ASL_ABSOLUTE_X = 0x1E
 # Branch if carry clear
-BCC_RELATIVE = 0x90
+BCC= 0x90
 # Branch if carry set
-BCS_RELATIVE = 0xB0
+BCS = 0xB0
 # Branch if equal
-BEQ_RELATIVE = 0xF0
+BEQ= 0xF0
 # Bit test
 BIT_ZERO_PAGE = 0x24
 BIT_ABSOLUTE = 0x2C
 # Branch if minus
-BMI_RELATIVE = 0x30
+BMI = 0x30
 # Branch if not equal
-BNE_RELATIVE = 0xD0
+BNE = 0xD0
 # Branch if positive
-BPL_RELATIVE = 0x10
+BPL = 0x10
 # Break, force interrupt
 BRK = 0x00
 # Branch if overflow clear

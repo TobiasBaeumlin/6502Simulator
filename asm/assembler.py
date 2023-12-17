@@ -19,6 +19,7 @@ def pass1_error_check(tokens, address_mode, op_code, errors, line_number):
             print('Error:', tokens[0], ' - Invalid Mnemonic for the specified Addressing Mode')
     return
 
+
 def handle_immediate_operands(operand):
     if operand[1].isdigit():
         return f'#${int(operand[1:]):02X}'
@@ -154,10 +155,11 @@ def assemble_file_pass_1(source_code) -> dict:
     return label_dict
 
         
-def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None) -> OrderedDict:
+def assemble_file_pass_2(source_code: list[str], label_dict: dict, list_file=None) -> (OrderedDict, dict):
     line_number = 0
     num_bytes = 0
     code_dict = OrderedDict()
+    debug_info = {}
     pass2_errors = {}
     pc = 0
 
@@ -190,7 +192,7 @@ def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None)
                 continue
 
         if len(token_line) == 2 and token_line[1].startswith('#'):
-           token_line[1] = handle_immediate_operands(token_line[1])
+            token_line[1] = handle_immediate_operands(token_line[1])
 
         if token_line[0] == '.ORG':
             pc = ah.parse_num(token_line[1])
@@ -203,6 +205,7 @@ def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None)
                 line_out = ah.build_source_listing_line(line, f'{pc:04X}', ':', data_bytes)
                 list_out.write(line_out)   
             code_dict[pc] = data_bytes
+            debug_info[pc] = line_number
             pc = pc + num_data_bytes
         elif token_line[0] == '.DS':
             if list_file:
@@ -309,26 +312,31 @@ def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None)
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code)
                     list_out.write(line_out)   
                 code_dict[pc] = op_code
+                debug_info[pc] = line_number
             elif address_mode == 'Immediate' or address_mode == 'Indirect,X' or address_mode == 'Indirect,Y':
                 if list_file:
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code, operand[2:4])
                     list_out.write(line_out)   
                 code_dict[pc] = op_code + operand[2:4]
-            elif address_mode == 'Zero Page' or address_mode == 'Zero Page,X' or address_mode == 'Zero Page,Y': 
+                debug_info[pc] = line_number
+            elif address_mode == 'Zero Page' or address_mode == 'Zero Page,X' or address_mode == 'Zero Page,Y':
                 if list_file:
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code, operand[1:3])
                     list_out.write(line_out)   
                 code_dict[pc] = op_code + operand[1:3]
+                debug_info[pc] = line_number
             elif address_mode == 'Absolute' or address_mode == 'Absolute,X' or address_mode == 'Absolute,Y':
                 if list_file:
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code, operand[3:5], operand[1:3])
                     list_out.write(line_out)   
                 code_dict[pc] = op_code + operand[3:5] + operand[1:3]
+                debug_info[pc] = line_number
             elif address_mode == 'Indirect':
                 if list_file:
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code, operand[4:6], operand[2:4])    
                     list_out.write(line_out)   
                 code_dict[pc] = op_code + operand[4:6] + operand[2:4]
+                debug_info[pc] = line_number
             pc = pc + num_bytes
 
     if list_file:        
@@ -340,4 +348,4 @@ def assemble_file_pass_2(source_code:list[str], label_dict:dict, list_file=None)
         raise AssemblerError('Error(s) in pass 2', pass2_errors)
 
     print('Pass 2 Complete - No Errors Encountered')
-    return code_dict
+    return code_dict, debug_info
