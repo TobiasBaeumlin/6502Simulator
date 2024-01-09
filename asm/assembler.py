@@ -67,6 +67,10 @@ def assemble_file_pass_1(source_code) -> dict:
             if len(tokens) == 0:
                 continue
 
+        if len(tokens) > 2:
+            pass1_errors[line_number] = 'Too many tokens'
+            continue
+
         if len(tokens) == 2 and tokens[1].startswith('#'):
             tokens[1] = handle_immediate_operands(tokens[1])
 
@@ -90,8 +94,7 @@ def assemble_file_pass_1(source_code) -> dict:
                 operand = tokens[1]
                 if operand != 'A' and not operand.startswith('$'):
                     for p in ah.ADDRESS_MODE_PATTERNS_SYM.keys():
-                        z = re.fullmatch(p, operand)
-                        if z:
+                        if re.fullmatch(p, operand):
                             mode = ah.ADDRESS_MODE_PATTERNS_SYM[p]
                             if isinstance(mode, tuple):
                                 if 'Zero Page' in mode:
@@ -140,11 +143,8 @@ def assemble_file_pass_1(source_code) -> dict:
             elif len(tokens) == 1:
                 address_mode, num_bytes, op_code = ah.determine_mode(tokens[0], '')
                 pass1_error_check(tokens, address_mode, op_code, pass1_errors, line_number)
-            else:
-                pass1_errors[line_number] = 'Too many tokens'
-                print(f'Error on line {line_number}:', tokens, ' - Too Many Tokens')
-                    
-            pc = pc + num_bytes    
+
+            pc = pc + num_bytes
 
     if len(pass1_errors) == 0:
         print('Pass 1 Complete - No Errors Encountered')
@@ -237,7 +237,8 @@ def assemble_file_pass_2(source_code: list[str], label_dict: dict, list_file=Non
                 if list_file:
                     line_out = ah.build_source_listing_line(line,  f'{pc:04X}', ':', op_code, disp)
                     list_out.write(line_out)   
-                code_dict[pc] = op_code + disp             
+                code_dict[pc] = op_code + disp
+                debug_info[pc] = line_number
                 pc = pc + 2
         else:
             if len(token_line) == 2:

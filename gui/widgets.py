@@ -1,37 +1,6 @@
-import setuptools
 from PySide6.QtWidgets import QFrame, QLabel, QLCDNumber
-from PySide6.QtGui import QPainter, QPaintEvent, QPen, QColor, QFont
-from PySide6.QtCore import  Qt
-
-
-# class ComputerFrame(QFrame):
-#     def paintEvent(self, event: QPaintEvent) -> None:
-#         painter = QPainter(self)
-#         self.paint_bus(painter)
-#         painter.end()
-#         return super().paintEvent(event)
-#
-#     @staticmethod
-#     def paint_bus(painter: QPainter):
-#         pen = QPen()
-#         pen.setColor(QColor(180, 20, 50))
-#         pen.setWidth(4)
-#         painter.setPen(pen)
-#         painter.setWindow(0, 0, 950, 870)
-#         painter.setViewport(20, -70, 970, 940)
-#         painter.drawLine(Points.sr, Points.c1)
-#         painter.drawLine(Points.pc, Points.c2)
-#         painter.drawLine(Points.ar_i, Points.c10)
-#         painter.drawLine(Points.ac, Points.c4)
-#         painter.drawLine(Points.ix, Points.al_i1)
-#         painter.drawLine(Points.iy, Points.c6)
-#         painter.drawLine(Points.sp, Points.al_i2)
-#         painter.drawLine(Points.al_o, Points.c9)
-#         # Vertical lines
-#         painter.drawLine(Points.c1, Points.c3)
-#         painter.drawLine(Points.c4, Points.c8)
-#         painter.drawLine(Points.ir, Points.dat)
-#         painter.drawLine(Points.ar_o, Points.mem)
+from PySide6.QtGui import QFont
+from PySide6.QtCore import Qt
 
 
 class RegisterMode:

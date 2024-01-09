@@ -23,7 +23,7 @@ def build_address_mode_string(mode: str, index_register: str) -> str:
 
 
 class ProcessorVisualization(QObject, Processor):
-    animate_signal = Signal(dict, list)
+    animate_signal = Signal(dict)
     update_label_signal = Signal(str, object)
     show_page_signal = Signal(int)
     show_address_signal = Signal(int)
@@ -48,6 +48,12 @@ class ProcessorVisualization(QObject, Processor):
         # Current instruction in disassembled form
         self.current_instruction = ''
 
+    def interrupt(self):
+        self.interrupt_requested = True
+
+    def unmaskable_interrupt(self):
+        self.non_maskable_interrupt = True
+
     @property
     def current_page(self):
         return self._current_page
@@ -68,29 +74,20 @@ class ProcessorVisualization(QObject, Processor):
 
     # Blocks while the animation in the gui is running
     def animate_data_transfer(self, data_transfer, destination=None):
-        if destination is None:
-            destinations = []
-        elif destination == 'AR':
-            destinations = ['ARH', 'ARL']
-        elif destination == 'PC':
-            destinations = ['PCH', 'PCL']
-        elif destination == 'A':
-            destinations = ['A', 'AB']
-        else:
-            destinations = [destination]
         self.window.animation_running = True
-        self.animate_signal.emit(data_transfer, destinations)
+        self.animate_signal.emit(data_transfer)
         time.sleep(0.1)
         while self.window.animation_running:
             pass
+
+    def show_stack(self):
+        self.show_page_signal.emit(1)
 
     def update_label(self, label, value):
         self.update_label_signal.emit(label, value)
 
     def highlight_pc_in_assembler(self):
-        print('highlight_pc_in_assembler', self.PC)
         if self.PC in self.window.debug_info:
-            print('sending signal')
             self.highlight_pc_in_assembler_signal.emit(self.window.debug_info[self.PC]-1)
 
     # Overriding methods from class Processor
@@ -248,7 +245,7 @@ class ProcessorVisualization(QObject, Processor):
     def reset(self) -> None:
         super().reset()
         self.update_label('cycle_stage', '')
-        self.window.show_page(self.memory.data[0xfffc])
+        self.window.show_page(self.memory.data[self.reset_vector_address])
         self.window.show_memory_address(self.PC)
 
     def set_zero_and_negative_status_flags(self, register: str = 'RES') -> None:
@@ -270,14 +267,16 @@ class ProcessorVisualization(QObject, Processor):
         if self.window.animation_mode:
             data = self.__getattribute__(from_register)
             self.animate_data_transfer({'path': AnimationPaths[from_register][to_register],
-                                        'data': f'{data:{self.byte_format}}'}, to_register)
+                                        'data': f'{data:{self.byte_format}}'})
         super().copy_byte(from_register, to_register)
 
     def fetch_byte(self) -> int:
         if self.window.animation_mode:
             data = f'{self.AR:{self.byte_format}}'
-            if self.AR >> 8 == 0:
+            if self.ARH == 0:
                 path = AnimationPaths['AR']['ZA']
+            elif self.ARH == 1:
+                path = AnimationPaths['AR']['SA']
             else:
                 path = AnimationPaths['AR']['MA']
             self.animate_data_transfer({'path': path, 'data': data})
@@ -286,22 +285,24 @@ class ProcessorVisualization(QObject, Processor):
         return byte
 
     def fetch_byte_to_register(self, register: str) -> None:
-        if self.window.animation_mode:
-            if (self.AR >> 8) == 0:
-                path = AnimationPaths['ZD'][register]
-            else:
-                path = AnimationPaths['MD'][register]
-            data = f'{self.memory.data[self.AR]:{self.byte_format}}'
         byte = self.fetch_byte()
         if self.window.animation_mode:
-            self.animate_data_transfer({'path': path, 'data': data}, register)
+            if self.ARH == 0:
+                path = AnimationPaths['ZD'][register]
+            elif self.ARH == 1:
+                path = AnimationPaths['SD'][register]
+            else:
+                path = AnimationPaths['MD'][register]
+            self.animate_data_transfer({'path': path, 'data': f'{byte:{self.byte_format}}'})
         setattr(self, register, byte)
 
     def fetch_byte_at_pc(self) -> int:
         if self.window.animation_mode:
             data = f'{self.PC:{self.byte_format}}'
-            if self.PC >> 8 == 0:
+            if self.PCH == 0:
                 path = AnimationPaths['PC']['ZA']
+            elif self.PCH == 1:
+                path = AnimationPaths['PC']['SA']
             else:
                 path = AnimationPaths['PC']['MA']
             self.animate_data_transfer({'path': path, 'data': data})
@@ -312,24 +313,36 @@ class ProcessorVisualization(QObject, Processor):
         return super().fetch_byte_at_pc()
 
     def fetch_byte_at_pc_to_register(self, register: str) -> None:
+        byte = self.fetch_byte_at_pc()
         if self.window.animation_mode:
-            if (self.PC >> 8) == 0:
+            if self.PCH == 0:
                 path = AnimationPaths['ZD'][register]
+            elif self.PCH == 1:
+                path = AnimationPaths['SD'][register]
             else:
                 path = AnimationPaths['MD'][register]
             data = f'{self.memory.data[self.PC]:{self.byte_format}}'
-        byte = self.fetch_byte_at_pc()
-        if self.window.animation_mode:
-            self.animate_data_transfer({'path': path, 'data': data}, register)
+            self.animate_data_transfer({'path': path, 'data': f'{byte:{self.byte_format}}'})
         setattr(self, register, byte)
+
+    def put_byte(self, byte: int) -> None:
+        super().put_byte(byte)
+        if self.AR in (self.interrupt_vector_address, self.interrupt_vector_address+1):
+            self.update_label('interrupt_vector', f'{self.word(self.interrupt_vector_address):04X}')
+        if self.AR in (self.reset_vector_address, self.reset_vector_address+1):
+            self.update_label('reset_vector', f'{self.word(self.reset_vector_address):04X}')
+        if self.AR in (self.nmi_vector_address, self.nmi_vector_address+1):
+            self.update_label('nmi_vector', f'{self.word(self.nmi_vector_address):04X}')
 
     def put_byte_from_register(self, register: str) -> None:
         if self.window.animation_mode:
             data = f'{getattr(self, register):{self.byte_format}}'
         super().put_byte_from_register(register)
         if self.window.animation_mode:
-            if (self.AR >> 8) == 0:
+            if self.ARH == 0:
                 path = AnimationPaths[register]['ZD']
+            elif self.ARH == 1:
+                path = AnimationPaths[register]['SD']
             else:
                 path = AnimationPaths[register]['MD']
             self.animate_data_transfer({'path': path, 'data': data})
@@ -337,22 +350,12 @@ class ProcessorVisualization(QObject, Processor):
         self.memory.data[self.AR] = getattr(self, register)
         self.show_address_signal.emit(self.AR)
 
-    def push_pc_to_stack(self, word: int) -> None:
+    def set_address_register_from_stack_pointer(self) -> None:
         if self.window.animation_mode:
-            data = f'{(word & 0xff):{self.byte_format}}'
-            self.animate_data_transfer({'path': AnimationPaths['PC']['MD'], 'data': data})
+            self.animate_data_transfer({'path': AnimationPaths['S']['AR'], 'data': f'{self.S:02X}'})
+        super().set_address_register_from_stack_pointer()
         if self.window.animation_mode:
-            data = f'{(word >> 0xff):{self.byte_format}}'
-            self.animate_data_transfer({'path': AnimationPaths['PC']['MD'], 'data': data})
-        super().push_pc_to_stack(word)
-
-    def pull_pc_from_stack(self) -> None:
-        if self.window.animation_mode:
-            self.animate_data_transfer({'path': AnimationPaths['MD']['PC'],
-                                        'data': f'{(self.PC & 0xff):{self.byte_format}}'}, 'PC')
-            self.animate_data_transfer({'path': AnimationPaths['PC']['MD'],
-                                        'data': f'{(self.PC >> 0xff):{self.byte_format}}'})
-        super().pull_pc_from_stack()
+            self.animate_data_transfer({'path': AnimationPaths['AR']['SA'], 'data': f'{self.AR:04X}'})
 
     def fetch_instruction(self) -> None:
         self.show_cycle_status('fetch')
@@ -381,7 +384,7 @@ class ProcessorVisualization(QObject, Processor):
         if self.window.animation_mode:
             path = AnimationPaths[source][destination]
             self.animate_data_transfer({'path': path,
-                                        'data': str(getattr(self, source))}, destination)
+                                        'data': str(getattr(self, source))})
         super().transfer_register(source, destination)
 
     def arithmetic_operation(self, operator: str, mode: str, index_register: str = None) -> None:
@@ -481,28 +484,25 @@ class ProcessorVisualization(QObject, Processor):
             self.CI = f'CL{flag}'
         self.show_cycle_status('run')
         if self.window.animation_mode:
-            self.animate_data_transfer({'path': AnimationPaths['IR']['SR'], 'data': f'{flag}:{int(state)}'}, 'S')
+            self.animate_data_transfer({'path': AnimationPaths['IR']['SR'], 'data': f'{flag}:{int(state)}'})
         super().set_flag(flag, state)
 
-    def push_processor_status(self) -> None:
-        self.CI = 'PHP'
+    def push_register_to_stack(self, register: str) -> None:
+        if register == 'SR':
+            self.CI = 'PHP'
+        elif register == 'A':
+            self.CI = 'PHA'
         self.show_cycle_status('run')
-        super().push_processor_status()
+        super().push_register_to_stack(register)
+        self.show_stack()
 
-    def push_accumulator(self) -> None:
-        self.CI = 'PHA'
+    def pull_register_from_stack(self, register: str) -> None:
+        if register == 'SR':
+            self.CI = 'PLP'
+        elif register == 'A':
+            self.CI = 'PLA'
         self.show_cycle_status('run')
-        super().push_accumulator()
-
-    def pull_processor_status(self) -> None:
-        self.CI = 'PLP'
-        self.show_cycle_status('run')
-        super().pull_processor_status()
-
-    def pull_accumulator(self) -> None:
-        self.CI = 'PLP'
-        self.show_cycle_status('run')
-        super().pull_accumulator()
+        super().pull_register_from_stack(register)
 
     def jump(self, mode) -> None:
         self.CI = f'JMP {mode}'
@@ -522,6 +522,7 @@ class ProcessorVisualization(QObject, Processor):
     def brk(self):
         self.CI = 'BRK'
         self.show_cycle_status('run')
+        super().brk()
 
     def return_from_interrupt(self):
         self.CI = 'RTI'

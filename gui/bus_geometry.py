@@ -84,6 +84,8 @@ AnimationPaths = {
     'Y': {},
     'SR': {},                     # Status register
     'PC': {},                     # Program counter
+    'PCL': {},
+    'PCH': {},
     'S': {},                     # Stack pointer
     'RES': {},
     'AR': {},
@@ -91,6 +93,8 @@ AnimationPaths = {
     'MA': {},
     'ZD': {},
     'ZA': {},
+    'SD': {},                    # Stack data
+    'SA': {},
     'IR': {},
     'C': {},
     'N': {},
@@ -128,8 +132,14 @@ AnimationPaths['ZD']['OP2'] = [AnimationPoints['zd'], AnimationPoints['db4'], An
 AnimationPaths['ZD']['PC'] = [AnimationPoints['zd'], AnimationPoints['db4'], AnimationPoints['db0'],
                               AnimationPoints['pb2'], AnimationPoints['pcd']]
 
+AnimationPaths['SD']['A'] = [AnimationPoints['sd'], AnimationPoints['db3'], AnimationPoints['db1'],
+                             AnimationPoints['pb5'], AnimationPoints['a']]
+AnimationPaths['SD']['SR'] = [AnimationPoints['sd'], AnimationPoints['db3'], AnimationPoints['db0'],
+                              AnimationPoints['pb1'], AnimationPoints['sr']]
+
 AnimationPaths['A']['MD'] = list(reversed(AnimationPaths['MD']['A']))
 AnimationPaths['A']['ZD'] = list(reversed(AnimationPaths['ZD']['A']))
+AnimationPaths['A']['SD'] = list(reversed(AnimationPaths['SD']['A']))
 AnimationPaths['A']['X'] = [AnimationPoints['a'], AnimationPoints['pb5'], AnimationPoints['pb7'],
                             AnimationPoints['x']]
 AnimationPaths['A']['Y'] = [AnimationPoints['a'], AnimationPoints['pb5'], AnimationPoints['pb8'],
@@ -140,6 +150,8 @@ AnimationPaths['A']['SR'] = [AnimationPoints['a2'], AnimationPoints['sr']]
 AnimationPaths['X']['A'] = list(reversed(AnimationPaths['A']['X']))
 AnimationPaths['X']['MD'] = list(reversed(AnimationPaths['MD']['X']))
 AnimationPaths['X']['ZD'] = list(reversed(AnimationPaths['ZD']['X']))
+AnimationPaths['X']['OP1'] = [AnimationPoints['x'], AnimationPoints['pb7'], AnimationPoints['pb5'],
+                              AnimationPoints['op1']]
 AnimationPaths['X']['S'] = [AnimationPoints['x'], AnimationPoints['pb7'], AnimationPoints['pb8'],
                              AnimationPoints['sp']]
 AnimationPaths['X']['SR'] = [AnimationPoints['x2'], AnimationPoints['pb2'], AnimationPoints['pb1'],
@@ -148,6 +160,8 @@ AnimationPaths['X']['SR'] = [AnimationPoints['x2'], AnimationPoints['pb2'], Anim
 AnimationPaths['Y']['A'] = list(reversed(AnimationPaths['A']['Y']))
 AnimationPaths['Y']['MD'] = list(reversed(AnimationPaths['MD']['Y']))
 AnimationPaths['Y']['ZD'] = list(reversed(AnimationPaths['ZD']['Y']))
+AnimationPaths['Y']['OP1'] = [AnimationPoints['y'], AnimationPoints['pb8'], AnimationPoints['pb5'],
+                              AnimationPoints['op1']]
 AnimationPaths['Y']['SR'] = [AnimationPoints['y2'], AnimationPoints['pb3'], AnimationPoints['pb1'],
                              AnimationPoints['sr']]
 
@@ -157,8 +171,16 @@ AnimationPaths['RES']['ZD'] = [AnimationPoints['res'], AnimationPoints['pb7'], A
                                AnimationPoints['db4'], AnimationPoints['zd']]
 AnimationPaths['RES']['A'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb5'],
                               AnimationPoints['a']]
+AnimationPaths['RES']['X'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb7'],
+                              AnimationPoints['x']]
+AnimationPaths['RES']['Y'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb8'],
+                              AnimationPoints['y']]
 AnimationPaths['RES']['SR'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb9'],
                                AnimationPoints['pb4'], AnimationPoints['pb1'], AnimationPoints['sr']]
+AnimationPaths['RES']['PCL'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb9'],
+                                AnimationPoints['pb4'], AnimationPoints['pb2'], AnimationPoints['pcd']]
+AnimationPaths['RES']['S'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb8'],
+                              AnimationPoints['sp']]
 
 AnimationPaths['PC']['AR'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab1'],
                               AnimationPoints['ara']]
@@ -166,11 +188,17 @@ AnimationPaths['PC']['MD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], An
                               AnimationPoints['db2'], AnimationPoints['md']]
 AnimationPaths['PC']['ZD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
                               AnimationPoints['db4'], AnimationPoints['zd']]
+AnimationPaths['PC']['SD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
+                              AnimationPoints['db3'], AnimationPoints['sd']]
 AnimationPaths['PC']['ZA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab2'],
                               AnimationPoints['ab3'], AnimationPoints['za']]
 AnimationPaths['PC']['MA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ma']]
 AnimationPaths['PC']['SA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab2'],
                               AnimationPoints['ab4'], AnimationPoints['sa']]
+AnimationPaths['PCL']['SD'] = AnimationPaths['PC']['SD']
+AnimationPaths['PCH']['SD'] = AnimationPaths['PC']['SD']
+AnimationPaths['PCL']['OP1'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['pb4'],
+                               AnimationPoints['pb9'], AnimationPoints['pb5'], AnimationPoints['op1']]
 
 AnimationPaths['AR']['MA'] = [AnimationPoints['ara'], AnimationPoints['ab1'], AnimationPoints['ma']]
 AnimationPaths['AR']['ZA'] = [AnimationPoints['ara'], AnimationPoints['ab1'], AnimationPoints['ab2'],
@@ -198,7 +226,12 @@ AnimationPaths['MD']['ARH'] = AnimationPaths['ZD']['AR']
 AnimationPaths['S']['X'] = list(reversed(AnimationPaths['X']['S']))
 AnimationPaths['S']['SR'] = [AnimationPoints['sp'], AnimationPoints['pb8'], AnimationPoints['pb9'],
                              AnimationPoints['pb4'], AnimationPoints['pb1'], AnimationPoints['sr']]
+AnimationPaths['S']['AR'] = [AnimationPoints['sp'], AnimationPoints['pb8'], AnimationPoints['pb9'],
+                             AnimationPoints['pb4'], AnimationPoints['pb3'], AnimationPoints['ard']]
+AnimationPaths['S']['OP1'] = [AnimationPoints['sp'], AnimationPoints['pb8'], AnimationPoints['pb5'],
+                              AnimationPoints['op1']]
 
 AnimationPaths['SR']['OP2'] = [AnimationPoints['sr'], AnimationPoints['pb1'], AnimationPoints['pb4'],
                                AnimationPoints['pb9'], AnimationPoints['pb6'], AnimationPoints['op2']]
+AnimationPaths['SR']['SD'] = list(reversed(AnimationPaths['SD']['SR']))
 AnimationPaths['C']['OP2'] = AnimationPaths['SR']['OP2']

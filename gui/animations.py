@@ -28,7 +28,7 @@ def build_path_animation(transfer, gui):
     animator.setStyleSheet(u"background-color:red;border-radius:10px;")
     animator.setText(str(data))
     for i in range(len(path) - 1):
-        duration =  segment_length(path[i], path[i + 1]) // gui.animation_speed
+        duration = segment_length(path[i], path[i + 1]) // gui.animation_speed
         a = QPropertyAnimation(animator, b"pos")
         a.setDuration(duration)
         a.setStartValue(path[i])

@@ -32,6 +32,7 @@ def test_return_from_subroutine_instruction(instruction:list[int], return_point,
     assert processor.S == sp + 2
     assert processor.cycles == num_cycles
 
+
 def test_break(instruction:list[int], num_cycles, data, register_data):
     processor = setup_processor(instruction, data=data, registers=register_data)
         
@@ -43,6 +44,7 @@ def test_break(instruction:list[int], num_cycles, data, register_data):
     assert processor.S == sp - 3
     assert processor.memory.data[0x0100+sp] + (processor.memory.data[0x0100+sp-1] << 8) == return_point
     assert processor.cycles == num_cycles
+
 
 def test_return_from_interrupt(instruction:list[int], return_point, num_cycles:int, data:dict={}, register_data:dict={}) -> None:
     processor = setup_processor(instruction, data=data, registers=register_data)
@@ -67,14 +69,14 @@ class ProcessorTest(unittest.TestCase):
 
     def test_return_from_subroutine(self):
         test_return_from_subroutine_instruction([RTS], return_point=0x2003, num_cycles=6, 
-                                                data={0x01fe:0x20, 0x01ff:0x02}, register_data={'S': 0xfd})
+                                                data={0x01fe: 0x20, 0x01ff: 0x02}, register_data={'S': 0xfd})
 
     def test_break(self):
         test_break([BRK], num_cycles=7, data={0xfffe: 0x05, 0xffff: 0x04}, register_data={'PC': 0x0200})
 
     def test_return_from_interrupt(self):
-        test_return_from_interrupt([RTI], return_point=0x8000, num_cycles=6, data={0x1fd:0b11011101, 0x01fe:0x80, 0x1ff:0x00}, 
-                                   register_data={'S': 0xfc})
+        test_return_from_interrupt([RTI], return_point=0x8000, num_cycles=6,
+                                   data={0x1fd: 0b11011101, 0x01fe: 0x80, 0x1ff: 0x00}, register_data={'S': 0xfc})
 
     def test_can_return_from_subroutine(self):
         data = {

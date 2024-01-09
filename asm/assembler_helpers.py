@@ -18,7 +18,6 @@
 #
 
 import re
-from collections import OrderedDict
 
 VALID_MNEMONICS = {
     'LDA', 'BVS', 'PLA', 'INY', 'PHA', 'RTS', 'BCS', 'DEC', 'AND',
@@ -148,18 +147,10 @@ def build_source_listing_line(sline, *arguments):
     return z + ' ' + sline + '\n'
 
 
-# Convert a negative signed integer to a 1 byte hex string in two's complement format
-def convert_int_to_twos_complement(x):
-    t = bin(x)[3:]
-    b = '0' * (8 - len(t)) + t  # expand by propagating a '0' out to 8 bits
-    # flip the bits in b creating num1
-    num1 = ''
-    for bit in b:
-        if bit == '0':
-            num1 = num1 + '1'
-        else:
-            num1 = num1 + '0'
-    return hex(int(num1, 2) + int('0001', 2))[2:].upper()
+# Convert a (signed) integer to a 1 byte hex string in two's complement format
+def convert_int_to_twos_complement(x: int) -> str:
+    assert -128 <= x < 128
+    return f'{int.from_bytes(x.to_bytes(1, signed=True)):02X}'
 
 
 # Tokenize source line into a list
@@ -188,8 +179,7 @@ def determine_mode(mnemonic, operand):
         mode = 'Accumulator'
     else:
         for p in ADDRESS_MODE_PATTERNS.keys():
-            z = re.fullmatch(p, operand)
-            if z != None:
+            if re.fullmatch(p, operand):
                 mode = ADDRESS_MODE_PATTERNS[p]
                 break
 
@@ -230,7 +220,7 @@ def build_data_bytes(operand):
         elif db[0] == '%':
             db_str = db_str + hex(int(db[1:], 2))[2:].zfill(2).upper()
     nb = len(db_str) // 2
-    return (nb, db_str)
+    return nb, db_str
 
 
 def parse_num(text: str) -> int:
@@ -244,6 +234,11 @@ def parse_num(text: str) -> int:
             value = int(text[1:], 16)
         except ValueError:
             value = None
+    elif text.startswith('^'):
+        try:
+            value = int(text[1:], 2)
+        except ValueError:
+            value = None
     elif text.startswith('0b'):
         try:
             value = int(text[2:], 2)
@@ -254,4 +249,6 @@ def parse_num(text: str) -> int:
             value = int(text, 10)
         except ValueError:
             value = None
+    if value is None:
+        raise ValueError('Invalid numeral')
     return value

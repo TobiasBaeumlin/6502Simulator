@@ -16,7 +16,3 @@ window = Simulator()
 window.show()
 app.exec()
 
-
-
-
-

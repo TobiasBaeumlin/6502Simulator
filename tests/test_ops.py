@@ -1,9 +1,10 @@
 import unittest
 from emulator.processor import Processor
-from emulator.opcodes import *
+
 
 class ProcessorTest(unittest.TestCase):
-    def test_setter_getter(self):
+    @staticmethod
+    def test_setter_getter():
         processor = Processor()
         processor.PC = 0x200
         assert processor.program_counter_low.value == 0x00
@@ -39,14 +40,16 @@ class ProcessorTest(unittest.TestCase):
         processor.N = 0
         assert processor.status.value == 0         
 
-    def test_put(self):
+    @staticmethod
+    def test_put():
         processor = Processor()
         processor.AR = 0xff
         processor.put_byte(10)
         assert processor.memory.data[0xff] == 10
         assert processor.cycles == 1
 
-    def test_fetch(self):
+    @staticmethod
+    def test_fetch():
         processor = Processor()
         processor.memory.data[0x100] = 42
         processor.AR = 0x100
