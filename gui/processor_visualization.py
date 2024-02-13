@@ -33,7 +33,9 @@ class ProcessorVisualization(QObject, Processor):
         super().__init__()
         self.window = window
 
+        self.halt_requested = False
         self.interrupt_requested = False
+        self.non_maskable_interrupt_requested = False
         self.single_cycle = False  # Do not stop after each cycle
         self.cycle_delay = 1  # Wait for 1s after each cycle
         self.shown_page = 0
@@ -48,11 +50,16 @@ class ProcessorVisualization(QObject, Processor):
         # Current instruction in disassembled form
         self.current_instruction = ''
 
-    def interrupt(self):
+    def halt(self):
+        print('Processor halt requested')
+        self.halt_requested = True
+
+    def request_interrupt(self):
+        print('Processsor visualization: interrupt_requested')
         self.interrupt_requested = True
 
-    def unmaskable_interrupt(self):
-        self.non_maskable_interrupt = True
+    def request_unmaskable_interrupt(self):
+        self.non_maskable_interrupt_requested = True
 
     @property
     def current_page(self):
@@ -67,10 +74,14 @@ class ProcessorVisualization(QObject, Processor):
 
     def show_cycle_status(self, status: str):
         self.update_label('cycle_stage', status)
-        if self.window.animation_mode and status == 'decode':
-            time.sleep(0.5)
-        if not self.window.animation_mode:
-            time.sleep(self.window.cycle_delay)
+        if status == 'decode':
+            if self.window.animation_mode:
+                time.sleep(self.window.cycle_delay)
+            # if not self.window.animation_mode:
+            #     time.sleep(self.window.cycle_delay)
+        if status == 'fetch':
+            if not self.window.animation_mode:
+                time.sleep(self.window.cycle_delay)
 
     # Blocks while the animation in the gui is running
     def animate_data_transfer(self, data_transfer, destination=None):
@@ -213,34 +224,42 @@ class ProcessorVisualization(QObject, Processor):
     # Address modes
     def immediate(self):
         super().immediate()
+        self.CI = self.CI[:3] + f' #${self.memory.data[self.AR]:02X}'
 
     def zero_page(self):
         super().zero_page()
         self.CI = self.CI[:3] + f' ${self.AR:02X}'
 
     def zero_page_indexed(self, register, penalty_cycle=False):
+        value = self.memory.data[self.PC]
         super().zero_page_indexed(register, penalty_cycle)
-        self.CI = self.CI[:3] + f' ${self.AR:02X},${getattr(self, register)}'
+        self.CI = self.CI[:3] + f' ${value:02X},{register}'
 
     def absolute(self):
         super().absolute()
         self.CI = self.CI[:3] + f' ${self.AR:04X}'
 
     def absolute_indexed(self, register, penalty_cycle=False) -> None:
+        value = self.memory.data[self.PC] + (self.memory.data[self.PC+1] << 8)
         super().absolute_indexed(register, penalty_cycle)
-        self.CI = self.CI[:3] + f' ${self.AR:04X},${getattr(self, register)}'
+        self.CI = self.CI[:3] + f' ${value:04X},{register}'
 
     def indexed_indirect_x(self) -> None:
+        value = self.memory.data[self.PC]
         super().indexed_indirect_x()
-        self.CI = self.CI[:3] + f' (${self.AR:04X},${self.X})'
+        self.CI = self.CI[:3] + f' (${value:02X},X)'
 
     def indirect_indexed_y(self) -> None:
+        value = self.memory.data[self.PC]
         super().indirect_indexed_y()
-        self.CI = self.CI[:3] + f' (${self.AR:04X}),${self.Y}'
+        self.CI = self.CI[:3] + f' (${value:02X}),Y'
 
     def indirect(self) -> None:
         super().indirect()
         self.CI = self.CI[:3] + f' (${self.AR:04X})'
+
+    def relative(self) -> None:
+        super().relative()
 
     def reset(self) -> None:
         super().reset()
@@ -328,11 +347,11 @@ class ProcessorVisualization(QObject, Processor):
     def put_byte(self, byte: int) -> None:
         super().put_byte(byte)
         if self.AR in (self.interrupt_vector_address, self.interrupt_vector_address+1):
-            self.update_label('interrupt_vector', f'{self.word(self.interrupt_vector_address):04X}')
+            self.update_label('interrupt_vector', f'${self.word(self.interrupt_vector_address):04X}')
         if self.AR in (self.reset_vector_address, self.reset_vector_address+1):
-            self.update_label('reset_vector', f'{self.word(self.reset_vector_address):04X}')
+            self.update_label('reset_vector', f'${self.word(self.reset_vector_address):04X}')
         if self.AR in (self.nmi_vector_address, self.nmi_vector_address+1):
-            self.update_label('nmi_vector', f'{self.word(self.nmi_vector_address):04X}')
+            self.update_label('nmi_vector', f'${self.word(self.nmi_vector_address):04X}')
 
     def put_byte_from_register(self, register: str) -> None:
         if self.window.animation_mode:
@@ -370,8 +389,6 @@ class ProcessorVisualization(QObject, Processor):
         self.CI = f'LD{register} {build_address_mode_string(mode, index_register)}'
         self.show_cycle_status('run')
         super().load_register(register, mode, index_register)
-        if mode == 'immediate':
-            self.CI = self.CI[:3] + f' ${self.memory.data[self.AR]:02X}'
 
     def store_register(self, register: str, mode: str, index_register: str = None) -> None:
         self.CI = f'ST{register} {build_address_mode_string(mode, index_register)}'
@@ -476,6 +493,7 @@ class ProcessorVisualization(QObject, Processor):
             self.CI = 'BCC'
         self.show_cycle_status('run')
         super().branch(flag, state)
+        self.CI = f'{self.CI[0:3]} *${self.OP1:02X}'
 
     def set_flag(self, flag: str, state: bool) -> None:
         if state is True:
@@ -523,6 +541,11 @@ class ProcessorVisualization(QObject, Processor):
         self.CI = 'BRK'
         self.show_cycle_status('run')
         super().brk()
+
+    def interrupt(self):
+        self.CI = 'INT'
+        self.show_cycle_status('run')
+        super().interrupt()
 
     def return_from_interrupt(self):
         self.CI = 'RTI'

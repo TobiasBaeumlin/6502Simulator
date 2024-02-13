@@ -113,3 +113,60 @@ def shr(byte: int, bit_in: int = 0) -> (int, int):
 def inc(byte: int, increment: int) -> int:
     return (byte + increment) % 0x100
 
+
+# BCD addition of 2 bytes with carry in
+def bcd_addition_with_carry(byte1, byte2, carry_in):
+    result = 0
+    carry = carry_in
+
+    # Iterate over each decimal digit (4 bits) in reverse order
+    for shift in [0, 4]:
+        # Extract the current 4 bits from each byte
+        digit1 = (byte1 >> shift) & 0xF
+        digit2 = (byte2 >> shift) & 0xF
+
+        # Perform BCD addition for the current decimal digit
+        temp_sum = digit1 + digit2 + carry
+
+        # Check for carry and adjust if necessary
+        if temp_sum > 9:
+            carry = 1
+            temp_sum -= 10
+        else:
+            carry = 0
+
+        # Add the result for the current digit to the overall result
+        result |= (temp_sum << shift)
+
+    # Handle any remaining carry
+    if carry:
+        result |= (carry << 8)
+
+    return result, carry
+
+
+def bcd_subtraction_with_borrow(byte1, byte2, borrow_in):
+    print(byte1, byte2, borrow_in)
+    result = 0
+    borrow = borrow_in
+
+    # Iterate over each decimal digit (4 bits) in reverse order
+    for shift in [0, 4]:
+        # Extract the current 4 bits from each byte
+        digit1 = (byte1 >> shift) & 0xF
+        digit2 = (byte2 >> shift) & 0xF
+
+        # Perform BCD subtraction for the current decimal digit
+        temp_diff = digit1 - digit2 - borrow
+
+        # Check for borrow and adjust if necessary
+        if temp_diff < 0:
+            borrow = 1
+            temp_diff += 10
+        else:
+            borrow = 0
+
+        # Add the result for the current digit to the overall result
+        result |= (temp_diff << shift)
+
+    return result, borrow

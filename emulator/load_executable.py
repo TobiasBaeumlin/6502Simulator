@@ -1,7 +1,8 @@
 from processor import Processor
 from intelhex import IntelHex
 
-def load_executable(filename:str, processor:Processor) -> None:
+
+def load_executable(filename: str, processor: Processor) -> None:
     hex_data = IntelHex(filename)
     data = hex_data.todict()
     for key, value in data.items():

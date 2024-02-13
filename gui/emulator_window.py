@@ -5,6 +5,12 @@ from PySide6.QtWidgets import QFrame, QLabel, QPushButton, QWidget, QMainWindow,
 from gui.assembler_editor import AssemblerEdit
 from gui.widgets import RegisterWidget
 
+VERSION = "0.9"
+CLICKABLE = 'color: rgb(10, 85, 205);'
+DATA_BUS = 'color: rgb(10, 180, 30);'
+ADDRESS_BUS = 'color: rgb(10, 100, 10);'
+RED = "color: rgb(230, 0, 80);"
+
 
 class EmulatorWindow(QMainWindow):
     def __init__(self):
@@ -173,7 +179,9 @@ class EmulatorWindow(QMainWindow):
                 getattr(self, f'{prefix}_{row:X}{col:X}').setFrameShadow(QFrame.Shadow.Sunken)
                 getattr(self, f'{prefix}_{row:X}{col:X}').setAlignment(
                     Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+                getattr(self, f'{prefix}_{row:X}{col:X}').setStyleSheet(CLICKABLE)
                 getattr(self, f'{prefix}_{row:X}{col:X}').setIndent(0)
+
                 getattr(self, f'{prefix}_{row:X}{col:X}').raise_()
 
     def draw_bus_line(self, number, parent, orientation, geometry, style_sheet):
@@ -188,36 +196,33 @@ class EmulatorWindow(QMainWindow):
         getattr(self, f'line_{number}').raise_()
 
     def draw_bus_system(self):
-        blue = 'color: rgb(0, 85, 255);'
-        purple = 'color: rgb(100, 0, 210);'
-
         # Data bus
-        self.draw_bus_line(0, self.computer_frame, QFrame.Shape.HLine, QRect(20, 460, 1241, 20), blue)
-        self.draw_bus_line(1, self.computer_frame, QFrame.Shape.VLine, QRect(250, 370, 20, 101), blue)
-        self.draw_bus_line(2, self.computer_frame, QFrame.Shape.VLine, QRect(470, 370, 20, 101), blue)
-        self.draw_bus_line(3, self.computer_frame, QFrame.Shape.VLine, QRect(600, 470, 20, 111), blue)
-        self.draw_bus_line(4, self.computer_frame, QFrame.Shape.VLine, QRect(990, 320, 20, 151), blue)
-        self.draw_bus_line(5, self.computer_frame, QFrame.Shape.VLine, QRect(1230, 470, 20, 111), blue)
+        self.draw_bus_line(0, self.computer_frame, QFrame.Shape.HLine, QRect(20, 460, 1241, 20), DATA_BUS)
+        self.draw_bus_line(1, self.computer_frame, QFrame.Shape.VLine, QRect(250, 370, 20, 101), DATA_BUS)
+        self.draw_bus_line(2, self.computer_frame, QFrame.Shape.VLine, QRect(470, 370, 20, 101), DATA_BUS)
+        self.draw_bus_line(3, self.computer_frame, QFrame.Shape.VLine, QRect(600, 470, 20, 111), DATA_BUS)
+        self.draw_bus_line(4, self.computer_frame, QFrame.Shape.VLine, QRect(990, 320, 20, 151), DATA_BUS)
+        self.draw_bus_line(5, self.computer_frame, QFrame.Shape.VLine, QRect(1230, 470, 20, 111), DATA_BUS)
         # Processor bus
-        self.draw_bus_line(6, self.processor_frame, QFrame.Shape.HLine, QRect(190, 330, 301, 20), blue)
-        self.draw_bus_line(7, self.processor_frame, QFrame.Shape.VLine, QRect(220, 10, 20, 331), blue)
-        self.draw_bus_line(8, self.processor_frame, QFrame.Shape.VLine, QRect(440, 10, 20, 331), blue)
-        self.draw_bus_line(9, self.processor_frame, QFrame.Shape.HLine, QRect(190, 160, 151, 20), blue)
-        self.draw_bus_line(10, self.processor_frame, QFrame.Shape.HLine, QRect(190, 250, 151, 20), blue)
-        self.draw_bus_line(11, self.processor_frame, QFrame.Shape.HLine, QRect(190, 80, 81, 20), blue)
-        self.draw_bus_line(12, self.processor_frame, QFrame.Shape.HLine, QRect(450, 80, 41, 20), blue)
-        self.draw_bus_line(13, self.processor_frame, QFrame.Shape.HLine, QRect(410, 160, 81, 20), blue)
-        self.draw_bus_line(14, self.processor_frame, QFrame.Shape.HLine, QRect(410, 250, 81, 20), blue)
-        self.draw_bus_line(15, self.processor_frame, QFrame.Shape.HLine, QRect(410, 40, 81, 20), blue)
+        self.draw_bus_line(6, self.processor_frame, QFrame.Shape.HLine, QRect(190, 330, 301, 20), DATA_BUS)
+        self.draw_bus_line(7, self.processor_frame, QFrame.Shape.VLine, QRect(220, 10, 20, 331), DATA_BUS)
+        self.draw_bus_line(8, self.processor_frame, QFrame.Shape.VLine, QRect(440, 10, 20, 331), DATA_BUS)
+        self.draw_bus_line(9, self.processor_frame, QFrame.Shape.HLine, QRect(190, 160, 151, 20), DATA_BUS)
+        self.draw_bus_line(10, self.processor_frame, QFrame.Shape.HLine, QRect(190, 250, 151, 20), DATA_BUS)
+        self.draw_bus_line(11, self.processor_frame, QFrame.Shape.HLine, QRect(190, 80, 81, 20), DATA_BUS)
+        self.draw_bus_line(12, self.processor_frame, QFrame.Shape.HLine, QRect(450, 80, 41, 20), DATA_BUS)
+        self.draw_bus_line(13, self.processor_frame, QFrame.Shape.HLine, QRect(410, 160, 81, 20), DATA_BUS)
+        self.draw_bus_line(14, self.processor_frame, QFrame.Shape.HLine, QRect(410, 250, 81, 20), DATA_BUS)
+        self.draw_bus_line(15, self.processor_frame, QFrame.Shape.HLine, QRect(410, 40, 81, 20), DATA_BUS)
         # Address bus
-        self.draw_bus_line(16, self.zero_page_frame, QFrame.Shape.HLine, QRect(30, -10, 511, 41), purple)
-        self.draw_bus_line(17, self.memory_frame, QFrame.Shape.HLine, QRect(30, -10, 511, 41), purple)
-        self.draw_bus_line(18, self.computer_frame, QFrame.Shape.HLine, QRect(20, 400, 1241, 41), purple)
-        self.draw_bus_line(19, self.computer_frame, QFrame.Shape.VLine, QRect(40, 200, 31, 631), purple)
-        self.draw_bus_line(20, self.computer_frame, QFrame.Shape.VLine, QRect(670, 420, 31, 411), purple)
-        self.draw_bus_line(21, self.computer_frame, QFrame.Shape.VLine, QRect(1030, 370, 31, 51), purple)
-        self.draw_bus_line(22, self.computer_frame, QFrame.Shape.HLine, QRect(60, 180, 31, 41), purple)
-        self.draw_bus_line(23, self.computer_frame, QFrame.Shape.HLine, QRect(60, 270, 31, 41), purple)
+        self.draw_bus_line(16, self.zero_page_frame, QFrame.Shape.HLine, QRect(30, -10, 511, 41), ADDRESS_BUS)
+        self.draw_bus_line(17, self.memory_frame, QFrame.Shape.HLine, QRect(30, -10, 511, 41), ADDRESS_BUS)
+        self.draw_bus_line(18, self.computer_frame, QFrame.Shape.HLine, QRect(20, 400, 1241, 41), ADDRESS_BUS)
+        self.draw_bus_line(19, self.computer_frame, QFrame.Shape.VLine, QRect(40, 200, 31, 631), ADDRESS_BUS)
+        self.draw_bus_line(20, self.computer_frame, QFrame.Shape.VLine, QRect(670, 420, 31, 411), ADDRESS_BUS)
+        self.draw_bus_line(21, self.computer_frame, QFrame.Shape.VLine, QRect(1030, 370, 31, 51), ADDRESS_BUS)
+        self.draw_bus_line(22, self.computer_frame, QFrame.Shape.HLine, QRect(60, 180, 31, 41), ADDRESS_BUS)
+        self.draw_bus_line(23, self.computer_frame, QFrame.Shape.HLine, QRect(60, 270, 31, 41), ADDRESS_BUS)
 
     def build_stack_frame(self):
         font6 = QFont()
@@ -244,7 +249,7 @@ class EmulatorWindow(QMainWindow):
             getattr(self, f'stack_sp_{i:X}').setGeometry(QRect(50, y_coor - i * 20, 41, 20))
             getattr(self, f'stack_sp_{i:X}').setFont(self.memoryRegisterFont)
             if i == 8:
-                getattr(self, f'stack_sp_{i:X}').setStyleSheet("color: rgb(230, 0, 80);")
+                getattr(self, f'stack_sp_{i:X}').setStyleSheet(RED)
             getattr(self, f'stack_sp_{i:X}').setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
 
     def setup_buttons(self):
@@ -349,7 +354,7 @@ class EmulatorWindow(QMainWindow):
         self.accumulator_frame.setFrameShape(QFrame.Shape.Box)
         self.accumulator_frame.setGeometry(QRect(270, 30, 141, 81))
         self.accumulator_frame.setObjectName("accumulator_frame")
-        self.accumulator_frame.setStyleSheet("color: rgb(0, 85, 255)")
+        self.accumulator_frame.setStyleSheet(CLICKABLE)
         self.accumulator_frame.setLineWidth(2)
 
         self.accumulator_label.raise_()
@@ -413,7 +418,7 @@ class EmulatorWindow(QMainWindow):
         self.alu_operator.setFont(font4)
         self.alu_operator.setFrameShadow(QFrame.Shadow.Sunken)
         self.alu_operator.setFrameShape(QFrame.Shape.StyledPanel)
-        self.alu_operator.setGeometry(QRect(10, 90, 41, 31))
+        self.alu_operator.setGeometry(QRect(10, 90, 51, 31))
         self.alu_operator.setObjectName("alu_operator")
         self.alu_res.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.alu_res.setFrameShadow(QFrame.Shadow.Sunken)
@@ -465,12 +470,12 @@ class EmulatorWindow(QMainWindow):
         self.cycle_counter.setObjectName("cycle_counter")
         self.cycle_counter_frame.raise_()
         self.cycle_counter_frame.setFrameShadow(QFrame.Shadow.Plain)
-        self.cycle_counter_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.cycle_counter_frame.setFrameShape(QFrame.Shape.Box)
         self.cycle_counter_frame.setGeometry(QRect(760, 110, 171, 51))
         self.cycle_counter_frame.setObjectName("cycle_counter_frame")
         self.cycle_counter_label.raise_()
         self.cycle_counter_label.setFont(font)
-        self.cycle_counter_label.setGeometry(QRect(760, 90, 58, 18))
+        self.cycle_counter_label.setGeometry(QRect(760, 90, 151, 18))
         self.cycle_counter_label.setObjectName("cycle_counter_label")
 
         self.cycle_stage.raise_()
@@ -482,7 +487,7 @@ class EmulatorWindow(QMainWindow):
         self.cycle_stage.setObjectName("cycle_stage")
         self.cycle_stage_label.raise_()
         self.cycle_stage_label.setFont(font)
-        self.cycle_stage_label.setGeometry(QRect(760, 10, 101, 20))
+        self.cycle_stage_label.setGeometry(QRect(760, 10, 151, 20))
         self.cycle_stage_label.setObjectName("cycle_stage_label")
 
         self.current_instruction.raise_()
@@ -493,7 +498,7 @@ class EmulatorWindow(QMainWindow):
         self.current_instruction.setObjectName("current_instruction")
         self.current_instruction_label.raise_()
         self.current_instruction_label.setFont(font)
-        self.current_instruction_label.setGeometry(QRect(760, 290, 101, 20))
+        self.current_instruction_label.setGeometry(QRect(760, 170, 151, 20))
         self.current_instruction_label.setObjectName("current_instruction_label")
 
         self.draw_bus_system()
@@ -581,7 +586,7 @@ class EmulatorWindow(QMainWindow):
         self.index_x_frame.setFrameShape(QFrame.Shape.Box)
         self.index_x_frame.setGeometry(QRect(340, 140, 71, 51))
         self.index_x_frame.setObjectName("index_x_frame")
-        self.index_x_frame.setStyleSheet("color: rgb(0, 85, 255)")
+        self.index_x_frame.setStyleSheet(CLICKABLE)
         self.index_x_frame.setLineWidth(2)
 
         self.index_x_label.raise_()
@@ -601,7 +606,7 @@ class EmulatorWindow(QMainWindow):
         self.index_y_frame.setFrameShape(QFrame.Shape.Box)
         self.index_y_frame.setGeometry(QRect(340, 230, 71, 51))
         self.index_y_frame.setObjectName("index_y_frame")
-        self.index_y_frame.setStyleSheet("color: rgb(0, 85, 255)")
+        self.index_y_frame.setStyleSheet(CLICKABLE)
         self.index_y_frame.setLineWidth(2)
 
         self.index_y_label.raise_()
@@ -618,6 +623,7 @@ class EmulatorWindow(QMainWindow):
         self.interrupt_vector_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.interrupt_vector_frame.setGeometry(QRect(1130, 30, 131, 51))
         self.interrupt_vector_frame.setObjectName("interrupt_vector_frame")
+        self.interrupt_vector_frame.setStyleSheet(CLICKABLE)
         self.interrupt_vector_label.raise_()
         self.interrupt_vector_label.setFont(font)
         self.interrupt_vector_label.setGeometry(QRect(1130, 10, 131, 20))
@@ -640,6 +646,7 @@ class EmulatorWindow(QMainWindow):
         self.nminterrupt_vector_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.nminterrupt_vector_frame.setGeometry(QRect(1130, 190, 131, 51))
         self.nminterrupt_vector_frame.setObjectName("nminterrupt_vector_frame")
+        self.nminterrupt_vector_frame.setStyleSheet(CLICKABLE)
         self.nminterrupt_vector_label.raise_()
         self.nminterrupt_vector_label.setFont(font)
         self.nminterrupt_vector_label.setGeometry(QRect(1130, 170, 131, 20))
@@ -649,7 +656,7 @@ class EmulatorWindow(QMainWindow):
         self.shown_page_frame.setGeometry(150, 855, 60, 30)
         self.shown_page_frame.setFrameShadow(QFrame.Shadow.Plain)
         self.shown_page_frame.setFrameShape(QFrame.Shape.Box)
-        self.shown_page_frame.setStyleSheet("color: rgb(100, 0, 210)")
+        self.shown_page_frame.setStyleSheet(CLICKABLE)
         self.shown_page_frame.setLineWidth(2)
 
         self.shown_page_display.raise_()
@@ -658,7 +665,7 @@ class EmulatorWindow(QMainWindow):
         self.shown_page_display.setIndent(5)
         self.shown_page_display.setMargin(0)
         self.shown_page_display.setObjectName("page")
-        self.shown_page_display.setStyleSheet("color: rgb(100, 0, 210);")
+        self.shown_page_display.setStyleSheet(CLICKABLE)
 
         self.processor_frame.raise_()
         self.processor_frame.setFrameShadow(QFrame.Shadow.Plain)
@@ -679,7 +686,7 @@ class EmulatorWindow(QMainWindow):
         self.program_counter_frame.setGeometry(QRect(60, 140, 131, 51))
         self.program_counter_frame.setObjectName("program_counter_frame")
         self.program_counter_frame.setObjectName("accumulator_frame")
-        self.program_counter_frame.setStyleSheet("color: rgb(0, 85, 255)")
+        self.program_counter_frame.setStyleSheet(CLICKABLE)
         self.program_counter_frame.setLineWidth(2)
 
         self.program_counter_high_byte.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -710,6 +717,7 @@ class EmulatorWindow(QMainWindow):
         self.reset_vector_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.reset_vector_frame.setGeometry(QRect(1130, 110, 131, 51))
         self.reset_vector_frame.setObjectName("reset_vector_frame")
+        self.reset_vector_frame.setStyleSheet(CLICKABLE)
         self.reset_vector_label.raise_()
         self.reset_vector_label.setFont(font)
         self.reset_vector_label.setGeometry(QRect(1130, 90, 131, 20))
@@ -732,7 +740,7 @@ class EmulatorWindow(QMainWindow):
         self.stack_pointer_frame.setFrameShape(QFrame.Shape.Box)
         self.stack_pointer_frame.setGeometry(QRect(490, 230, 71, 51))
         self.stack_pointer_frame.setObjectName("stack_pointer_frame")
-        self.stack_pointer_frame.setStyleSheet("color: rgb(0, 85, 255)")
+        self.stack_pointer_frame.setStyleSheet(CLICKABLE)
         self.stack_pointer_frame.setLineWidth(2)
 
         self.stack_pointer_label.raise_()
@@ -746,7 +754,7 @@ class EmulatorWindow(QMainWindow):
         self.status_register_frame.setFrameShape(QFrame.Shape.Box)
         self.status_register_frame.setGeometry(QRect(20, 30, 171, 81))
         self.status_register_frame.setObjectName("status_register_frame")
-        self.status_register_frame.setStyleSheet("color: rgb(0, 85, 255)")
+        self.status_register_frame.setStyleSheet(CLICKABLE)
         self.status_register_frame.setLineWidth(2)
 
         self.status_register_label.raise_()
@@ -761,14 +769,14 @@ class EmulatorWindow(QMainWindow):
         self.zero_page_frame.setObjectName("zero_page_frame")
         self.zero_page_label.raise_()
         self.zero_page_label.setFont(font)
-        self.zero_page_label.setGeometry(QRect(660, 850, 81, 21))
+        self.zero_page_label.setGeometry(QRect(660, 860, 81, 21))
         self.zero_page_label.setObjectName("zero_page_label")
 
         self.computer_frame.setObjectName("computer_frame")
         QMetaObject.connectSlotsByName(self)
 
     def retranslate(self):
-        self.setWindowTitle(QCoreApplication.translate("MainWindow", "6502 Emulator", None))
+        self.setWindowTitle(QCoreApplication.translate("MainWindow", f"6502Simulator, v{VERSION}", None))
 
         for i in range(0x10):
             getattr(self, f'reg_col_{i:X}').setText(QCoreApplication.translate("MainWindow", f'${i:X}', None))
@@ -811,14 +819,15 @@ class EmulatorWindow(QMainWindow):
         self.stack_pointer.setText(QCoreApplication.translate("MainWindow", "0", None))
         self.instruction_register.setText("")
         self.instruction_register_label.setText(QCoreApplication.translate("MainWindow", "Instruction", None))
-        self.alu_operator.setText(QCoreApplication.translate("MainWindow", "op", None))
+        self.current_instruction_label.setText(QCoreApplication.translate("MainWindow", "Current Instruction", None))
+        self.alu_operator.setText(QCoreApplication.translate("MainWindow", "", None))
         self.alu_op1.setText(QCoreApplication.translate("MainWindow", "00", None))
         self.alu_op2.setText(QCoreApplication.translate("MainWindow", "00", None))
         self.alu_res.setText(QCoreApplication.translate("MainWindow", "255", None))
         self.alu_op1_label.setText(QCoreApplication.translate("MainWindow", "Operand 1", None))
         self.alu_op2_label.setText(QCoreApplication.translate("MainWindow", "Operand 2", None))
         self.alu_res_label.setText(QCoreApplication.translate("MainWindow", "Result", None))
-        self.alu_label.setText(QCoreApplication.translate("MainWindow", "AL", None))
+        self.alu_label.setText(QCoreApplication.translate("MainWindow", "ALU", None))
         self.address_register_high_byte.setText(QCoreApplication.translate("MainWindow", "0", None))
         self.address_register_low_byte.setText(QCoreApplication.translate("MainWindow", "0", None))
         self.address_register_label.setText(QCoreApplication.translate("MainWindow", "Address Register", None))

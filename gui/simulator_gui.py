@@ -57,7 +57,7 @@ class RunWorker(QObject):
 
     def run_processor(self):
         i = 0
-        while not self.processor.interrupt_requested:
+        while not self.processor.halt_requested:
             if self.processor_ready:
                 try:
                     self.processor.run_instruction()
@@ -76,6 +76,7 @@ class RunWorker(QObject):
 
 
 class Simulator(EmulatorWindow):
+    halt_signal = Signal()
     interrupt_signal = Signal()
     nminterrupt_signal = Signal()
 
@@ -86,9 +87,9 @@ class Simulator(EmulatorWindow):
         self.retranslate()
 
         self.processor = ProcessorVisualization(self)
-
-        self.interrupt_signal.connect(self.processor.interrupt)
-        self.nminterrupt_signal.connect(self.processor.non_maskable_interrupt)
+        self.halt_signal.connect(self.processor.halt)
+        self.interrupt_signal.connect(self.processor.request_interrupt)
+        self.nminterrupt_signal.connect(self.processor.request_unmaskable_interrupt)
 
         self.shown_page = 2
         self.shown_page_col = 0
@@ -116,15 +117,33 @@ class Simulator(EmulatorWindow):
         self.shown_page_frame.mousePressEvent = self.set_shown_page
 
         for offset in range(0x100):
-            widget = self.__getattribute__(f'reg_{offset:02X}')
+            widget = getattr(self, f'reg_{offset:02X}')
             widget.mousePressEvent = partial(self.set_memory_address, offset, 'reg')
-            widget = self.__getattribute__(f'zp_{offset:02X}')
+            widget = getattr(self, f'zp_{offset:02X}')
             widget.mousePressEvent = partial(self.set_memory_address, offset, 'zp')
+
+        self.reset_vector_frame.mousePressEvent = partial(
+            self.set_vector, 'Reset', self.processor.reset_vector_address
+        )
+        self.interrupt_vector_frame.mousePressEvent = partial(
+            self.set_vector, 'Interrupt', self.processor.interrupt_vector_address
+        )
+        self.nminterrupt_vector_frame.mousePressEvent = partial(
+            self.set_vector, 'NMInterrupt', self.processor.nmi_vector_address
+        )
+
+        self.flag_c.mousePressEvent = partial(self.switch_flag, 'C')
+        self.flag_z.mousePressEvent = partial(self.switch_flag, 'Z')
+        self.flag_i.mousePressEvent = partial(self.switch_flag, 'I')
+        self.flag_d.mousePressEvent = partial(self.switch_flag, 'D')
+        self.flag_b.mousePressEvent = partial(self.switch_flag, 'B')
+        self.flag_n.mousePressEvent = partial(self.switch_flag, 'N')
+        self.flag_v.mousePressEvent = partial(self.switch_flag, 'V')
 
         self.run_button.clicked.connect(self.run_button_clicked)
         self.program_running = False
         self.step_button.clicked.connect(self.step_button_clicked)
-        self.reset_button.clicked.connect(self.reset_button_clicked)
+        self.reset_button.clicked.connect(self.reset)
         self.interrupt_button.clicked.connect(self.interrupt_button_clicked)
         self.nminterrupt_button.clicked.connect(self.nminterrupt_button_clicked)
         self.clear_memory_button.clicked.connect(self.clear_processor_memory)
@@ -138,20 +157,21 @@ class Simulator(EmulatorWindow):
         self.speed_dial.valueChanged.connect(self.set_speed)
         self.animation_max_speed = 1.5
         self.animation_min_speed = 0.01
-        self.animation_speed = 0.4
+        self.animation_speed = 0.01
         self.animation_running = False
-        self.speed_dial.setValue(30)
-        self.set_speed()
+        self.cycle_max_delay = 3
+        self.cycle_delay = 0
+        self.speed_dial.setValue(50)
 
         self.animation_mode_checkbox.stateChanged.connect(self.animations_checkbox_clicked)
-        self.animation_mode = False
+        self.animation_mode = True
         self.paths = AnimationPaths
         self.animators = []
 
         self.decimal_mode_checkbox.stateChanged.connect(self.decimal_display_checkbox_clicked)
         self.set_base_mode(QLCDNumber.Mode.Hex)
         self.accumulator_binary.setMode(QLCDNumber.Mode.Bin)
-        self.processor.reset()
+        self.reset()
 
     def input_byte(self, title, text, word=False):
         text, ok = QInputDialog.getText(self, title, text)
@@ -164,7 +184,7 @@ class Simulator(EmulatorWindow):
                                     "Invalid number format", "Valid number formats are:\n"
                                     "'0x..' or '$..' for hexadecimal numbers\n"
                                     "'...' for decimal numbers\n"
-                                    "'0b........' for binary numbers.")
+                                    "'0b........' or '%........' for binary numbers.")
             else:
                 if 0 <= value <= maximum:
                     return value
@@ -176,7 +196,8 @@ class Simulator(EmulatorWindow):
         # For animation mode
         self.animation_speed = self.animation_min_speed + (self.animation_max_speed-self.animation_min_speed)*value/100
         # Cycle delay is used without animations
-        self.cycle_delay = 5 - 5*value/100
+        self.cycle_delay = self.cycle_max_delay * (1 - value / 100)
+        pass
 
     def set_shown_page(self, _) -> None:
         page = self.input_byte("Select page", f"Set shown page to:")
@@ -309,7 +330,7 @@ class Simulator(EmulatorWindow):
 
     def clear_processor_memory(self):
         self.processor.clear_memory()
-        self.reset_button_clicked()
+        self.reset()
 
     def set_register(self, register, _):
         if register == 'PC':
@@ -317,7 +338,7 @@ class Simulator(EmulatorWindow):
         else:
             value = self.input_byte("Set Register", f"Set register {register} to:")
 
-        if value:
+        if value is not None:
             setattr(self.processor, register, value)
 
     def set_memory_address(self, offset, prefix, _):
@@ -333,6 +354,18 @@ class Simulator(EmulatorWindow):
             self.processor.memory.data[address] = value
             getattr(self, f'{prefix}_{offset:02X}').setText(value)
 
+    def set_vector(self, name, address, _):
+        value = self.input_byte(f'Set {name} vector', f'Set {name} vector at ${address:04X} to:', word=True)
+
+        if value is not None:
+            self.processor.memory.data[address] = value & 0xff
+            self.processor.memory.data[address+1] = value >> 8
+            getattr(self, f'{name.lower()}_vector').setText(f'${value:04X}')
+
+    def switch_flag(self, name, _):
+        value = 0 if getattr(self.processor, name) == 1 else 1
+        setattr(self.processor, name, value)
+
     def enable_buttons(self, state: bool) -> None:
         self.run_button.setEnabled(state)
         self.step_button.setEnabled(state)
@@ -345,21 +378,19 @@ class Simulator(EmulatorWindow):
     def run_button_clicked(self):
         if self.program_running:
             self.run_button.setEnabled(False)
-            self.worker.finished.emit()
+            self.halt_signal.emit()
             self.program_running = False
         else:
             self.enable_buttons(False)
-
+            self.processor.halt_requested = False
             self.run_button.setEnabled(True)
-            self.run_button.setText('Stop')
+            self.run_button.setText('Halt')
             self.program_running = True
-            self.processor.interrupt_requested = False
             self.thread = QThread()
             self.worker = RunWorker(self.processor)
             self.worker.moveToThread(self.thread)
             self.thread.started.connect(self.worker.run_processor)
             self.worker.finished.connect(self.thread.quit)
-            # self.worker.finished.connect(self.interrupt)
             self.worker.update_label_signal.connect(self.update_label)
             self.worker.finished.connect(self.worker.deleteLater)
             self.thread.finished.connect(self.thread.deleteLater)
@@ -390,19 +421,20 @@ class Simulator(EmulatorWindow):
         )
         self.thread.start()
 
-    def reset_button_clicked(self):
+    def reset(self):
         self.processor.reset()
         self.current_instruction.setText('')
         self.cycle_stage.setText('')
         self.processor.cycles = 0
-        self.reset_vector.setText(f'{self.processor.word(self.processor.reset_vector_address):04X}')
-        self.interrupt_vector.setText(f'{self.processor.word(self.processor.interrupt_vector_address):04X}')
-        self.nminterrupt_vector.setText(f'{self.processor.word(self.processor.nmi_vector_address):04X}')
+        self.reset_vector.setText(f'${self.processor.word(self.processor.reset_vector_address):04X}')
+        self.interrupt_vector.setText(f'${self.processor.word(self.processor.interrupt_vector_address):04X}')
+        self.nminterrupt_vector.setText(f'${self.processor.word(self.processor.nmi_vector_address):04X}')
         self.show_stack(force_update=True)
         self.show_page(2, force_update=True)
         self.show_page(0, force_update=True)
 
     def interrupt_button_clicked(self):
+        print('interrupt_button_clicked')
         self.interrupt_signal.emit()
 
     def nminterrupt_button_clicked(self):
@@ -430,8 +462,8 @@ class Simulator(EmulatorWindow):
             # todo: Mark lines with errors
             QMessageBox.critical(self, 'Assembler error', self.format_assembler_errors(e))
         except Exception as error:
-            QMessageBox.critical(self, 'Assembler error',
-                                       f'Something went wrong with your assembler code: {error}')
+            QMessageBox.critical(self, 'Uncaught error',
+                                       f'Something went wrong while assembling code: {error}')
         else:
             first_address = None
             for key, value in data.items():
@@ -442,7 +474,7 @@ class Simulator(EmulatorWindow):
                     self.processor.memory.data[key] = byte
                     key += 1
             self.show_page(first_address >> 8, force_update=True)
-            self.processor.reset()
+            self.reset()
 
     def open_assembler_file_clicked(self):
         if self.assembler_file_unsaved_changes:

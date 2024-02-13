@@ -2,7 +2,7 @@ from PySide6.QtCore import QSequentialAnimationGroup, QPropertyAnimation, QRect,
 from PySide6.QtWidgets import QLabel
 
 
-def segment_length(point_a:QPoint, point_b:QPoint) -> int:
+def segment_length(point_a: QPoint, point_b: QPoint) -> int:
     return abs(point_a.x() - point_b.x()) + abs(point_a.y()-point_b.y())
 
 

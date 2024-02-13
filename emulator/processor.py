@@ -1,7 +1,7 @@
 import array as ar
 from operator import inv, or_, xor, and_  # noqa
 from emulator.opcodes import *
-from emulator.operators import unsigned_byte_addition, shl, shr, set_bit, cmp, sbb, adc, inc
+from emulator.operators import unsigned_byte_addition, shl, shr, set_bit, cmp, sbb, adc, inc, bcd_addition_with_carry, bcd_subtraction_with_borrow
 
 
 class UndefinedInstructionError(Exception):
@@ -316,11 +316,12 @@ class Processor:
     def alu_operation(self, operator):
         if operator == 'adc':
             if self.D:
-                raise NotImplementedError
+                self.RES, self.C = bcd_addition_with_carry(self.OP1, self.OP2, self.C)
             self.RES, self.C, self.V = adc(self.OP1, self.OP2, self.C)
         elif operator == 'sbc':
             if self.D:
-                raise NotImplementedError
+                print(self.OP1, self.OP2, self.C)
+                self.RES, self.C = bcd_subtraction_with_borrow(self.OP1, self.OP2, 1-self.C)
             self.RES, self.C, self.V = sbb(self.OP1, self.OP2, 1 - self.C)
         elif operator == 'cmp':
             self.Z, self.C, self.N = cmp(self.OP1, self.OP2)
@@ -363,7 +364,6 @@ class Processor:
         self.add_to_stack_pointer(1)
         self.set_address_register_from_stack_pointer()
         self.fetch_byte_to_register(register)
-
 
     # Address modes to be called by name
     def immediate(self):
@@ -422,6 +422,22 @@ class Processor:
         self.AR = (index + 1) % 0x10000
         self.fetch_byte_to_register('AR')
         self.AR = (self.AR << 8) + low_byte
+
+    def relative(self) -> None:
+        self.copy_byte('PCL', 'OP2')
+        # Save flags c and v and prepare for addition
+        c, v = self.C, self.V
+        self.C = self.V = 0
+        self.alu_operation('adc')
+        self.copy_byte('RES', 'PCL')
+        self.cycle()
+        if self.C and self.OP2 < 0x80:
+            self.PCH += 1
+            self.cycle()
+        if not self.C and self.OP2 >= 0x80:
+            self.PCH -= 1
+            self.cycle()
+        self.C, self.V = c, v
 
     def get_address(self, mode: str, index_register: str = None, penalty_cycle=False) -> None:
         if index_register is None:
@@ -532,22 +548,9 @@ class Processor:
 
     # Branch if flag has given state
     def branch(self, flag: str, state: bool) -> None:
-        self.fetch_byte_at_pc_to_register('OP2')
-        self.copy_byte('PCL', 'OP1')
+        self.fetch_byte_at_pc_to_register('OP1')
         if getattr(self, flag) == state:
-            # Save flags c and v and prepare for addition
-            c, v = self.C, self.V
-            self.C = self.V = 0
-            self.alu_operation('adc')
-            self.copy_byte('RES', 'PCL')
-            self.cycle()
-            if self.C and self.OP2 < 0x80:
-                self.PCH += 1
-                self.cycle()
-            if not self.C and self.OP2 >= 0x80:
-                self.PCH -= 1
-                self.cycle()
-            self.C, self.V = c, v
+            self.get_address('relative')
 
     # Set or clear flag
     def set_flag(self, flag: str, state: bool) -> None:
@@ -574,16 +577,16 @@ class Processor:
 
     def jump_to_subroutine(self):
         self.PC += 1
-        self.push_register('PCL')
         self.push_register('PCH')
+        self.push_register('PCL')
         self.PC -= 1
         self.cycle()
         self.jump('absolute')
 
     def return_from_subroutine(self):
-        self.pull_register('PCH')
-        self.cycle()
         self.pull_register('PCL')
+        self.cycle()
+        self.pull_register('PCH')
         self.cycle()
         self.PC += 1
         self.cycle()
@@ -593,8 +596,8 @@ class Processor:
         # Break instruction has one extra cycle (actually reading the following byte and ignoring it)
         self.cycle()
         self.PC = self.PC + 1
-        self.push_register('PCL')
         self.push_register('PCH')
+        self.push_register('PCL')
         self.B = 1
         self.push_register('SR')
         self.AR = self.interrupt_vector_address
@@ -604,8 +607,8 @@ class Processor:
 
     def return_from_interrupt(self):
         self.pull_register('SR')
-        self.pull_register('PCH')
         self.pull_register('PCL')
+        self.pull_register('PCH')
         self.B = 0
         self.cycle()
         self.cycle()
@@ -614,10 +617,24 @@ class Processor:
         pass
 
     def interrupt(self):
-        print('Interrupted by IRQ')
+        if self.I:
+            return
+        self.push_register('PCH')
+        self.push_register('PCL')
+        self.push_register('SR')
+        self.AR = self.interrupt_vector_address
+        self.fetch_byte_to_register('PCL')
+        self.AR = self.interrupt_vector_address + 1
+        self.fetch_byte_to_register('PCH')
 
     def non_maskable_interrupt(self):
-        print('interrupted by NMIRQ')
+        self.push_register('PCH')
+        self.push_register('PCL')
+        self.push_register('SR')
+        self.AR = self.nmi_vector_address
+        self.fetch_byte_to_register('PCL')
+        self.AR = self.nmi_vector_address + 1
+        self.fetch_byte_to_register('PCH')
 
     def fetch_instruction(self) -> None:
         self.fetch_byte_at_pc_to_register('IR')
@@ -628,6 +645,8 @@ class Processor:
             self.interrupt()
         if self.non_maskable_interrupt_requested:
             self.non_maskable_interrupt()
+        self.interrupt_requested = False
+        self.non_maskable_interrupt_requested = False
         self.fetch_instruction()
         self.decode_instruction()
 
@@ -895,6 +914,7 @@ class Processor:
             self.rotate_memory(mode='absolute_indexed', index_register='X', left=False)
         # RTI instruction
         elif self.IR == RTI:
+            print('RTI')
             self.return_from_interrupt()
         # RTS instruction
         elif self.IR == RTS:
@@ -966,7 +986,8 @@ class Processor:
         elif self.IR == TYA:
             self.transfer_register('Y', 'A')
         else:
-            raise UndefinedInstructionError(self.IR)
+            self.no_operation()
+            # raise UndefinedInstructionError(self.IR)
 
 
 def setup_processor(instruction: list[int], data: dict = None, registers: dict = None, flags: dict = None) -> Processor:

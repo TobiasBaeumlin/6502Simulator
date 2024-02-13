@@ -44,25 +44,25 @@ class OperatorTest(unittest.TestCase):
 
     @staticmethod
     def test_addition_overflow():
-        assert signed_addition_overflow(0x50, 0x10) is False
-        assert signed_addition_overflow(0x50, 0x50) is True
-        assert signed_addition_overflow(0x50, 0x90) is False
-        assert signed_addition_overflow(0x50, 0xd0) is False
-        assert signed_addition_overflow(0xd0, 0x10) is False
-        assert signed_addition_overflow(0xd0, 0x50) is False
-        assert signed_addition_overflow(0xd0, 0x90) is True
-        assert signed_addition_overflow(0xd0, 0xd0) is False
+        assert signed_addition_overflow(0x50, 0x10) == 0
+        assert signed_addition_overflow(0x50, 0x50) == 1
+        assert signed_addition_overflow(0x50, 0x90) == 0
+        assert signed_addition_overflow(0x50, 0xd0) == 0
+        assert signed_addition_overflow(0xd0, 0x10) == 0
+        assert signed_addition_overflow(0xd0, 0x50) == 0
+        assert signed_addition_overflow(0xd0, 0x90) == 1
+        assert signed_addition_overflow(0xd0, 0xd0) == 0
 
     @staticmethod
     def test_subtraction_overflow():
-        assert signed_subtraction_overflow(0x50, 0xf0) is False
-        assert signed_subtraction_overflow(0x50, 0xb0) is True
-        assert signed_subtraction_overflow(0x50, 0x70) is False
-        assert signed_subtraction_overflow(0x50, 0x30) is False
-        assert signed_subtraction_overflow(0xd0, 0xf0) is False
-        assert signed_subtraction_overflow(0xd0, 0xb0) is False
-        assert signed_subtraction_overflow(0xd0, 0x70) is True
-        assert signed_subtraction_overflow(0xd0, 0x30) is False
+        assert signed_subtraction_overflow(0x50, 0xf0) == 0
+        assert signed_subtraction_overflow(0x50, 0xb0) == 1
+        assert signed_subtraction_overflow(0x50, 0x70) == 0
+        assert signed_subtraction_overflow(0x50, 0x30) == 0
+        assert signed_subtraction_overflow(0xd0, 0xf0) == 0
+        assert signed_subtraction_overflow(0xd0, 0xb0) == 0
+        assert signed_subtraction_overflow(0xd0, 0x70) == 1
+        assert signed_subtraction_overflow(0xd0, 0x30) == 0
 
     @staticmethod
     def test_shift_left():

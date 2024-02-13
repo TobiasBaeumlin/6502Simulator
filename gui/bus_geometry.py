@@ -74,8 +74,8 @@ AnimationPoints = {
     'md': QPoint(AnimationCoord.x4, AnimationCoord.y8),
     'za': QPoint(AnimationCoord.x5, AnimationCoord.y7),
     'zd': QPoint(AnimationCoord.x8, AnimationCoord.y8),
-    'sa': QPoint(AnimationCoord.x7, AnimationCoord.y5 - AnimationCoord.dy),
-    'sd': QPoint(AnimationCoord.x6, AnimationCoord.x3)
+    'sa': QPoint(AnimationCoord.x7, AnimationCoord.y4),
+    'sd': QPoint(AnimationCoord.x6, AnimationCoord.y3)
 }
 
 AnimationPaths = {
@@ -116,6 +116,24 @@ AnimationPaths['MD']['PC'] = [AnimationPoints['md'], AnimationPoints['db2'], Ani
                               AnimationPoints['pb2'], AnimationPoints['pcd']]
 AnimationPaths['MD']['PCL'] = AnimationPaths['MD']['PC']
 AnimationPaths['MD']['PCH'] = AnimationPaths['MD']['PC']
+AnimationPaths['PC']['AR'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab1'],
+                              AnimationPoints['ara']]
+AnimationPaths['PC']['MD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
+                              AnimationPoints['db2'], AnimationPoints['md']]
+AnimationPaths['PC']['ZD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
+                              AnimationPoints['db4'], AnimationPoints['zd']]
+AnimationPaths['PC']['SD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
+                              AnimationPoints['db3'], AnimationPoints['sd']]
+AnimationPaths['PC']['ZA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab2'],
+                              AnimationPoints['ab3'], AnimationPoints['za']]
+AnimationPaths['PC']['MA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ma']]
+AnimationPaths['PC']['SA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab2'],
+                              AnimationPoints['ab4'], AnimationPoints['sa']]
+AnimationPaths['PCL']['SD'] = AnimationPaths['PC']['SD']
+AnimationPaths['PCH']['SD'] = AnimationPaths['PC']['SD']
+AnimationPaths['PCL']['OP1'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['pb4'],
+                                AnimationPoints['pb9'], AnimationPoints['pb5'], AnimationPoints['op1']]
+
 
 AnimationPaths['ZD']['A'] = [AnimationPoints['zd'], AnimationPoints['db4'], AnimationPoints['db1'],
                              AnimationPoints['pb5'], AnimationPoints['a']]
@@ -136,6 +154,9 @@ AnimationPaths['SD']['A'] = [AnimationPoints['sd'], AnimationPoints['db3'], Anim
                              AnimationPoints['pb5'], AnimationPoints['a']]
 AnimationPaths['SD']['SR'] = [AnimationPoints['sd'], AnimationPoints['db3'], AnimationPoints['db0'],
                               AnimationPoints['pb1'], AnimationPoints['sr']]
+AnimationPaths['SD']['PC'] = list(reversed(AnimationPaths['PC']['SD']))
+AnimationPaths['SD']['PCH'] = AnimationPaths['SD']['PC']
+AnimationPaths['SD']['PCL'] = AnimationPaths['SD']['PC']
 
 AnimationPaths['A']['MD'] = list(reversed(AnimationPaths['MD']['A']))
 AnimationPaths['A']['ZD'] = list(reversed(AnimationPaths['ZD']['A']))
@@ -182,23 +203,6 @@ AnimationPaths['RES']['PCL'] = [AnimationPoints['res'], AnimationPoints['pb7'], 
 AnimationPaths['RES']['S'] = [AnimationPoints['res'], AnimationPoints['pb7'], AnimationPoints['pb8'],
                               AnimationPoints['sp']]
 
-AnimationPaths['PC']['AR'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab1'],
-                              AnimationPoints['ara']]
-AnimationPaths['PC']['MD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
-                              AnimationPoints['db2'], AnimationPoints['md']]
-AnimationPaths['PC']['ZD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
-                              AnimationPoints['db4'], AnimationPoints['zd']]
-AnimationPaths['PC']['SD'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['db0'],
-                              AnimationPoints['db3'], AnimationPoints['sd']]
-AnimationPaths['PC']['ZA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab2'],
-                              AnimationPoints['ab3'], AnimationPoints['za']]
-AnimationPaths['PC']['MA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ma']]
-AnimationPaths['PC']['SA'] = [AnimationPoints['pca'], AnimationPoints['ab0'], AnimationPoints['ab2'],
-                              AnimationPoints['ab4'], AnimationPoints['sa']]
-AnimationPaths['PCL']['SD'] = AnimationPaths['PC']['SD']
-AnimationPaths['PCH']['SD'] = AnimationPaths['PC']['SD']
-AnimationPaths['PCL']['OP1'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['pb4'],
-                               AnimationPoints['pb9'], AnimationPoints['pb5'], AnimationPoints['op1']]
 
 AnimationPaths['AR']['MA'] = [AnimationPoints['ara'], AnimationPoints['ab1'], AnimationPoints['ma']]
 AnimationPaths['AR']['ZA'] = [AnimationPoints['ara'], AnimationPoints['ab1'], AnimationPoints['ab2'],

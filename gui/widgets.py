@@ -37,7 +37,7 @@ class RegisterWidget(QLabel):
             if self.mode == QLCDNumber.Mode.Hex:
                 arg = f'${arg:02X}'
             elif self.mode == QLCDNumber.Mode.Bin:
-                arg = f'^{arg:08b}'
+                arg = f'%{arg:08b}'
             else:
                 arg = str(arg)
         super().setText(arg)
