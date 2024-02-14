@@ -1,6 +1,7 @@
 #     6502Simulator, a didactic visual simulator of the 6502 processor
 #     Copyright (C) 2024  Tobias Bäumlin
-# 
+#     Based on  6502Asm Copyright (C) 2022 James Salvino
+#     See https://github.com/SYSPROG-JLS/6502Asm
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
 #     the Free Software Foundation, either version 3 of the License, or
