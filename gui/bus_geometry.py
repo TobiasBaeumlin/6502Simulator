@@ -150,6 +150,8 @@ AnimationPaths['PCL']['SD'] = AnimationPaths['PC']['SD']
 AnimationPaths['PCH']['SD'] = AnimationPaths['PC']['SD']
 AnimationPaths['PCL']['OP1'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['pb4'],
                                 AnimationPoints['pb9'], AnimationPoints['pb5'], AnimationPoints['op1']]
+AnimationPaths['PCL']['OP2'] = [AnimationPoints['pcd'], AnimationPoints['pb2'], AnimationPoints['pb4'],
+                                AnimationPoints['pb9'], AnimationPoints['pb6'], AnimationPoints['op2']]
 
 
 AnimationPaths['ZD']['A'] = [AnimationPoints['zd'], AnimationPoints['db4'], AnimationPoints['db1'],

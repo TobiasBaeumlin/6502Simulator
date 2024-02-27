@@ -448,10 +448,10 @@ class Processor:
         self.alu_operation('adc')
         self.copy_byte('RES', 'PCL')
         self.cycle()
-        if self.C and self.OP2 < 0x80:
+        if self.C and self.OP1 < 0x80:
             self.PCH += 1
             self.cycle()
-        if not self.C and self.OP2 >= 0x80:
+        if not self.C and self.OP1 >= 0x80:
             self.PCH -= 1
             self.cycle()
         self.C, self.V = c, v

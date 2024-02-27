@@ -39,8 +39,8 @@ class AssemblerEdit(QPlainTextEdit):
 
     def __init__(self, parent=None):
         super(AssemblerEdit, self).__init__(parent)
-        # self.highlight = syntax.PythonHighlighter(self.document())
         self.highlighter = SyntaxHighlighter(self.document())
+        self.setLineWrapMode(QPlainTextEdit.NoWrap)
         self.lineNumberArea = LineNumberArea(self)
         self.blockCountChanged.connect(self.update_line_number_area_width)
         self.updateRequest.connect(self.update_line_number_area)
@@ -127,6 +127,7 @@ class SyntaxHighlighter(QSyntaxHighlighter):
 
     def highlight_line(self, line, format):
         if isinstance(line, int) and line >= 0 and isinstance(format, QTextCharFormat):
+            print(f'Highlighting {line}')
             self._highlight_lines[line] = format
             tb = self.document().findBlockByLineNumber(line)
             self.rehighlightBlock(tb)

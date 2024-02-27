@@ -181,6 +181,7 @@ class Simulator(EmulatorWindow):
         self.speed_dial.setValue(50)
 
         self.animation_mode_checkbox.stateChanged.connect(self.animations_checkbox_clicked)
+        self.animation_mode_checkbox.setCheckState(Qt.CheckState.Checked)
         self.animation_mode = True
         self.paths = AnimationPaths
         self.animators = []
