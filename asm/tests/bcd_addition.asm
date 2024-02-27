@@ -1,0 +1,7 @@
+SED
+LDA #57
+STA $10
+LDA #38
+ADC $10
+SEC
+SBC #64

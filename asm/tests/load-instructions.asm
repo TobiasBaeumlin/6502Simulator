@@ -1,0 +1,11 @@
+.org 50
+LDA #50
+LDA $99
+LDA $42,X
+LDA $2000
+LDA $4188,X
+LDA $78AF,Y
+LDA ($33,X)
+LDA ($AB),Y
+LDX #$42
+LDX #$50 

@@ -1,0 +1,7 @@
+LDA #12
+TAX
+TAY
+TXS
+TSX
+TXA
+TYA

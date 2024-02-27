@@ -1,0 +1,9 @@
+LDX #1
+INX
+DEX
+DEX
+LDY #$ff
+DEY
+INY
+INY
+ 
