@@ -177,3 +177,5 @@ test*.asm
 *.blg
 *.synctex.gz
 /project/
+/.idea/
+/docu/auto/
