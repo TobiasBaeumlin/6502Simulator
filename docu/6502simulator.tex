@@ -22,8 +22,8 @@
 
 \usepackage{graphicx}
 
-\newcommand{\byte}{\unit{B}}
-\newcommand{\bit}{\unit{b}}
+\newcommand{\byte}{\unit{Byte}}
+\newcommand{\bit}{\unit{bit}}
 
 \newcommand{\pyside}{\lstinline!PySide6!}
 
@@ -73,6 +73,13 @@
 \usetikzlibrary{shadows}
 
 \newmdenv[shadow=true,shadowcolor=black,font=\sffamily,rightmargin=8pt]{unterricht}
+
+\newcommand{\picref}[1]{
+  \begin{tikzpicture}
+     \shade[ball color=red](0,0) circle(5pt);
+     \draw(0,0) node{\fontsize{6.5}{8}\selectfont #1};
+  \end{tikzpicture}
+}
 
 \begin{document}
 
@@ -139,8 +146,8 @@ eingesetzt werden könnte. Es ist nicht die Absicht, eine vollständige
 Beschreibung des 6502 Prozessors mit allen Details und Feinheiten zu
 geben, dafür sei auf die diversen online Verfügbaren Quellen
 verwiesen, zum Beispiel in~\cite{6502org_reference}
-und~\cite{masswerk_6502instructions}. Ich selbst habe mich auf diese Quellen
-massgeblich bei der Umsetzung meines Emulators abgestützt.
+und~\cite{masswerk_6502instructions}. Ich selbst habe mich bei der
+Umsetzung meines Emulators massgeblich auf diese Quellen abgestützt.
 
 \newpage
 \section{Der 6502 Prozessor}
@@ -184,7 +191,7 @@ genannt) und zweite (mit Nummer 1) spezielle Funktionen haben:
 \begin{itemize}
 \item Die Zeropage dient als eine Art \emph{Cache}, da deren
   Speicherstellen schneller gelesen und geschrieben werden können, als
-  die der übrigen Seiten (siehe~\ref{address_modes}).
+  die der übrigen Seiten (siehe~\ref{sec:address_modes}).
 \item Die zweite Seite wird als \emph{Stack} verwendet für den
   Mechanismus des Aufrufs von \emph{Subroutinen} und
   \emph{Interrupts}.
@@ -204,7 +211,7 @@ die folgenden Operationen ausführen:
   Addition von Zahlen mit mehr als einem Byte Grösse zu programmieren.
     
 \item \emph{Subtraktion} zweier Operanden mit Übertrag (\emph{carry},
-  eigentlich eher \emph{borrow}, siehe~\ref{arithmetic_operations}).
+  eigentlich eher \emph{borrow}, siehe~\cite{kenshirriff6502overflow}).
 \item Bitweise logische Operationen \emph{Und}, \emph{Oder} und
   \emph{exklusives Oder} zweier Operanden.
     
@@ -267,24 +274,52 @@ interpretiert werden, siehe~\ref{tab:flags}.
  
 \begin{xltabular}{\linewidth}{@{}ccX@{}}
   \caption{Statusflags\label{tab:flags}}\\\toprule
-    Bit Nr. & Name & Funktion \\\midrule\endhead
-    0 & \texttt{C} & Das \emph{Carry}-Flag signalisiert einen Übertrag bei der letzten arithmetisch-logischen Operation. 
+  Bit Nr. & Name & Funktion \\\midrule\endhead
+  0 & \texttt{C} & Das \emph{Carry}-Flag signalisiert einen Übertrag
+                   bei der letzten arithmetisch-logischen Operation.
+                   
     
-                     Um ein korrektes Resultat zu garantieren, muss dieses vor diesen Operationen richtig gesetzt oder gelöscht werden. \\
-    1 & \texttt{Z} & Das \emph{Zero}-Flag wird gesetzt, wenn das Resultat der letzten Operation Null war.
+                   Um ein korrektes Resultat zu garantieren, muss
+                   dieses vor jeder Addition oder Subtraktion richtig
+                   gelöscht beziehungsweise gesetzt werden. \\
+  1 & \texttt{Z} & Das \emph{Zero}-Flag wird gesetzt, wenn das
+                   Resultat der letzten Operation Null war.
+                   
 
-                     Dieses Flag wird nicht nur durch die arithmetisch-logischen Operationen verändert sondern auch durch die Befehle, die Daten aus dem Speicher in ein Register holen. \\   
-    2 & \texttt{I} & Ist das \emph{Interrupt Disable}-Flag gesetzt, werden normale Interrupt-Requests ignoriert. \\
-    3 & \texttt{D} & Wenn das \emph{Decimal Mode}-Flag gesetzt ist, werden die Addition und Subtraktion durch die ALU in einem speziellen dezimalen Modus ausgeführt\footnote{In der aktuellen Version dieses Simulators ist dieser Modus noch nicht implementiert und das \emph{D}-Flag wird ignoriert.}. \\
-    4 & \texttt{B} & Das \emph{Break}-Flag wird durch den Break-Befehl gesetzt, um zu signalisieren, dass der es sich um einen Software-Interrupt handelt, der nicht durch die Interrupt-Leitung ausgelöst wurde. \\
-    5 & --- & Wird nicht verwendet und kann theoretisch beim Programmieren des Prozessors für benutzerdefinierte Zwecke verwendet werden. \\
-    6 & \texttt{V} & Das \emph{Overflow}-Flag wird für die Interpretation der Addition und Subtraktion als vorzeichenbehaftete Operationen verwendet.
+                   Dieses Flag wird nicht nur durch die
+                   arithmetisch-logischen Operationen verändert
+                   sondern auch durch die Befehle, die Daten 
+                   aus dem Speicher in ein Register holen. \\   
+  2 & \texttt{I} & Ist das \emph{Interrupt Disable}-Flag gesetzt,
+                   werden normale Interrupt-Requests ignoriert. \\ 
+  3 & \texttt{D} & Wenn das \emph{Decimal Mode}-Flag gesetzt ist,
+                   werden die Addition und  Subtraktion durch die ALU
+                   in einem speziellen  dezimalen Modus
+                   ausgeführt\footnote{In der aktuellen Version dieses
+                   Simulators ist dieser Modus noch nicht
+                   implementiert und das \emph{D}-Flag wird
+                   ignoriert.}. \\ 
+  4 & \texttt{B} & Das \emph{Break}-Flag wird durch den Break-Befehl
+                   gesetzt, um zu signalisieren, dass der es sich um
+                   einen Software-Interrupt handelt, der nicht durch
+                   die Interrupt-Leitung ausgelöst wurde. \\ 
+  5 & --- & Wird nicht verwendet und kann theoretisch beim
+            Programmieren des Prozessors für benutzerdefinierte Zwecke
+            verwendet werden. \\ 
+  6 & \texttt{V} & Das \emph{Overflow}-Flag wird für die
+                   Interpretation der Addition und Subtraktion als
+                   vorzeichenbehaftete Operationen verwendet. 
 
-                     Das gesetzte \texttt{V}-Flag signalisiert, dass bei einer vorzeichenbehafteten Addition das Ergebnis grösser als 127, bzw.~bei einer Subtraktion kleiner als -128 war. \\
-    7 & \texttt{N} & Das \emph{Negative}-Flag wird ebenfalls für vorzeichenbehaftete arithmetische Operationen verwendet.
-
-                     Das \texttt{n}-Flag wird gesetzt, wenn das höchstwertige Bit nach einer Addition oder Subtraktion auf 1 steht.
-                     
+                   Das gesetzte \texttt{V}-Flag signalisiert, dass bei
+                   einer vorzeichenbehafteten Addition das Ergebnis
+                   grösser als 127, bzw.~bei einer Subtraktion kleiner
+                   als -128 war\footnote{Da der Zweck dieses Flags auf
+                   die Interpretation der Addition und Subtraktion als
+                   vorzeichenbehaftete Operationen beschränkt ist,
+                   kann es im Unterricht auch ignoriert werden}. \\ 
+  7 & \texttt{N} & Das \texttt{n}-Flag wird gesetzt, wenn das
+                   höchstwertige Bit nach einer Addition oder
+                   Subtraktion auf 1 steht. 
   \end{xltabular}
 
 \newpage
@@ -315,62 +350,66 @@ oder \lstinline!0xFF10!)  oder binär (z. B. \lstinline!%100101! oder
 \label{sec:elemente}
 
 
-Innerhalb des Prozessors (1 in der Abbildung~\ref{fig:gui}) sind die
-oben genannten Register \acc, \xreg, \yreg, \pc, \sreg\ und \stp\
-sowie die arithmetisch-logische Einheit ALU dargestellt. Zusätzlich
-ist das Adressregister, das die aktuell adressierte Speicherstelle
-(zum Lesen oder Schreiben), und das \emph{Instruktionsregister}
-gezeigt, das den zuletzt geladenen Opcode enthält.
+Innerhalb des Prozessors (\picref{1} in der Abbildung~\ref{fig:gui})
+sind die oben genannten Register \acc, \xreg, \yreg, \pc, \sreg\ und
+\stp\ sowie die arithmetisch-logische Einheit ALU dargestellt. Der
+Inhalt des Akkumulators wird zusätzlich in der binär gezeigt, um die
+bitweisen logischen Operationen einfacher nachvollziehen zu können.
+
+Zusätzlich ist das Adressregister, das die aktuell
+adressierte Speicherstelle (zum Lesen oder Schreiben), und das
+\emph{Instruktionsregister} gezeigt, das den zuletzt geladenen Opcode
+enthält.
 
 Der Hauptspeicher kann aus Platzgründen natürlich nicht als Ganzes
 dargestellt werden:
 
-Links unten (2 in der Abbildung~\ref{fig:gui}) sind die 256 Stellen
-einer Seite des Hauptspeichers matrixförmig angezeigt, darunter ist
-die Nummer der angezeigten Seite ersichtlich und wählbar. Die
-dargestellte Seite wechselt dynamisch während der Ausführung eines
-Programms, je nach dem, auf welche Speicherstelle gerade zugegriffen
-wird.
+Links unten (\picref{2} in der Abbildung~\ref{fig:gui}) sind die 256
+Stellen einer Seite des Hauptspeichers matrixförmig angezeigt,
+darunter ist die Nummer der angezeigten Seite ersichtlich und
+wählbar. Die dargestellte Seite wechselt dynamisch während der
+Ausführung eines Programms, je nach dem, auf welche Speicherstelle
+gerade zugegriffen wird.
 
 
-Rechts daneben (3 in der Abbildung~\ref{fig:gui}) ist in gleicher Form
-der Inhalt der Zeropage dargestellt.
+Rechts daneben (\picref{3} in der Abbildung~\ref{fig:gui}) ist in
+gleicher Form der Inhalt der Zeropage dargestellt.
 
-Für zweite Speicherseite, die ja den Stack enthält (4 in
+Für die zweite Speicherseite, die ja den Stack enthält (\picref{4} in
 der Abbildung~\ref{fig:gui}), wurde eine andere, spaltenförmige
 Darstellungsform gewählt: In der Mitte steht das Stack-Element, auf
 das der Stackpointer aktuell zeigt (rot hervorgehoben), nach unten
 nehmen die Adressen zu, nach oben ab. Die Darstellung muss man sich
 kreisförmig vorstellen, da oberhalb der höchsten Adresse \hex{01FF}
-wieder die tiefste Adresse \hex{0100} anschliesst\footnote{Dies in
+wieder die tiefste Adresse \hex{0100} anschliesst.\footnote{Dies in
   Übereinstimmung der Stack-Logik, die bei einem Unterschreiten der
   \hex{00} ebenfalls wieder nach \hex{FF} springt.}
 
-In hellgrüner Farbe wird der 8\bit breite Datenbus dargestellt (5 in
-der Abbildung~\ref{fig:gui}, während für den 16\bit breiten Adressbus
-eine dunkelgrüne Farbe verwendet wird (6 in der
-Abbildung~\ref{fig:gui}\footnote{Es wird auf eine unterschiedliche
+In hellgrüner Farbe wird der 8\bit\ breite Datenbus dargestellt
+(\picref{5} in der Abbildung~\ref{fig:gui}, während für den 16\bit\
+breiten Adressbus eine dunkelgrüne Farbe verwendet wird (\picref{6} in
+der Abbildung~\ref{fig:gui}).\footnote{Es wird auf eine unterschiedliche
   Darstellung des Bus innerhalb und ausserhalb des Prozessors
   verzichtet, obwohl dies in der Realität natürlich nicht dasselbe
-  ist.}.
+  ist.}
 
-Zwischen dem Prozessor und dem Stack (7 in der Abbildung~\ref{fig:gui}
-werden Informationen zum
-Programmablauf angezeigt: Der momentane Schritt innerhalb des Von
-Neumann-Zyklus "`fetch"', "`decode"' beziehungsweise "`run"', die
-Anzahl abgearbeiteter Prozessorzyklen seit dem letzten Zurücksetzen
-sowie die aktuelle Instruktion in desassemblierter Form.
+Zwischen dem Prozessor und dem Stack (\picref{7} in der
+Abbildung~\ref{fig:gui} werden Informationen zum Programmablauf
+angezeigt: Der momentane Schritt innerhalb des Von Neumann-Zyklus
+"`fetch"', "`decode"' beziehungsweise "`run"', die Anzahl
+abgearbeiteter Prozessorzyklen seit dem letzten Zurücksetzen sowie die
+aktuelle Instruktion in desassemblierter Form.
 
 Die drei Vektoren, welche die Adressen enthalten, an denen nach einem
 Interrupt, einem Reset beziehungsweise einem nicht maskierbaren
 Interrupt (\emph{NMI}) die Programmausführung fortgesetzt wird, sind
-rechts des Stacks gezeigt und können dort verändert werden (8 in der
-Abbildung~\ref{fig:gui}).
+rechts des Stacks gezeigt und können dort verändert werden (\picref{8}
+in der Abbildung~\ref{fig:gui}).
 
 Die Elemente des Assemblers (siehe Abschnitt~\ref{sec:assembler}
 zuletzt nehmen den rechten Rand des Fensters ein: ein Texteingabefeld
-für den Assemblercode (9 in der Abbildung~\ref{fig:gui}) und darüber
-der Name der aktuellen Assembler-Datei (10 in der
+für den Assemblercode (\picref{9} in der Abbildung~\ref{fig:gui}) und
+darüber der Name der aktuellen Assembler-Datei (\picref{10} in der
 Abbildung~\ref{fig:gui}).
 
 \subsection{Bedienung}
@@ -500,7 +539,7 @@ und~\ref{sec:address_modes}\footnote{Es macht im Unterricht sicher
                                                        \hex{1234} und
                                                        \hex{1235}
                                                         steht. \\
-    \lstinline!$10 $08! & \lstinline!BPL +10! & Fall der \nflag-Flag nicht
+    \lstinline!$10 $08! & \lstinline!BPL *10! & Fall der \nflag-Flag nicht
                                                 gesetzt ist, werden die nächsten
                                                 8 Byte in der
                                                 Programmausführung
@@ -508,11 +547,11 @@ und~\ref{sec:address_modes}\footnote{Es macht im Unterricht sicher
 
                                                 In der mnemonischen
                                                 Schreibweise steht
-                                                dafür $+10$, weil 2
+                                                dafür \texttt{*10}, weil 2
                                                 Bytes schon durch die
                                                 Anweisung selbst
                                                 benötigt werden.\\
-    \lstinline!$XX! & \lstinline!TAX! & Kopiere den Wert des
+    \lstinline!$AA! & \lstinline!TAX! & Kopiere den Wert des
                                         Akkumulators \acc\ in das
                                         Index-Register \xreg. \\
     \bottomrule
@@ -554,7 +593,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
              Dabei sind die Operanden implizit im Befehl beinhaltet und es werden
              keine weitere Operanden benötigt.
                       &  1\byte \\
-   \multicolumn{3}{X}{
+   \multicolumn{3}{p{11.5cm}}{
      \begin{tabularx}{1.2\linewidth}{lX}\midrule
        \lstinline!TXS! & Kopiere das \xreg-Register in das \sreg-Register\\
        \lstinline|CLC| & Lösche das \cflag-Flag, \\
@@ -569,7 +608,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
   Es handelt sich also nicht um eine Adresse im
   eigentlichen Sinn.
   & 2\byte \\
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
   \begin{tabularx}{1.2\linewidth}{lX}\midrule
     \lstinline!LDX \#$10! & Lade den Wert \hex{10} in das \xreg-Register \\
     \lstinline!ADC \#$80! & Addiere den Wert \hex{80} zum Akkumulator \acc \\
@@ -586,7 +625,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
          innerhalb der ersten Speicherseite interpretiert und man spricht man von
          Zeropage-Adressierung.
                       & 3\byte/2\byte \\
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
   \begin{tabularx}{1.2\linewidth}{lX}\midrule
     \lstinline!LDX \$4010! & Lade den Wert an der Adresse \hex{4010} in das \xreg-Register \\
     \lstinline!STY \$FF! & Speichere den Wert des \yreg-Registers in der Adresse \hex{00FF} \\
@@ -599,7 +638,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
                      
                                 Hierbei wird zu der Adresse, die in
                                 den beiden folgenden Bytes steht, noch
-                                der Wert des \texttt{X}, bzw.\
+                                der Wert des \texttt{p{11.8cm}}, bzw.\
                                 \texttt{Y}-Registers als Index addiert.
 
                                 Wie bei \abs gibt es davon auch die
@@ -608,7 +647,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
                                 wird, um eine Adresse innerhalb der
                                 ersten Speicherseite anzugeben.
                       & 3\byte/2\byte \\
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
   \begin{tabularx}{1.2\linewidth}{lX}\midrule
     \lstinline!STA \$2000,X! & Ist der Wert des Index-Registers \xreg\ gleich \hex{A0},
                                so wird der Wert des Akkumulators an der Stelle \hex{20A0}
@@ -626,7 +665,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
              effektive Adresse des Operanden beginnt (das heisst, das \lobyte
              steht an dieser Adresse, das \hibyte in der darauf
              folgenden). & 3\byte \\ 
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
   \begin{tabularx}{1.2\linewidth}{lX}\midrule
     \lstinline!STA (\$1234)! & Steht an der Stelle \hex{1234} der Wert \hex{10}
                                und an der darauf folgenden Stelle \hex{1235} der Wert \hex{A8},
@@ -642,7 +681,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
                            Wert verwendet, um den Start der vollständigen
                            Adresse (zwei Byte in \emph{little endian}-Ordnung)
                            des Operanden zu erhalten.  & 2\byte \\
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
     \begin{tabularx}{1.2\linewidth}{lX}\midrule
       \lstinline!STA (\$A0,X)! & Steht an der Stelle \hex{A0} der Wert \hex{40} und hat
                                  Indexregister \xreg\ den Wert \hex{0A}, so werden die
@@ -662,7 +701,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
                            Anschliessend wird zu dieser Adresse noch der Wert
                            des Indexregister \yreg\ addiert, um die definitive
                            Adresse des Operanden zu erhalten. & 2\byte \\
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
      \begin{tabularx}{1.2\linewidth}{lX}\midrule
       \lstinline!LDA (\$70),Y! & Steht an der Stelle \hex{70} der Wert \hex{B1} und
                                  danach an der Stelle \hex{71} der Wert \hex{35} und hat
@@ -676,7 +715,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
                          Akkumulator separat. Diese Adressierungsart
                          entspricht im wesentlichen der impliziten. &
                                                                       1\byte\\
-  \multicolumn{3}{X}{
+  \multicolumn{3}{p{11.8cm}}{
     \begin{tabularx}{1.2\linewidth}{lX}\midrule
        \lstinline!ASL A! & Schiebt die Bits des Akkumulators um eine
                           Stelle nach links    \\
@@ -696,9 +735,11 @@ Die restlichen Opcodes sind sogenannt \emph{illegal} und nicht
 offiziell dokumentiert. Einige davon kann man tatsächlich für eher
 exotische Zwecke nutzbar machen (siehe??). Der vorliegende Emulator
 behandelt sie aber alle als \emph{No operation} \texttt{NOP}, also als
-Befehle ohne Effekt\footnote{Dies aus didaktischen Gründen, um den
+Befehle ohne Effekt.\footnote{Dies aus didaktischen Gründen, um den
   Einstieg in die Assemblerprogrammierung nicht unnötig zu
-  verkomplizieren.}
+  verkomplizieren.}.
+
+Einen Überblick über den vollständigen Befehlssatz zusammen mit den jeweiligen Adressierungsarten findet sich im Anhang~\ref{sec:instruction_reference}.
 
 \subsubsection{Datentransfer}
 \label{sec:datatransfer_instructions}
@@ -922,7 +963,7 @@ Software-Interrupts unterschieden wird\footnote{Das ganze Thema der
   Interrupt-Behandlung geht sicher über das hinaus, was sinnvollerweise
   im obligatorischen Fach Informatik behandelt werden kann, und wird
   hier nicht ausführlich beschrieben. Für eine umfassende Darstellung
-  sei zum Beispiel auf~\ref{~~} verwiesen}.
+  sei zum Beispiel auf~\cite{6502org_interrupts} verwiesen}.
 
 Der Befehlssatz des 6502 Prozessor kennt zwei Instruktionen für den
 Umgang damit:
@@ -954,7 +995,7 @@ der obigen Kategorien fallen:
 \item Der Befehl \lstinline!BIT! (für \texttt{BI}t \texttt{T}est)
   testet einige Bits seines Operanden\footnote{Die genauen
     Spezifikationen dieser einigermassen exotischen Instruktion werden
-    hier übergangen und können zum Beispiel bei~\cite{??}
+    hier übergangen und können zum Beispiel bei~\cite{6502org_instructions}
     nachgeschlagen werden.}.
 \end{itemize}
 
@@ -965,11 +1006,12 @@ der obigen Kategorien fallen:
 
 Der Simulator verfügt über einen einfachen Assembler, der das
 Erstellen von Programmen vereinfacht. Bei dessen Implementierung habe
-ich mich bei dem Quellcode von ?? als Vorlage bedient (siehe~\cite{ass}),
-diesen aber fast vollständig umstrukturiert und neu implementiert,
-um ihn überhaupt zu verstehen, einige Bugs zu eliminieren,
-hilfreichere Fehlermeldungen zu haben und
-an meine Bedürfnisse für den vorliegenden Simulator anzupassen.
+ich mich bei dem Quellcode von James Salvino als Vorlage bedient
+(siehe~\cite{6502Asm}), diesen aber weitgehend umstrukturiert und neu
+implementiert. Dies zuerst, um ihn überhaupt zu verstehen, und danach
+um einige Bugs zu eliminieren, verständlichere Fehlermeldungen zu
+haben und ihn an meine Bedürfnisse für den vorliegenden Simulator
+anzupassen.
 
 
 \subsection{Instruktionen}
@@ -989,6 +1031,9 @@ Durch dieses Programm werden die drei Anweisungen \lstinline!LDA #100!
 (2\byte), \lstinline!ADC $FF00! (3\byte) und \lstinline!STA $FF!
 (2\byte) nach einander in die Stellen 0 bis 6 des Hauptspeichers
 geschrieben.
+
+Alles, was nach einem Semikolon folgt, wird als \emph{Kommentar}
+betrachtet durch den Assembler ignoriert.
 
 Gross- und Kleinschreibung ist dabei unwichtig, es empfiehlt sich
 jedoch aus Gründen der Leserlichkeit, sich auf eine einheitliche
@@ -1152,19 +1197,20 @@ Den grösseren von zwei Werten kann man einfach durch Vergleichen der
 beiden bestimmen:
 \lstinputlisting[caption={Maximum von 2 Werten}, label=ex_max_two]{~/Python/6502Simulator/examples/max_two.asm}
  
-Will man den grössten von drei Werten bestimmen, vergleicht man den
-dritten mit dem Maximum der ersten beiden:
+Will man den grössten von drei Werten bestimmen, bestimmt man zuerst das Maximum der ersten beiden und vergleicht dieses anschliessend mit dem dritten Wert:
 \lstinputlisting[caption={Maximum von 3 Werten}, label=ex_max_two]{~/Python/6502Simulator/examples/max_three.asm}
 
 Dies lässt sich nun auf $n$ viele Werte verallgemeinern: Das erste
 Maximum ist der erste Wert in der Liste, danach vergleicht man alle
 folgenden Werte mit dem bisherigen Maximum und passt dieses an, wenn
-man einen Wert findet der noch grösser ist:
+man einen Wert findet der noch grösser ist\footnote{Damit hat
+  man den bekannten \emph{Bubble Sort}-Algorithmus implementiert.}:
 \lstinputlisting[caption={Maximum einer Liste von Werten}, label=ex_max_two]{~/Python/6502Simulator/examples/max_lst.asm}
 
 Man beachte das Verwenden des Index-Registers \xreg\ zusammen mit der
 indexierten Adressierungsart \indx, um die Elemente der Liste der
 Reihe nach durchzugehen.
+
 
 \subsection{Unterprogramme}
 \label{sec:example_2byte_add_sub}
@@ -1627,7 +1673,7 @@ auf natürliche Art eine einfache Implementierung des Bubble-Sort.
                     \begin{optable}
                       \impl & \hex{F8} \\
                     \end{optable} & \cflag  
-  & Setzt den\dflag-flag für den Dezimalmodus. Ist dieser gesetzt,
+  & Setzt den \dflag-flag für den Dezimalmodus. Ist dieser gesetzt,
   werden die Argumente der Addition und Subtraktion nicht normal
   hexadezimal sondern als Paare von Dezimalzahlen
   interpretiert\footnote{Für den Unterricht empfiehlt es sich sicher,
@@ -1643,7 +1689,7 @@ auf natürliche Art eine einfache Implementierung des Bubble-Sort.
                     \begin{optable}
                       \impl & \hex{78} \\
                     \end{optable} & \cflag  
-  & Setzt den\iflag-flag. Ist dieser gesetzt,
+  & Setzt den \iflag-flag. Ist dieser gesetzt,
   werden normale Interrupts ignoriert und nur die nicht-maskierbaren
   Interrupts beachtet\footnote{Das ganze Thema der Interrupt-Behandlung
     geht wohl über den Zweck des gymnasialen Unterrichts hinaus.}
@@ -1664,7 +1710,7 @@ auf natürliche Art eine einfache Implementierung des Bubble-Sort.
   \\\midrule
 \end{instrtable}
 
-
+\newpage
 \printbibliography
 
 
@@ -1682,4 +1728,5 @@ auf natürliche Art eine einfache Implementierung des Bubble-Sort.
 % LocalWords:  Desassemblierung Inversion Programmzähler optable
 % LocalWords:  instrtable Vergleichsinstruktionen höchstwertige Label
 % LocalWords:  niedrigstwertige Programmschleifen Speicheradresse
-% LocalWords:  Adressierungsmodus Indexregister
+% LocalWords:  Adressierungsmodus Indexregister vorzeichenbehaftete
+% LocalWords:  Flags spaltenförmige
