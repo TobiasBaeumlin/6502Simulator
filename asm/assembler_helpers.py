@@ -158,17 +158,16 @@ def convert_int_to_twos_complement(x: int) -> str:
     return f'{int.from_bytes(x.to_bytes(1, signed=True)):02X}'
 
 
-# Given the mnemonic and operand in a source line
-# determine the addressing mode and...
-# return the addressing mode, number of bytes for that instruction and 
-# the instruction's opcode
+# Calculate addressing mode, length of instruction and op code give a mnemonic and operand
 #
-# 'XX' is returned in cases where the assembler mnemonic is invalid
-# 'Invalid' is returned for mode and 9 is returned for numbytes 
-# in cases where the addressing mode cannot be determined
-#
+# Mode = 'Invalid' and numbyte = 0 if addressing mode can't be determined
+# Opcode = 'Invalid' for invalid combinations of mnemonic and operand
 def determine_mode(mnemonic, operand):
-    mode = 'Invalid'
+    mode = op_code = 'Invalid'
+    # Since JMP and JSR have no zeropage mode we need to check the
+    # special cases of jumps within zeropage (e.g. by a label)
+    if mnemonic in ('JMP', 'JSR') and re.fullmatch('\$[0-9A-F]{2}', operand) is not None:
+        operand = f'$00{operand[1:]}'
     if operand == '':
         mode = 'Implied'
     elif operand == 'A':
@@ -180,18 +179,13 @@ def determine_mode(mnemonic, operand):
                 break
 
     if mode == 'Invalid':
-        return mode, 0, 'XX'
+        return mode, 0, 'Invalid'
 
     numbytes = ADDRESS_MODES[mode][0]
-    good_mnemonic = False
     for m, op_code in ADDRESS_MODES[mode][1]:
         if m == mnemonic:
-            good_mnemonic = True
             break
-    if good_mnemonic:
-        return mode, numbytes, op_code
-    else:
-        return mode, numbytes, 'XX'
+    return operand, op_code, mode, numbytes
 
 
 # Construct data bytes field from a .db directive

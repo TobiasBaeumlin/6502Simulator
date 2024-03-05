@@ -120,7 +120,7 @@ def assemble_file_pass_1(source_code) -> dict:
             pc = pc + 2
         else:
             if line == '':
-                address_mode, num_bytes, op_code = ah.determine_mode(token, '')
+                operand, op_code, address_mode, num_bytes = ah.determine_mode(token, '')
                 ah.pass1_error_check(token, '', address_mode, op_code, pass1_errors, line_number)
             else:
                 operand, line = ah.get_token(line)
@@ -132,7 +132,7 @@ def assemble_file_pass_1(source_code) -> dict:
                         operand = ah.parse_symbolic_label(operand, label_dict)
                     except Pass1Error as error:
                         pass1_errors[line_number] = str(error)
-                address_mode, num_bytes, op_code = ah.determine_mode(token, operand)
+                operand, op_code, address_mode, num_bytes = ah.determine_mode(token, operand)
                 ah.pass1_error_check(token, operand, address_mode, op_code, pass1_errors, line_number)
             pc = pc + num_bytes
 
@@ -243,9 +243,12 @@ def assemble_file_pass_2(source_code: list[str], label_dict: dict, list_file=Non
                     except ValueError as e:
                         operand = '00'
                         pass2_errors[line_number] = str(e)
-            address_mode, num_bytes, op_code = ah.determine_mode(token, operand)
+            operand, op_code, address_mode, num_bytes = ah.determine_mode(token, operand)
             if address_mode == 'Invalid':
                 pass2_errors[line_number] = f'Undefined label {operand}'
+                break
+            if op_code == 'Invalid':
+                pass2_errors[line_number] = f'Invalid address mode {address_mode} for instruction {token}'
                 break
             if address_mode == 'Implied' or address_mode == 'Accumulator':
                 if list_file:
