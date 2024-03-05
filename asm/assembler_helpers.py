@@ -163,7 +163,7 @@ def convert_int_to_twos_complement(x: int) -> str:
 # Mode = 'Invalid' and numbyte = 0 if addressing mode can't be determined
 # Opcode = 'Invalid' for invalid combinations of mnemonic and operand
 def determine_mode(mnemonic, operand):
-    mode = op_code = 'Invalid'
+    mode = 'Invalid'
     # Since JMP and JSR have no zeropage mode we need to check the
     # special cases of jumps within zeropage (e.g. by a label)
     if mnemonic in ('JMP', 'JSR') and re.fullmatch('\$[0-9A-F]{2}', operand) is not None:
@@ -185,6 +185,8 @@ def determine_mode(mnemonic, operand):
     for m, op_code in ADDRESS_MODES[mode][1]:
         if m == mnemonic:
             break
+    else:
+        op_code = 'Invalid'
     return operand, op_code, mode, numbytes
 
 
