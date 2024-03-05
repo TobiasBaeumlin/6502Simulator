@@ -124,7 +124,7 @@ Der Simulator ist in Python (3.11) geschrieben und besteht aus
 mehreren Teilen:
 \begin{itemize}
 \item Ein \emph{Emulator}, der den 6502 Prozessor vollständig
-  emuliert, das heisst den vollständigen Satz an Befehlen und
+  emuliert, das heisst den vollstän\-digen Satz an Befehlen und
   Adressierungsarten umsetzt. Diese Emulation ist auf einer logischen
   Stufe angesiedelt und zielt nicht auf Effizienz sondern auf eine
   möglichst getreue Umsetzung auf Register-Ebene ab.
@@ -167,11 +167,14 @@ grosse Anzahl von Webseiten, die sich damit befassen, seine
 Eigenschaften detailliert dokumentieren und Software zu seiner
 Emulation bereit stellen.
 
-Er war in seiner ersten Version aus 4528 Transistoren in CMOS-Technik
-aufgebaut und wurde --- mangels entsprechender Computer --- noch von
-Hand gezeichnet und danach mit foto-lithografischen Mitteln
-verkleinert für die Produktion.  Seine Taktrate wurde zwischen
-1\unit{MHz} und 2\unit{MHz} angegeben, je nach Version.
+Er war in seiner ersten Version aus 3510
+Transistoren\footnote{Alternativ findet man auch die Zahl 4528, wenn
+  die Pull-Up-Widerstände mitgezählt
+  werden. Siehe~\cite{MOS6502BestLayoutGuy}} in CMOS-Technik aufgebaut
+und wurde --- mangels entsprechender Computer --- noch von Hand
+gezeichnet und danach mit foto-lithografischen Mitteln verkleinert für
+die Produktion.  Seine Taktrate wurde zwischen 1\unit{MHz} und
+2\unit{MHz} angegeben, je nach Version.
 
 Eines der unglaublichsten Projekte ist eine Simulation des Prozessors
 auf der physikalischen Transistor ebene. Das heisst, es wurde seine
@@ -262,13 +265,13 @@ Der Prozessor besitzt ein sehr kleine Anzahl von
 \subsection{Status-Flags}
 \label{sec:flags}
 
-Von den acht Bits des Statusregister dienen 7 als Flags (Markierungen)
+Von den acht Bits des Statusregister dienen 7 als \emph{Flags} (Markierungen)
 verschiedener Zustände des Prozessors oder Ergebnisse von
 Instruktionen.
 
 So können zum Beispiel die Ergebnisse von Addition und
 Subtraktion sowohl vorzeichenlos als auch mit Vorzeichen behaftet
-interpretiert werden, siehe~\ref{tab:flags}.
+interpretiert werden, siehe Tabelle~\ref{tab:flags}.
 
 
  
@@ -570,7 +573,7 @@ Der 6502 Prozessor kennt eine Reihe von verschiedenen
 \emph{Adressierungsarten} (\emph{Address mode}), die beschreiben, wie
 aus den Adressbytes letztlich der Operand bestimmt wird.
 Tabelle~\ref{tab:address-modes} gibt einen Überblick all dieser
-Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
+Adressierungsarten\footnote{Im Unterricht wird es nicht möglich
   sein, alle diese Adressierungsarten anzuschauen.  Sie sind in daher
   in absteigender Wichtigkeit (für den Unterricht) in der Tabelle
   aufgelistet.
@@ -581,7 +584,7 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
   Da der Assembler (siehe Abschnitt~\ref{sec:assembler}) uns die
   Berechnungen der relativen Adressierung bei Verzweigungsbefehlen
   abnimmt, kann auch darauf verzichtet werden, deren Details
-  anzuschauen.}
+  anzuschauen.}.
   
 
 \begin{xltabular}{\linewidth}{@{}p{25mm}Xl@{}}
@@ -661,9 +664,9 @@ Adressierungsarten~\footnote{Im Unterricht wird es nicht möglich
 
   \textbf{\sffamily Indirect}\newline \ind & Indirekte Adressierung
              
-             Es wird mit zwei Bytes eine Speicherstelle angegeben, wo die
+             Es wird mit zwei Bytes eine Speicherstelle angegeben, an der die
              effektive Adresse des Operanden beginnt (das heisst, das \lobyte
-             steht an dieser Adresse, das \hibyte in der darauf
+             steht an dieser Adresse, das \hibyte\ in der darauf
              folgenden). & 3\byte \\ 
   \multicolumn{3}{p{11.8cm}}{
   \begin{tabularx}{1.2\linewidth}{lX}\midrule
@@ -739,7 +742,7 @@ Befehle ohne Effekt.\footnote{Dies aus didaktischen Gründen, um den
   Einstieg in die Assemblerprogrammierung nicht unnötig zu
   verkomplizieren.}.
 
-Einen Überblick über den vollständigen Befehlssatz zusammen mit den jeweiligen Adressierungsarten findet sich im Anhang~\ref{sec:instruction_reference}.
+Einen Überblick über den vollständigen Befehlssatz zusammen mit den jeweiligen Adressierungsarten findet sich in den Tabellen des Anhangs~\ref{sec:instruction_reference}.
 
 \subsubsection{Datentransfer}
 \label{sec:datatransfer_instructions}
@@ -750,6 +753,7 @@ eine Reihe von Befehlen.
 \begin{itemize}
 \item \texttt{LDA}, \texttt{LDX}, \texttt{LDY} dienen zum Laden eines
   Bytes in die Register \texttt{A}, \texttt{X}, \texttt{Y} respektive.
+
   Diese Operationen beeinflussen zudem alle die Flags \zflag\ und \nflag,
   je nach dem, ob die transferierten Werte Null
   bzw. negativ~\footnote{Auf vorzeichenbehaftete Arithmetik wird in
@@ -768,6 +772,8 @@ eine Reihe von Befehlen.
 \item \texttt{TAX}, \texttt{TAY}, \texttt{TXA}, \texttt{TYA}
   \texttt{TSX}, \texttt{TSX}, kopieren das Byte des erstgenannten
   Registers in das zweitgenannte Register.
+
+  Diese Befehle setzen je nach Wert wieder die Flags \zflag\ und \nflag. 
 \end{itemize}
 
 
@@ -781,8 +787,8 @@ Tabelle~\ref{tab:datatransfer_instructions}.
 \label{sec:arithmetic_logic}
 
 Der 6502 kennt eine Reihe von Instruktionen, die arithmetische
-(Addition und Subtraktion\footnote{Multiplikation und Division sind
-  nicht implementiert.
+Operationen (Addition und Subtraktion\footnote{Multiplikation und
+  Division sind nicht implementiert.
 
   Diese sind aufwändig in der Hardware-Implementierung und blieben
   lange Zeit spezialisierten externen Coprozessoren überlassen
@@ -791,9 +797,9 @@ Der 6502 kennt eine Reihe von Instruktionen, die arithmetische
   Entgegen der intuitiven Annahme gehören die arithmetischen
   Operationen auch nicht zu den am häufigst verwendeten in der
   Programmierung.}, schrittweise Vergrösserung und
-Verkleinerung\footnote{Dieses Inkrementieren und Dekrementieren eines Werts
-  sind in der Programmierung so häufig verwendete Operationen, dass
-  sich die Definition dedizierter Befehle dafür lohnt.
+Verkleinerung\footnote{Dieses Inkrementieren und Dekrementieren eines
+  Werts sind in der Programmierung so häufig verwendete Operationen,
+  dass sich die Definition dedizierter Befehle dafür lohnt.
 
   Ausserdem entfällt dabei die Angabe eines Operanden, der immer 1
   ist.}),
@@ -1290,7 +1296,7 @@ auf natürliche Art eine einfache Implementierung des Bubble-Sort.
                       \zp  & \hex{A6} \\
                       \zpy & \hex{B6} \\
                       \abs & \hex{AE} \\
-                      \absx & \hex{BE} \\
+                      \absy & \hex{BE} \\
                     \end{optable} & \nflag,  \cflag & Lädt einen Wert
                                                        in das
                                                        Index-Register \xreg
