@@ -24,11 +24,11 @@ from gui.bus_geometry import AnimationPaths
 ADDRESS_MODES_SHORT = {
     'immediate': 'imm',
     'zero_page': 'zp',
-    'zero_page_indexed': 'zp_idx',
+    'zero_page_indexed': 'zp',
     'absolute': 'abs',
-    'absolute_indexed': 'abs_idx',
-    'indexed_indirect_x': 'idx_x_ind',
-    'indirect_indexed_y': 'ind_idx_y',
+    'absolute_indexed': 'abs',
+    'indexed_indirect_x': '(ind,X)',
+    'indirect_indexed_y': '(ind),Y',
 }
 
 
