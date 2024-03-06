@@ -641,7 +641,7 @@ Adressierungsarten\footnote{Im Unterricht wird es nicht möglich
                      
                                 Hierbei wird zu der Adresse, die in
                                 den beiden folgenden Bytes steht, noch
-                                der Wert des \texttt{p{11.8cm}}, bzw.\
+                                der Wert des \texttt{X}, bzw.\
                                 \texttt{Y}-Registers als Index addiert.
 
                                 Wie bei \abs gibt es davon auch die
@@ -670,9 +670,10 @@ Adressierungsarten\footnote{Im Unterricht wird es nicht möglich
              folgenden). & 3\byte \\ 
   \multicolumn{3}{p{11.8cm}}{
   \begin{tabularx}{1.2\linewidth}{lX}\midrule
-    \lstinline!STA (\$1234)! & Steht an der Stelle \hex{1234} der Wert \hex{10}
+    \lstinline!JMP (\$1234)! & Steht an der Stelle \hex{1234} der Wert \hex{10}
                                und an der darauf folgenden Stelle \hex{1235} der Wert \hex{A8},
-                              so wird der Wert der Stelle \hex{A810} in den Akkumulator geladen.
+                               so wird an die Stelle \hex{A810} gesprungen (der Wert \hex{A810} in
+                               den Programmzähler geladen).
     \\
     \end{tabularx}} \\\midrule
   \textbf{\sffamily X-Indexed\newline Indirect}\newline \indx &
@@ -1343,38 +1344,38 @@ auf natürliche Art eine einfache Implementierung des Bubble-Sort.
   \lstinline!TAX! &
                     \begin{optable}
                       \impl  & \hex{AA} \\
-                    \end{optable} & --- & Kopiert den Wert des
+                    \end{optable} & \nflag, \cflag & Kopiert den Wert des
                                            Akkumulators \acc in das
                                            Index-Register \xreg. \\\midrule 
 
   \lstinline!TAY! &
                     \begin{optable}
                       \impl  & \hex{A8} \\
-                    \end{optable} & --- & Kopiert den Wert des
+                    \end{optable} & \nflag,  \cflag & Kopiert den Wert des
                                            Akkumulators \acc in das
                                            Index-Register \yreg. \\\midrule 
   \lstinline!TXA! &
                     \begin{optable}
                       \impl  & \hex{8A} \\
-                    \end{optable} & --- & Kopiert den Wert des
+                    \end{optable} & \nflag,  \cflag & Kopiert den Wert des
                                            Index-Registers \xreg in
                                            den Akkumulator \acc. \\\midrule 
   \lstinline!TYA! &
                     \begin{optable}
                       \impl  & \hex{AA} \\
-                    \end{optable} & --- & Kopiert den Wert des
+                    \end{optable} & \nflag,  \cflag & Kopiert den Wert des
                                            Index-Registers \yreg in
                                            den Akkumulator \acc. \\\midrule 
   \lstinline!TSX! &
                     \begin{optable}
                       \impl  & \hex{BA} \\
-                    \end{optable} & --- & Kopiert den Wert des
+                    \end{optable} & \nflag,  \cflag & Kopiert den Wert des
                                            Stack-Register \stp in das
                                            Index-Register \xreg. \\\midrule 
   \lstinline!TXS! &
                     \begin{optable}
                       \impl  & \hex{AA} \\
-                    \end{optable} & --- & Kopiert den Wert des
+                    \end{optable} & \nflag,  \cflag & Kopiert den Wert des
                                            Index-Registers \xreg in
                                            das Stack-Register \stp. \\\bottomrule 
 \end{instrtable}
