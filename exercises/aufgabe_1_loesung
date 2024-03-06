@@ -1,0 +1,27 @@
+a) $0200: $A5 $A0	LDA $A0
+   	  $A6 $B0	LDX $B0
+	  $85 $B0	STA $B0
+	  $86 $A0	STX $A0	
+
+b) $0200: $A2 $00	LDX #0
+   	  $BD $00 $03	LDA $0300,X
+	  $A8 	  	TAY
+	  $A2 $01	LDX #1
+	  $BD $00 $03	LDA $0300,X
+	  $A2 $00 	LDX #0
+	  $9D $00 $93	STA $0300,X
+	  $A2 $01 	LDX #1
+	  $98 		TYA
+	  $9D $00 $03	STA $030,X
+
+c) $0000: $00 $03	
+   $0200: $A0 $00	LDY #0
+	  $B1 $00	LDA ($00),Y
+	  $AA		TAX
+	  $A0 $01	LDY #1
+   	  $B1 $00	LDA ($00),Y
+	  $A0 $00	LDY #0
+	  $91 $00	STA ($00),Y
+	  $8A		TXA
+	  $A0 $01	LDY #1
+	  $91 $00	STA ($00),Y
