@@ -17,7 +17,7 @@
 
 def word(low_byte, high_byte):
     assert 0 <= low_byte <= 0xff, 0 <= high_byte <= 0xff
-    return (low_byte + (high_byte << 8))
+    return low_byte + (high_byte << 8)
 
 
 def set_bit(v, index, x):
@@ -29,12 +29,12 @@ def set_bit(v, index, x):
 
 def signed_byte_addition(a: int, b: int) -> int:
     assert -128 <= a <= 127, -128 <= b <= 127
-    sum = a + b
-    if sum > 127:
-        return sum - 256
-    if sum < -128:
-        return sum + 256
-    return sum
+    c = a + b
+    if c > 127:
+        return c - 256
+    if c < -128:
+        return c + 256
+    return c
 
 
 def signed_byte_subtraction(a: int, b: int) -> int:
@@ -44,10 +44,10 @@ def signed_byte_subtraction(a: int, b: int) -> int:
 
 def unsigned_byte_addition(a: int, b: int, carry_in: int = 0) -> int:
     assert 0 <= a <= 255, 0 <= b <= 255
-    sum = a + b + carry_in
-    if sum > 255:
-        return sum - 256
-    return sum
+    c = a + b + carry_in
+    if c > 255:
+        return c - 256
+    return c
 
 
 def unsigned_byte_subtraction(a: int, b: int, carry_in: int = 0) -> int:

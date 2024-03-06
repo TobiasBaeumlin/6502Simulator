@@ -101,7 +101,7 @@ class ProcessorVisualization(QObject, Processor):
                 time.sleep(self.window.cycle_delay)
 
     # Blocks while the animation in the gui is running
-    def animate_data_transfer(self, data_transfer, destination=None):
+    def animate_data_transfer(self, data_transfer):
         self.window.animation_running = True
         self.animate_signal.emit(data_transfer)
         time.sleep(0.1)
@@ -357,7 +357,6 @@ class ProcessorVisualization(QObject, Processor):
                 path = AnimationPaths['SD'][register]
             else:
                 path = AnimationPaths['MD'][register]
-            data = f'{self.memory.data[self.PC]:{self.byte_format}}'
             self.animate_data_transfer({'path': path, 'data': f'{byte:{self.byte_format}}'})
         setattr(self, register, byte)
 

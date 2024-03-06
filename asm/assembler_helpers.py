@@ -88,29 +88,28 @@ ADDRESS_MODES = {
 }
 
 ADDRESS_MODE_PATTERNS = {
-    'A': 'Accumulator',
-    '\#\$([0-9A-F]{2}|UNDEF)': 'Immediate',
-    '\$[0-9A-F]{2}': 'Zero Page',
-    '\$[0-9A-F]{2},X': 'Zero Page,X',
-    '\$[0-9A-F]{2},Y': 'Zero Page,Y',
-    '\$([0-9A-F]{4}|UNDEF)': 'Absolute',
-    '\$([0-9A-F]{4}|UNDEF),X': 'Absolute,X',
-    '\$([0-9A-F]{4}|UNDEF),Y': 'Absolute,Y',
-    '\(\$([0-9A-F]{4}|UNDEF)\)': 'Indirect',
-    '\(\$([0-9A-F]{2}|UNDEF),X\)': 'Indirect,X',
-    '\(\$([0-9A-F]{2}|UNDEF)\),Y': 'Indirect,Y',
+    r'A': 'Accumulator',
+    r'\#\$([0-9A-F]{2}|UNDEF)': 'Immediate',
+    r'\$[0-9A-F]{2}': 'Zero Page',
+    r'\$[0-9A-F]{2},X': 'Zero Page,X',
+    r'\$[0-9A-F]{2},Y': 'Zero Page,Y',
+    r'\$([0-9A-F]{4}|UNDEF)': 'Absolute',
+    r'\$([0-9A-F]{4}|UNDEF),X': 'Absolute,X',
+    r'\$([0-9A-F]{4}|UNDEF),Y': 'Absolute,Y',
+    r'\(\$([0-9A-F]{4}|UNDEF)\)': 'Indirect',
+    r'\(\$([0-9A-F]{2}|UNDEF),X\)': 'Indirect,X',
+    r'\(\$([0-9A-F]{2}|UNDEF)\),Y': 'Indirect,Y',
 }
 
 ADDRESS_MODE_PATTERNS_SYM = {
-    'A': 'Accumulator',
-    '\#[0-9A-Z]{1,8}': 'Immediate',
-    '[0-9A-Z]{1,8}([+-][0-9]+)?': 'Zero Page_Absolute',
-    '[0-9A-Z]{1,8}([+-][0-9]+)?,X': 'Zero Page_Absolute,X',
-    '[0-9A-Z]{1,8}([+-][0-9]+)?,Y': 'Zero Page_Absolute,Y',
-    '\([0-9A-Z]{1,8}([+-][0-9]+)?\)': 'Indirect',
-    '\([0-9A-Z]{1,8}([+-][0-9]+)?,X\)': 'Indirect,X',
-    '\([0-9A-Z]{1,8}([+-][0-9]+)?\),Y': 'Indirect,Y',
-
+    r'A': 'Accumulator',
+    r'\#[0-9A-Z]{1,8}': 'Immediate',
+    r'[0-9A-Z]{1,8}([+-][0-9]+)?': 'Zero Page_Absolute',
+    r'[0-9A-Z]{1,8}([+-][0-9]+)?,X': 'Zero Page_Absolute,X',
+    r'[0-9A-Z]{1,8}([+-][0-9]+)?,Y': 'Zero Page_Absolute,Y',
+    r'\([0-9A-Z]{1,8}([+-][0-9]+)?\)': 'Indirect',
+    r'\([0-9A-Z]{1,8}([+-][0-9]+)?,X\)': 'Indirect,X',
+    r'\([0-9A-Z]{1,8}([+-][0-9]+)?\),Y': 'Indirect,Y',
 }
 
 RELATIVE_ADDRESS_MODE_INSTRUCTIONS = {
@@ -166,7 +165,7 @@ def determine_mode(mnemonic, operand):
     mode = 'Invalid'
     # Since JMP and JSR have no zeropage mode we need to check the
     # special cases of jumps within zeropage (e.g. by a label)
-    if mnemonic in ('JMP', 'JSR') and re.fullmatch('\$[0-9A-F]{2}', operand) is not None:
+    if mnemonic in ('JMP', 'JSR') and re.fullmatch(r'\$[0-9A-F]{2}', operand) is not None:
         operand = f'$00{operand[1:]}'
     if operand == '':
         mode = 'Implied'
@@ -303,19 +302,14 @@ def extract_label_from_operand(operand: str, mode: str) -> str:
         return operand
     if mode == 'Zero Page_Absolute,X':
         return operand[:-2]
-        # return operand.rstrip(',X')
     if mode == 'Zero Page_Absolute,Y':
         return operand[:-2]
-        # return operand.rstrip(',Y')
     if mode == 'Indirect':
         return operand[1:-1]
-        # return operand.lstrip('(').rstrip(')')
     if mode == 'Indirect,X':
         return operand[1:-3]
-        #return operand.lstrip('(').rstrip(',X)')
     if mode == 'Indirect,Y':
         return operand[1:-3]
-        # return operand.lstrip('(').rstrip('),Y')
     # mode must be 'Immediate'
     return operand[1:]
     # return operand.lstrip('#')
@@ -338,7 +332,7 @@ def rebuild_operand(operand: str, mode: str) -> str:
     return f'#{operand}'
 
 
-def parse_symbolic_label(operand: str, label_dict: dict, evaluate: bool=False) -> str:
+def parse_symbolic_label(operand: str, label_dict: dict) -> str:
     for p in ADDRESS_MODE_PATTERNS_SYM.keys():
         if re.fullmatch(p, operand):
             mode = ADDRESS_MODE_PATTERNS_SYM[p]
@@ -416,4 +410,3 @@ def parse_relative_mode_operand(operand: str, label_dict: dict, pc: int) -> str:
     if value < 0:
         return convert_int_to_twos_complement(value - 2)
     return f'{(value-2):02X}'
-

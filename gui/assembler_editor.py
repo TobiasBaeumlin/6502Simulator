@@ -17,7 +17,7 @@
 
 import math
 
-from PySide6.QtCore import QSize, QRect, Qt, Slot, Signal
+from PySide6.QtCore import QSize, QRect, Qt, Signal
 from PySide6.QtGui import QPainter, QColor, QTextFormat, QTextCursor, QSyntaxHighlighter, QTextCharFormat
 from PySide6.QtWidgets import QWidget, QPlainTextEdit, QTextEdit
 
@@ -51,7 +51,7 @@ class AssemblerEdit(QPlainTextEdit):
     def line_number_area_width(self):
         count = (max(1, self.blockCount()))
         digits = int(math.log10(count) + 1)
-        return 3+self.fontMetrics().boundingRect('9').width() * digits
+        return 3 + self.fontMetrics().boundingRect('9').width() * digits
 
     def update_line_number_area_width(self, _):
         self.setViewportMargins(self.line_number_area_width(), 0, 0, 0)
@@ -85,8 +85,9 @@ class AssemblerEdit(QPlainTextEdit):
             if block.isVisible() and (bottom >= event.rect().top()):
                 number = str(block_number + 1)
                 painter.setPen(Qt.black)
-                painter.drawText(0, top, self.lineNumberArea.width(), height,
-                                   Qt.AlignRight, number)
+                painter.drawText(
+                    0, top, self.lineNumberArea.width(), height, Qt.AlignRight, number
+                )
 
             block = block.next()
             top = bottom
@@ -115,9 +116,9 @@ class AssemblerEdit(QPlainTextEdit):
             self.setExtraSelections([selection])
 
     def mark_line(self, line_number):
-        format = QTextCharFormat()
-        format.setBackground(QColor("red").lighter(200))
-        self.highlighter.highlight_line(line_number, format)
+        fmt = QTextCharFormat()
+        fmt.setBackground(QColor("red").lighter(200))
+        self.highlighter.highlight_line(line_number, fmt)
 
 
 class SyntaxHighlighter(QSyntaxHighlighter):
@@ -125,10 +126,10 @@ class SyntaxHighlighter(QSyntaxHighlighter):
         super(SyntaxHighlighter, self).__init__(parent)
         self._highlight_lines = dict()
 
-    def highlight_line(self, line, format):
-        if isinstance(line, int) and line >= 0 and isinstance(format, QTextCharFormat):
+    def highlight_line(self, line, fmt):
+        if isinstance(line, int) and line >= 0 and isinstance(fmt, QTextCharFormat):
             print(f'Highlighting {line}')
-            self._highlight_lines[line] = format
+            self._highlight_lines[line] = fmt
             tb = self.document().findBlockByLineNumber(line)
             self.rehighlightBlock(tb)
 

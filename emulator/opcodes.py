@@ -40,11 +40,11 @@ ASL_ZERO_PAGE_X = 0x16
 ASL_ABSOLUTE = 0x0E
 ASL_ABSOLUTE_X = 0x1E
 # Branch if carry clear
-BCC= 0x90
+BCC = 0x90
 # Branch if carry set
 BCS = 0xB0
 # Branch if equal
-BEQ= 0xF0
+BEQ = 0xF0
 # Bit test
 BIT_ZERO_PAGE = 0x24
 BIT_ABSOLUTE = 0x2C

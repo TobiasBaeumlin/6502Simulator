@@ -295,19 +295,3 @@ def assemble_file_pass_2(source_code: list[str], label_dict: dict, list_file=Non
 
     print('Pass 2 Complete - No Errors Encountered')
     return code_dict, debug_info
-
-
-if __name__ == '__main__':
-    # with open('../../6502Asm/test1.asm') as source_file:
-    #     # remove redundant white space in each line
-    #     source_code = [' '.join(l.split()) for l in source_file]
-    source_code = ["label BNE $4", 'BEQ -10', 'BMI +10', 'BPL label']
-    try:
-        label_dict = assemble_file_pass_1(source_code)
-    except AssemblerError as e:
-        print(e, e.errors)
-    else:
-        try:
-            code_dict = assemble_file_pass_2(source_code, label_dict, list_file='test.out')
-        except AssemblerError as e:
-            print(e, e.errors)

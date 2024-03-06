@@ -193,7 +193,7 @@ AnimationPaths['X']['ZD'] = list(reversed(AnimationPaths['ZD']['X']))
 AnimationPaths['X']['OP1'] = [AnimationPoints['x'], AnimationPoints['pb7'], AnimationPoints['pb5'],
                               AnimationPoints['op1']]
 AnimationPaths['X']['S'] = [AnimationPoints['x'], AnimationPoints['pb7'], AnimationPoints['pb8'],
-                             AnimationPoints['sp']]
+                            AnimationPoints['sp']]
 AnimationPaths['X']['SR'] = [AnimationPoints['x2'], AnimationPoints['pb2'], AnimationPoints['pb1'],
                              AnimationPoints['sr']]
 

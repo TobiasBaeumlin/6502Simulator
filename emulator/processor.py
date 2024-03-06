@@ -18,7 +18,9 @@
 import array as ar
 from operator import inv, or_, xor, and_  # noqa
 from emulator.opcodes import *
-from emulator.operators import unsigned_byte_addition, shl, shr, set_bit, cmp, sbb, adc, inc, bcd_addition_with_carry, bcd_subtraction_with_borrow
+from emulator.operators import (
+    unsigned_byte_addition, shl, shr, set_bit, cmp, sbb, adc, inc, bcd_addition_with_carry, bcd_subtraction_with_borrow
+)
 
 
 class UndefinedInstructionError(Exception):
