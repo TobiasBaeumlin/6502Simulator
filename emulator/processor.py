@@ -867,7 +867,7 @@ class Processor:
             self.load_register('Y', 'zero_page_indexed', 'X')
         elif self.IR == LDY_ABSOLUTE:
             self.load_register('Y', 'absolute')
-        elif self.IR == LDX_ABSOLUTE_Y:
+        elif self.IR == LDY_ABSOLUTE_X:
             self.load_register('Y', 'absolute_indexed', 'X')
         # Logical shift right
         elif self.IR == LSR_ACCUMULATOR:
