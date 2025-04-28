@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QFrame, QLabel, QPushButton, QWidget, QMainWindow,
 from gui.assembler_editor import AssemblerEdit
 from gui.widgets import RegisterWidget
 
-VERSION = "0.96"
+VERSION = "0.97"
 CLICKABLE = 'color: rgb(10, 85, 205);'
 DATA_BUS = 'color: rgb(10, 180, 30);'
 ADDRESS_BUS = 'color: rgb(10, 100, 10);'
